@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "description": "Small manually curated smoke-test set. Names and queries are provisional and must be checked for ambiguity.",
+  "candidates": [
+    {"id":"person-donald-trump","label":"Donald Trump","category":"global_people","query":"\"Donald Trump\"","locale":"global","notes":"Person; verify that query results refer to the current public figure."},
+    {"id":"person-taylor-swift","label":"Taylor Swift","category":"global_people","query":"\"Taylor Swift\"","locale":"global","notes":"Person; name is relatively distinctive."},
+    {"id":"event-olympic-games","label":"Olympic Games","category":"global_events","query":"\"Olympic Games\"","locale":"global","notes":"Recurring event family, not a single dated edition; replace with concrete named events after candidate discovery."},
+    {"id":"event-cop-climate","label":"UN Climate Change Conference","category":"global_events","query":"\"UN Climate Change Conference\"","locale":"global","notes":"Recurring event family; not yet a unique event instrument."},
+    {"id":"country-france","label":"France","category":"countries","query":"France","locale":"global","notes":"Country name may have non-country matches; test disambiguation."},
+    {"id":"country-japan","label":"Japan","category":"countries","query":"Japan","locale":"global","notes":"Country name may have non-country matches; test disambiguation."},
+    {"id":"city-paris","label":"Paris, France","category":"global_cities","query":"Paris sourcecountry:FR","locale":"global","notes":"DOC query filter may not uniquely identify the city; inspect results."},
+    {"id":"city-tokyo","label":"Tokyo, Japan","category":"global_cities","query":"Tokyo","locale":"global","notes":"Inspect homonyms and geographic relevance."},
+    {"id":"city-gdansk","label":"Gdańsk, Poland","category":"polish_cities","query":"Gdansk","locale":"polish_media","notes":"Test ASCII spelling; later compare with Gdańsk and aliases."},
+    {"id":"city-krakow","label":"Kraków, Poland","category":"polish_cities","query":"Krakow","locale":"polish_media","notes":"Test ASCII spelling; later compare with Kraków and aliases."},
+    {"id":"person-donald-tusk","label":"Donald Tusk","category":"people_in_polish_media","query":"\"Donald Tusk\"","locale":"polish_media","notes":"Category means coverage in Polish media, not nationality."},
+    {"id":"person-robert-lewandowski","label":"Robert Lewandowski","category":"people_in_polish_media","query":"\"Robert Lewandowski\"","locale":"polish_media","notes":"Category means coverage in Polish media, not nationality."}
+  ]
+}
