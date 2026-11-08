@@ -3,21 +3,19 @@ name: Web NGrams proof of concept
 on:
   workflow_dispatch:
     inputs:
-      lookback_minutes:
-        description: How many recent UTC minutes to probe (1–1440; default 24 hours)
+      sample_hours:
+        description: Number of hourly samples across the previous 24 hours (1–24)
         required: false
-        default: "1440"
-      target_files:
-        description: Minimum number of successful files desired (1–30)
-        required: false
-        default: "30"
+        default: "24"
   schedule:
     - cron: "35 6 * * *"
   push:
     paths:
       - "scripts/webngrams-smoke-test.mjs"
       - "scripts/webngrams-matching.mjs"
+      - "scripts/webngrams-sampling.mjs"
       - "tests/webngrams-matching.test.mjs"
+      - "tests/webngrams-sampling.test.mjs"
       - "data/webngrams-candidates.json"
       - "package.json"
       - ".github/workflows/webngrams-poc.yml"
@@ -25,7 +23,9 @@ on:
     paths:
       - "scripts/webngrams-smoke-test.mjs"
       - "scripts/webngrams-matching.mjs"
+      - "scripts/webngrams-sampling.mjs"
       - "tests/webngrams-matching.test.mjs"
+      - "tests/webngrams-sampling.test.mjs"
       - "data/webngrams-candidates.json"
       - "package.json"
       - ".github/workflows/webngrams-poc.yml"
@@ -35,30 +35,29 @@ permissions:
 
 jobs:
   validate:
-    if: github.event_name == 'push' || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 24
       - run: npm run check:webngrams
 
   sample:
     if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+    needs: validate
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 24
       - run: npm run check:webngrams
-      - name: Download and inspect available recent files
+      - name: Download one representative file per UTC hour
         run: npm run webngrams:test
         env:
-          WEBNGRAMS_LOOKBACK_MINUTES: ${{ github.event.inputs.lookback_minutes || '1440' }}
-          WEBNGRAMS_TARGET_FILES: ${{ github.event.inputs.target_files || '30' }}
+          WEBNGRAMS_SAMPLE_HOURS: ${{ github.event.inputs.sample_hours || '24' }}
       - uses: actions/upload-artifact@v4
         with:
           name: webngrams-poc-snapshot
