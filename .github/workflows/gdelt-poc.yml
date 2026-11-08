@@ -1,6 +1,7 @@
 name: GDELT proof of concept
 
 on:
+  push:
   workflow_dispatch:
   schedule:
     - cron: "17 5 * * *"
@@ -17,7 +18,7 @@ permissions:
 
 jobs:
   validate:
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -30,7 +31,7 @@ jobs:
         run: npm run check
 
   smoke-test:
-    if: github.event_name != 'pull_request'
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
