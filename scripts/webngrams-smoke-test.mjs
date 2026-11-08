@@ -13,6 +13,7 @@ const OUTPUT_DIR = path.resolve("output");
 const SAMPLE_HOURS = Math.min(24, Math.max(1, Number(process.env.WEBNGRAMS_SAMPLE_HOURS ?? 24)));
 const REQUEST_GAP_MS = Math.max(0, Number(process.env.WEBNGRAMS_REQUEST_GAP_MS ?? 750));
 const MAX_RETRIES = 2;
+const EVIDENCE_LIMIT = Math.min(100, Math.max(8, Number(process.env.WEBNGRAMS_EVIDENCE_LIMIT ?? 25)));
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -149,7 +150,7 @@ for (const sample of hourlyTargets) {
         }
         if (match.matchType === "context_filtered_single_token") item.contextFilteredMatchedRecords++;
         else item.multiwordPhraseMatchedRecords++;
-        if (item.evidence.length < 8 && !item.evidence.some(entry => entry.url === articleUrl)) {
+        if (item.evidence.length < EVIDENCE_LIMIT && !item.evidence.some(entry => entry.url === articleUrl)) {
           item.evidence.push({
             aliasMatches: match.matchedAliases,
             matchType: match.matchType,
@@ -253,6 +254,7 @@ const snapshot = {
     coverageStartUtc: successful.length ? successful[0].filename.slice(0, 14) : null,
     coverageEndUtc: successful.length ? successful[successful.length - 1].filename.slice(0, 14) : null,
     targetReached: new Set(successful.map(file => file.sampleHour)).size >= SAMPLE_HOURS,
+    evidenceLimitPerCandidate: EVIDENCE_LIMIT,
     files,
     note: "Samples one representative GDELT publication slot in each requested UTC hour, rotating across :01, :16, :31 and :46. If that minute is missing, the following minute is tried once. 404 minutes are normal publication gaps. Results from a file are merged only after its entire gzip stream parses successfully."
   },
