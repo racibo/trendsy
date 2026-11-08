@@ -8,7 +8,7 @@ on:
         required: false
         default: "1440"
       target_files:
-        description: Stop after this many successful files (1–30)
+        description: Minimum number of successful files desired (1–30)
         required: false
         default: "30"
   schedule:
