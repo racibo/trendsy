@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { normalizeTokens, matchCandidate } from "./webngrams-matching.mjs";
+import { normalizeTokens, matchCandidate } from "../scripts/webngrams-matching.mjs";
 
 test("normalization ignores Polish diacritics and preserves word boundaries", () => {
   assert.deepEqual(normalizeTokens("Gdańsk, Kraków!"), ["gdansk", "krakow"]);
