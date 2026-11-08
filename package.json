@@ -3,10 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Proof of concept for daily Trendsy popularity measurements using GDELT DOC API",
+  "description": "Proofs of concept for daily Trendsy popularity measurements using GDELT datasets",
   "scripts": {
     "gdelt:test": "node scripts/gdelt-smoke-test.mjs",
-    "check": "node --check scripts/gdelt-smoke-test.mjs"
+    "webngrams:test": "node scripts/webngrams-smoke-test.mjs",
+    "check": "node --check scripts/gdelt-smoke-test.mjs",
+    "check:webngrams": "node --check scripts/webngrams-smoke-test.mjs"
   },
-  "engines": { "node": ">=20" }
+  "engines": {
+    "node": ">=20"
+  }
 }
