@@ -69,7 +69,7 @@ scanStartedAt.setUTCSeconds(0, 0);
 const files = [];
 let lastRequestAt = 0;
 
-for (let offset = LOOKBACK_MINUTES; offset >= 1 && files.filter(file => file.status === "ok").length < TARGET_FILES; offset--) {
+for (let offset = LOOKBACK_MINUTES; offset >= 1; offset--) {
   const minute = new Date(scanStartedAt.getTime() - offset * 60_000);
   const filename = `${stamp(minute)}.webngrams.json.gz`;
   const url = `${BASE_URL}/${filename}`;
@@ -231,11 +231,11 @@ const snapshot = {
     missingMinutes: files.filter(file => file.status === "missing").length,
     failedRequests: files.filter(file => !["ok", "missing"].includes(file.status)).length,
     successfulFilesByUtcHour: successfulHours,
-    coverageStartUtc: successful.length ? successful[successful.length - 1].filename.slice(0, 14) : null,
-    coverageEndUtc: successful.length ? successful[0].filename.slice(0, 14) : null,
+    coverageStartUtc: successful.length ? successful[0].filename.slice(0, 14) : null,
+    coverageEndUtc: successful.length ? successful[successful.length - 1].filename.slice(0, 14) : null,
     targetReached: successful.length >= TARGET_FILES,
     files,
-    note: "Scans backwards across up to 24 hours and stops after the target number of fully parsed files or the lookback limit. 404 minutes are normal publication gaps. Results from a file are merged only after its entire gzip stream parses successfully."
+    note: "Scans backwards across the full requested lookback window; targetSuccessfulFiles is a minimum coverage goal, not an early-stop condition. 404 minutes are normal publication gaps. Results from a file are merged only after its entire gzip stream parses successfully."
   },
   summary: {
     totalCandidates: results.length,
@@ -257,7 +257,7 @@ const csv = [
 ].join("\n") + "\n";
 await fs.writeFile(path.join(OUTPUT_DIR, "webngrams-snapshot.csv"), csv);
 
-console.log(`\nCompleted: ${successful.length}/${TARGET_FILES} target files downloaded and fully parsed after probing ${files.length}/${LOOKBACK_MINUTES} minutes.`);
+console.log(`\nCompleted: ${successful.length} fully parsed files (minimum target ${TARGET_FILES}) after probing ${files.length}/${LOOKBACK_MINUTES} minutes.`);
 console.log(`Successful-file UTC-hour coverage: ${JSON.stringify(successfulHours)}`);
 console.log(`Candidates with at least one unique article: ${snapshot.summary.candidatesWithMatches}/${results.length}.`);
 console.log(`Matched records: ${snapshot.summary.totalMultiwordPhraseMatchedRecords} multiword-phrase / ${snapshot.summary.totalContextFilteredMatchedRecords} context-filtered-single-token.`);
