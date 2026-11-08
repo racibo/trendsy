@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { createGunzip } from "node:zlib";
 import { Readable } from "node:stream";
+import { pipeline } from "node:stream/promises";
 import { createInterface } from "node:readline";
 import { matchCandidate } from "./webngrams-matching.mjs";
 
@@ -106,7 +107,7 @@ for (let offset = LOOKBACK_MINUTES; offset >= 1; offset--) {
     let records = 0;
     let parseErrors = 0;
     const gunzip = createGunzip();
-    Readable.fromWeb(fetched.response.body).pipe(gunzip);
+    const streamDone = pipeline(Readable.fromWeb(fetched.response.body), gunzip);
     const lines = createInterface({ input: gunzip, crlfDelay: Infinity });
 
     for await (const line of lines) {
@@ -145,6 +146,7 @@ for (let offset = LOOKBACK_MINUTES; offset >= 1; offset--) {
       }
     }
 
+    await streamDone;
     if (parseErrors > 0) {
       throw new Error(`Rejected file: ${parseErrors} malformed JSON lines; no partial results were merged.`);
     }
