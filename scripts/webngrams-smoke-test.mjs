@@ -13,7 +13,10 @@ const OUTPUT_DIR = path.resolve("output");
 const SAMPLE_HOURS = Math.min(24, Math.max(1, Number(process.env.WEBNGRAMS_SAMPLE_HOURS ?? 24)));
 const REQUEST_GAP_MS = Math.max(0, Number(process.env.WEBNGRAMS_REQUEST_GAP_MS ?? 750));
 const MAX_RETRIES = 2;
-const EVIDENCE_LIMIT = Math.min(100, Math.max(8, Number(process.env.WEBNGRAMS_EVIDENCE_LIMIT ?? 25)));
+const requestedEvidenceLimit = Number(process.env.WEBNGRAMS_EVIDENCE_LIMIT ?? 25);
+const EVIDENCE_LIMIT = Number.isFinite(requestedEvidenceLimit)
+  ? Math.min(100, Math.max(8, Math.floor(requestedEvidenceLimit)))
+  : 25;
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
