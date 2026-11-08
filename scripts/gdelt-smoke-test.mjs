@@ -106,7 +106,7 @@ async function requestTimeline(candidate, expectedDates) {
       const series = Array.isArray(body.timeline) ? body.timeline : [];
       const points = series.flatMap(s => Array.isArray(s.data) ? s.data : [])
         .map(p => ({ date: compactDate(p.date), value: Number(p.value) }))
-        .filter(p => /^\\d{8}$/.test(p.date) && Number.isFinite(p.value));
+        .filter(p => /^\d{8}$/.test(p.date) && Number.isFinite(p.value));
       const returnedDates = new Set(points.map(p => p.date));
 
       return {
