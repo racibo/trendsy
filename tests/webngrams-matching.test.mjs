@@ -47,6 +47,18 @@ test("Paris Agreement and TV Tokyo are rejected as single-token city false posit
   assert.ok(matchCandidate(tokyo, { pre: "in", ngram: "Tokyo", post: "Japan near Shibuya" }));
 });
 
+test("Tokyo Bay is not treated as a mention of Tokyo city", () => {
+  const tokyo = {
+    aliases: ["Tokyo", "Tokyo city"],
+    singleTokenPolicy: {
+      requiredAny: ["Japan", "Japanese", "Shibuya", "Shinjuku", "Tokyo metropolitan"],
+      excludeAny: ["TV Tokyo", "Tokyo Broadcasting", "Tokyo Electron", "Tokyo Bay"]
+    }
+  };
+  assert.equal(matchCandidate(tokyo, { pre: "ships entered", ngram: "Tokyo", post: "Bay after the storm" }), null);
+  assert.ok(matchCandidate(tokyo, { pre: "visitors arrived in", ngram: "Tokyo", post: "Japan near Shibuya" }));
+});
+
 test("specific multiword event aliases do not need single-token context policy", () => {
   const event = { aliases: ["2026 Youth Olympic Games"] };
   assert.ok(matchCandidate(event, { pre: "the", ngram: "2026 Youth Olympic Games", post: "opened in Dakar" }));
