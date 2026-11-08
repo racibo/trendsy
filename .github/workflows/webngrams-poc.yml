@@ -1,0 +1,58 @@
+name: Web NGrams proof of concept
+
+on:
+  workflow_dispatch:
+    inputs:
+      sample_minutes:
+        description: Number of recent minute files to sample (1–10)
+        required: false
+        default: "3"
+  schedule:
+    - cron: "35 6 * * *"
+  push:
+    paths:
+      - "scripts/webngrams-smoke-test.mjs"
+      - "data/webngrams-candidates.json"
+      - "package.json"
+      - ".github/workflows/webngrams-poc.yml"
+  pull_request:
+    paths:
+      - "scripts/webngrams-smoke-test.mjs"
+      - "data/webngrams-candidates.json"
+      - "package.json"
+      - ".github/workflows/webngrams-poc.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm run check:webngrams
+
+  sample:
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm run check:webngrams
+      - name: Download and inspect recent files
+        run: npm run webngrams:test
+        env:
+          WEBNGRAMS_SAMPLE_MINUTES: ${{ github.event.inputs.sample_minutes || '3' }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: webngrams-poc-snapshot
+          path: output/webngrams-snapshot.*
+          if-no-files-found: error
+          retention-days: 30
