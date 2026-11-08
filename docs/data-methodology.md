@@ -65,3 +65,14 @@ Before an instrument enters the game catalogue, verify:
 - a defensible locale/language scope.
 
 Only after this review should we design a normalized popularity index and price formula.
+
+## Web NGrams matching and sampling (experimental)
+
+The Web NGrams matcher normalizes Unicode text (including Polish diacritics) and tokenizes words before checking aliases. Polish city candidates include common inflected forms (for example, Gdańsk, Gdańska, Gdańsku and Kraków, Krakowa, Krakowie).
+
+A single-token place or country alias is not accepted on its own. It must also have at least one configured nearby context phrase; configured exclusion phrases reject known false-positive contexts such as “Paris Agreement” and “TV Tokyo”. Multiword aliases are matched as phrases. These rules reduce known collisions but are heuristic filters, not a substitute for article-level entity resolution. The JSON output labels the match type and retains example article URLs and context for manual review.
+
+The manual Actions run defaults to scanning the complete previous 24 hours (1,440 minute filenames), with a goal of at least 30 fully parsed files. It does not stop when the goal is reached: the full window is scanned so the report can show the number of successful files in each UTC hour and reveal whether the sample covers different times of day. A 404 is a normal missing publication minute, not a failed request.
+
+Each gzip file is processed transactionally in memory. Candidate counters are staged per file and merged into the snapshot only after the entire stream has been read and all non-empty lines have parsed as JSON. A truncated or malformed file is discarded as a whole, preventing partial results from contaminating totals.
+
