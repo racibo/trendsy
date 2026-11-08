@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "description": "Exploratory Web NGrams candidate aliases. This is a sample-matching list, not a production catalogue.",
+  "candidates": [
+    { "id": "person-donald-trump", "label": "Donald Trump", "category": "global_people", "locale": "global", "languages": [], "aliases": ["Donald Trump"] },
+    { "id": "person-taylor-swift", "label": "Taylor Swift", "category": "global_people", "locale": "global", "languages": [], "aliases": ["Taylor Swift"] },
+    { "id": "event-olympic-games", "label": "Olympic Games", "category": "global_events", "locale": "global", "languages": [], "aliases": ["Olympic Games"] },
+    { "id": "event-cop-climate", "label": "UN Climate Change Conference", "category": "global_events", "locale": "global", "languages": [], "aliases": ["UN Climate Change Conference", "COP climate conference"] },
+    { "id": "country-france", "label": "France", "category": "countries", "locale": "global", "languages": [], "aliases": ["France"] },
+    { "id": "country-japan", "label": "Japan", "category": "countries", "locale": "global", "languages": [], "aliases": ["Japan"] },
+    { "id": "city-paris", "label": "Paris, France", "category": "global_cities", "locale": "global", "languages": [], "aliases": ["Paris"] },
+    { "id": "city-tokyo", "label": "Tokyo, Japan", "category": "global_cities", "locale": "global", "languages": [], "aliases": ["Tokyo"] },
+    { "id": "city-gdansk", "label": "Gdańsk, Poland", "category": "polish_cities", "locale": "polish_language_media", "languages": ["pl", "pol"], "aliases": ["Gdańsk", "Gdansk"] },
+    { "id": "city-krakow", "label": "Kraków, Poland", "category": "polish_cities", "locale": "polish_language_media", "languages": ["pl", "pol"], "aliases": ["Kraków", "Krakow"] },
+    { "id": "person-donald-tusk", "label": "Donald Tusk", "category": "people_in_polish_media", "locale": "polish_language_media", "languages": ["pl", "pol"], "aliases": ["Donald Tusk"] },
+    { "id": "person-robert-lewandowski", "label": "Robert Lewandowski", "category": "people_in_polish_media", "locale": "polish_language_media", "languages": ["pl", "pol"], "aliases": ["Robert Lewandowski", "Lewandowski"] }
+  ]
+}
