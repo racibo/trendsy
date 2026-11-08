@@ -10,7 +10,7 @@ const OUTPUT_DIR = path.resolve("output");
 const SAMPLE_MINUTES = Math.min(10, Math.max(1, Number(process.env.WEBNGRAMS_SAMPLE_MINUTES ?? 3)));
 
 function stamp(date) {
-  return date.toISOString().slice(0, 19).replaceAll("-", "").replaceAll(":", "");
+  return date.toISOString().slice(0, 19).replaceAll("-", "").replaceAll(":", "").replace("T", "");
 }
 function previousMinute(offset) {
   const d = new Date();
