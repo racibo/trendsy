@@ -55,7 +55,7 @@ async function fetchTimeline(candidate) {
 
 function csvEscape(value) {
   const text = String(value == null ? "" : value);
-  return /[",\\n]/.test(text) ? '"' + text.replaceAll('"', '""') + '"' : text;
+  return /[",\n]/.test(text) ? '"' + text.replaceAll('"', '""') + '"' : text;
 }
 
 const results = [];
@@ -82,7 +82,7 @@ for (const result of results) {
     rows.push([result.id, result.label, result.category, "", "", result.status].map(csvEscape).join(","));
   }
 }
-await writeFile("artifacts/gdelt-" + stamp + ".csv", rows.join("\\n") + "\\n");
+await writeFile("artifacts/gdelt-" + stamp + ".csv", rows.join("\n") + "\n");
 
 console.table(results.map(result => ({
   id: result.id, category: result.category, status: result.status,
