@@ -3,8 +3,8 @@ export function normalizeTokens(value) {
     .normalize("NFKC")
     .toLocaleLowerCase("und")
     .normalize("NFD")
-    .replace(/[\\u0300-\\u036f]/g, "")
-    .match(/[\\p{L}\\p{N}]+(?:['’][\\p{L}\\p{N}]+)*/gu) ?? [];
+    .replace(/[\u0300-\u036f]/g, "")
+    .match(/[\p{L}\p{N}]+(?:['’][\p{L}\p{N}]+)*/gu) ?? [];
 }
 
 export function containsSequence(haystack, needle) {
