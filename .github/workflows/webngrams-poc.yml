@@ -4,24 +4,28 @@ on:
   workflow_dispatch:
     inputs:
       lookback_minutes:
-        description: How many recent UTC minutes to probe (1–180)
+        description: How many recent UTC minutes to probe (1–1440; default 24 hours)
         required: false
-        default: "60"
+        default: "1440"
       target_files:
-        description: Stop after this many successful files (1–20)
+        description: Stop after this many successful files (1–30)
         required: false
-        default: "5"
+        default: "30"
   schedule:
     - cron: "35 6 * * *"
   push:
     paths:
       - "scripts/webngrams-smoke-test.mjs"
+      - "scripts/webngrams-matching.mjs"
+      - "tests/webngrams-matching.test.mjs"
       - "data/webngrams-candidates.json"
       - "package.json"
       - ".github/workflows/webngrams-poc.yml"
   pull_request:
     paths:
       - "scripts/webngrams-smoke-test.mjs"
+      - "scripts/webngrams-matching.mjs"
+      - "tests/webngrams-matching.test.mjs"
       - "data/webngrams-candidates.json"
       - "package.json"
       - ".github/workflows/webngrams-poc.yml"
@@ -43,7 +47,7 @@ jobs:
   sample:
     if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -53,8 +57,8 @@ jobs:
       - name: Download and inspect available recent files
         run: npm run webngrams:test
         env:
-          WEBNGRAMS_LOOKBACK_MINUTES: ${{ github.event.inputs.lookback_minutes || '60' }}
-          WEBNGRAMS_TARGET_FILES: ${{ github.event.inputs.target_files || '5' }}
+          WEBNGRAMS_LOOKBACK_MINUTES: ${{ github.event.inputs.lookback_minutes || '1440' }}
+          WEBNGRAMS_TARGET_FILES: ${{ github.event.inputs.target_files || '30' }}
       - uses: actions/upload-artifact@v4
         with:
           name: webngrams-poc-snapshot
