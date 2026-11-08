@@ -3,10 +3,14 @@ name: Web NGrams proof of concept
 on:
   workflow_dispatch:
     inputs:
-      sample_minutes:
-        description: Number of recent minute files to sample (1–10)
+      lookback_minutes:
+        description: How many recent UTC minutes to probe (1–180)
         required: false
-        default: "3"
+        default: "60"
+      target_files:
+        description: Stop after this many successful files (1–20)
+        required: false
+        default: "5"
   schedule:
     - cron: "35 6 * * *"
   push:
@@ -39,17 +43,18 @@ jobs:
   sample:
     if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
       - run: npm run check:webngrams
-      - name: Download and inspect recent files
+      - name: Download and inspect available recent files
         run: npm run webngrams:test
         env:
-          WEBNGRAMS_SAMPLE_MINUTES: ${{ github.event.inputs.sample_minutes || '3' }}
+          WEBNGRAMS_LOOKBACK_MINUTES: ${{ github.event.inputs.lookback_minutes || '60' }}
+          WEBNGRAMS_TARGET_FILES: ${{ github.event.inputs.target_files || '5' }}
       - uses: actions/upload-artifact@v4
         with:
           name: webngrams-poc-snapshot
