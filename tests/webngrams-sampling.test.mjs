@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildHourlyTargets } from "../scripts/webngrams-sampling.mjs";
+import { buildHourlyTargets, summarizeHourlyCoverage } from "../scripts/webngrams-sampling.mjs";
 
 test("builds one timestamp per hour across the previous 24 complete UTC hours", () => {
   const now = new Date("2026-11-08T23:42:00.000Z");
@@ -19,4 +19,37 @@ test("rotates probe times across the four quarter-hour publication slots", () =>
 
 test("limits the sample to at most 24 hours", () => {
   assert.equal(buildHourlyTargets(new Date(), 48).length, 24);
+});
+
+
+test("marks a complete hourly sample only when every requested hour succeeded", () => {
+  const files = [
+    { sampleHour: "2026-11-08T10:00:00.000Z", status: "ok" },
+    { sampleHour: "2026-11-08T11:00:00.000Z", status: "ok" },
+    { sampleHour: "2026-11-08T12:00:00.000Z", status: "ok" }
+  ];
+  assert.deepEqual(summarizeHourlyCoverage(3, files), {
+    status: "COMPLETE",
+    requestedSamples: 3,
+    successfulSamples: 3,
+    missingSamples: 0,
+    failedFiles: 0,
+    missingPublicationProbes: 0
+  });
+});
+
+test("marks a sample with a timed-out hour as partial", () => {
+  const files = [
+    { sampleHour: "2026-11-08T10:00:00.000Z", status: "ok" },
+    { sampleHour: "2026-11-08T11:00:00.000Z", status: "processing_error" },
+    { sampleHour: "2026-11-08T12:00:00.000Z", status: "ok" }
+  ];
+  assert.deepEqual(summarizeHourlyCoverage(3, files), {
+    status: "PARTIAL",
+    requestedSamples: 3,
+    successfulSamples: 2,
+    missingSamples: 1,
+    failedFiles: 1,
+    missingPublicationProbes: 0
+  });
 });

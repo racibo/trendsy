@@ -5,7 +5,7 @@ import { Readable } from "node:stream";
 import { pipeline } from "node:stream/promises";
 import { createInterface } from "node:readline";
 import { matchCandidate } from "./webngrams-matching.mjs";
-import { buildHourlyTargets } from "./webngrams-sampling.mjs";
+import { buildHourlyTargets, summarizeHourlyCoverage } from "./webngrams-sampling.mjs";
 
 const BASE_URL = "https://data.gdeltproject.org/gdeltv3/webngrams";
 const INPUT = new URL("../data/webngrams-candidates.json", import.meta.url);
@@ -234,6 +234,7 @@ const results = candidates.map(candidate => {
 });
 
 const successful = files.filter(file => file.status === "ok");
+const coverage = summarizeHourlyCoverage(SAMPLE_HOURS, files);
 const successfulHours = {};
 for (const file of successful) {
   const hour = String(file.utcHour).padStart(2, "0");
@@ -245,12 +246,15 @@ const snapshot = {
   sourceUrl: BASE_URL,
   generatedAt: new Date().toISOString(),
   sampling: {
+    status: coverage.status,
     sampleHours: SAMPLE_HOURS,
     targetSampleHours: SAMPLE_HOURS,
     probedMinutes: files.length,
     successfulFiles: successful.length,
-    successfulSampleHours: new Set(successful.map(file => file.sampleHour)).size,
-    missingSampleHours: SAMPLE_HOURS - new Set(successful.map(file => file.sampleHour)).size,
+    successfulSampleHours: coverage.successfulSamples,
+    missingSampleHours: coverage.missingSamples,
+    failedFiles: coverage.failedFiles,
+    missingPublicationProbes: coverage.missingPublicationProbes,
     missingMinutes: files.filter(file => file.status === "missing").length,
     failedRequests: files.filter(file => !["ok", "missing"].includes(file.status)).length,
     successfulFilesByUtcHour: successfulHours,
@@ -281,7 +285,7 @@ const csv = [
 ].join("\n") + "\n";
 await fs.writeFile(path.join(OUTPUT_DIR, "webngrams-snapshot.csv"), csv);
 
-console.log(`\nCompleted: ${new Set(successful.map(file => file.sampleHour)).size}/${SAMPLE_HOURS} hourly samples using ${successful.length} fully parsed files after ${files.length} file probes.`);
+console.log(`\n${coverage.status}: ${coverage.successfulSamples}/${SAMPLE_HOURS} hourly samples using ${successful.length} fully parsed files after ${files.length} file probes.`);
 console.log(`Successful-file UTC-hour coverage: ${JSON.stringify(successfulHours)}`);
 console.log(`Candidates with at least one unique article: ${snapshot.summary.candidatesWithMatches}/${results.length}.`);
 console.log(`Matched records: ${snapshot.summary.totalMultiwordPhraseMatchedRecords} multiword-phrase / ${snapshot.summary.totalContextFilteredMatchedRecords} context-filtered-single-token.`);

@@ -16,3 +16,20 @@ export function buildHourlyTargets(now = new Date(), hours = 24) {
     };
   });
 }
+
+
+export function summarizeHourlyCoverage(requestedHours, files) {
+  const requested = Math.min(24, Math.max(1, Math.floor(Number(requestedHours) || 24)));
+  const successfulHours = new Set(
+    files.filter(file => file.status === "ok").map(file => file.sampleHour)
+  );
+  const successfulSamples = successfulHours.size;
+  return {
+    status: successfulSamples >= requested ? "COMPLETE" : "PARTIAL",
+    requestedSamples: requested,
+    successfulSamples,
+    missingSamples: Math.max(0, requested - successfulSamples),
+    failedFiles: files.filter(file => !["ok", "missing"].includes(file.status)).length,
+    missingPublicationProbes: files.filter(file => file.status === "missing").length
+  };
+}
