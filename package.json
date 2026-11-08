@@ -8,7 +8,7 @@
     "gdelt:test": "node scripts/gdelt-smoke-test.mjs",
     "webngrams:test": "node scripts/webngrams-smoke-test.mjs",
     "check": "node --check scripts/gdelt-smoke-test.mjs",
-    "check:webngrams": "node --check scripts/webngrams-smoke-test.mjs && node --check scripts/webngrams-matching.mjs && node --test tests/webngrams-matching.test.mjs"
+    "check:webngrams": "node --check scripts/webngrams-smoke-test.mjs && node --check scripts/webngrams-matching.mjs && node --check scripts/webngrams-sampling.mjs && node --test tests/webngrams-matching.test.mjs tests/webngrams-sampling.test.mjs"
   },
   "engines": {
     "node": ">=20"
