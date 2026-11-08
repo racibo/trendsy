@@ -5,12 +5,12 @@ import { Readable } from "node:stream";
 import { pipeline } from "node:stream/promises";
 import { createInterface } from "node:readline";
 import { matchCandidate } from "./webngrams-matching.mjs";
+import { buildHourlyTargets } from "./webngrams-sampling.mjs";
 
 const BASE_URL = "https://data.gdeltproject.org/gdeltv3/webngrams";
 const INPUT = new URL("../data/webngrams-candidates.json", import.meta.url);
 const OUTPUT_DIR = path.resolve("output");
-const LOOKBACK_MINUTES = Math.min(1440, Math.max(1, Number(process.env.WEBNGRAMS_LOOKBACK_MINUTES ?? 1440)));
-const TARGET_FILES = Math.min(30, Math.max(1, Number(process.env.WEBNGRAMS_TARGET_FILES ?? 30)));
+const SAMPLE_HOURS = Math.min(24, Math.max(1, Number(process.env.WEBNGRAMS_SAMPLE_HOURS ?? 24)));
 const REQUEST_GAP_MS = Math.max(0, Number(process.env.WEBNGRAMS_REQUEST_GAP_MS ?? 750));
 const MAX_RETRIES = 2;
 
@@ -66,30 +66,43 @@ const stats = new Map(candidates.map(candidate => [candidate.id, {
 
 await fs.mkdir(OUTPUT_DIR, { recursive: true });
 const scanStartedAt = new Date();
-scanStartedAt.setUTCSeconds(0, 0);
+const hourlyTargets = buildHourlyTargets(scanStartedAt, SAMPLE_HOURS);
 const files = [];
 let lastRequestAt = 0;
 
-for (let offset = LOOKBACK_MINUTES; offset >= 1; offset--) {
-  const minute = new Date(scanStartedAt.getTime() - offset * 60_000);
-  const filename = `${stamp(minute)}.webngrams.json.gz`;
-  const url = `${BASE_URL}/${filename}`;
-  const wait = REQUEST_GAP_MS - (Date.now() - lastRequestAt);
-  if (wait > 0) await sleep(wait);
-  lastRequestAt = Date.now();
-  process.stdout.write(`Checking ${filename} ... `);
+for (const sample of hourlyTargets) {
+  let fetched = null;
+  let minute = sample.target;
+  let filename = "";
+  let url = "";
 
-  const fetched = await fetchWithRetry(url);
-  if (fetched.kind === "missing") {
-    files.push({ filename, url, status: "missing", httpStatus: 404 });
-    console.log("not published (404)");
-    continue;
+  // GDELT Web NGrams publishes files on quarter-hour slots. Probe one slot per
+  // hour, rotating through :01/:16/:31/:46, then try the following minute once.
+  for (const candidateMinute of [sample.target, sample.fallback]) {
+    minute = candidateMinute;
+    filename = `${stamp(minute)}.webngrams.json.gz`;
+    url = `${BASE_URL}/${filename}`;
+    const wait = REQUEST_GAP_MS - (Date.now() - lastRequestAt);
+    if (wait > 0) await sleep(wait);
+    lastRequestAt = Date.now();
+    process.stdout.write(`Checking ${filename} ... `);
+
+    fetched = await fetchWithRetry(url);
+    if (fetched.kind === "missing") {
+      files.push({ filename, url, status: "missing", httpStatus: 404, sampleHour: sample.sampleHour });
+      console.log("not published (404)");
+      continue;
+    }
+    if (fetched.kind !== "ok") {
+      files.push({ filename, url, status: fetched.kind, httpStatus: fetched.status, error: fetched.error, attempts: fetched.attempts, sampleHour: sample.sampleHour });
+      console.log(fetched.error ?? `HTTP ${fetched.status}`);
+      break;
+    }
+    console.log("available; processing");
+    break;
   }
-  if (fetched.kind !== "ok") {
-    files.push({ filename, url, status: fetched.kind, httpStatus: fetched.status, error: fetched.error, attempts: fetched.attempts });
-    console.log(fetched.error ?? `HTTP ${fetched.status}`);
-    continue;
-  }
+
+  if (!fetched || fetched.kind !== "ok") continue;
 
   // Stage every candidate result locally. Nothing is merged into the snapshot until
   // the complete gzip stream has been read and every non-empty line parsed.
@@ -186,11 +199,12 @@ for (let offset = LOOKBACK_MINUTES; offset >= 1; offset--) {
       matchedCandidateCount,
       uniqueCandidateArticleMatches,
       utcHour: minute.getUTCHours(),
+      sampleHour: sample.sampleHour,
       attempts: fetched.attempts
     });
     console.log(`${records.toLocaleString()} records; ${matchedCandidateCount} candidates matched`);
   } catch (error) {
-    files.push({ filename, url, status: "processing_error", error: String(error), attempts: fetched.attempts });
+    files.push({ filename, url, status: "processing_error", error: String(error), attempts: fetched.attempts, sampleHour: sample.sampleHour });
     console.log(`processing error: ${String(error)}`);
   }
 }
@@ -221,25 +235,26 @@ for (const file of successful) {
   const hour = String(file.utcHour).padStart(2, "0");
   successfulHours[hour] = (successfulHours[hour] ?? 0) + 1;
 }
-const successfulMinutes = successful.map(file => Number(file.filename.slice(0, 12)));
 const snapshot = {
   schemaVersion: 3,
   source: "GDELT Web News NGrams 3.0",
   sourceUrl: BASE_URL,
   generatedAt: new Date().toISOString(),
   sampling: {
-    lookbackMinutes: LOOKBACK_MINUTES,
-    targetSuccessfulFiles: TARGET_FILES,
+    sampleHours: SAMPLE_HOURS,
+    targetSampleHours: SAMPLE_HOURS,
     probedMinutes: files.length,
     successfulFiles: successful.length,
+    successfulSampleHours: new Set(successful.map(file => file.sampleHour)).size,
+    missingSampleHours: SAMPLE_HOURS - new Set(successful.map(file => file.sampleHour)).size,
     missingMinutes: files.filter(file => file.status === "missing").length,
     failedRequests: files.filter(file => !["ok", "missing"].includes(file.status)).length,
     successfulFilesByUtcHour: successfulHours,
     coverageStartUtc: successful.length ? successful[0].filename.slice(0, 14) : null,
     coverageEndUtc: successful.length ? successful[successful.length - 1].filename.slice(0, 14) : null,
-    targetReached: successful.length >= TARGET_FILES,
+    targetReached: new Set(successful.map(file => file.sampleHour)).size >= SAMPLE_HOURS,
     files,
-    note: "Scans backwards across the full requested lookback window; targetSuccessfulFiles is a minimum coverage goal, not an early-stop condition. 404 minutes are normal publication gaps. Results from a file are merged only after its entire gzip stream parses successfully."
+    note: "Samples one representative GDELT publication slot in each requested UTC hour, rotating across :01, :16, :31 and :46. If that minute is missing, the following minute is tried once. 404 minutes are normal publication gaps. Results from a file are merged only after its entire gzip stream parses successfully."
   },
   summary: {
     totalCandidates: results.length,
@@ -261,7 +276,7 @@ const csv = [
 ].join("\n") + "\n";
 await fs.writeFile(path.join(OUTPUT_DIR, "webngrams-snapshot.csv"), csv);
 
-console.log(`\nCompleted: ${successful.length} fully parsed files (minimum target ${TARGET_FILES}) after probing ${files.length}/${LOOKBACK_MINUTES} minutes.`);
+console.log(`\nCompleted: ${new Set(successful.map(file => file.sampleHour)).size}/${SAMPLE_HOURS} hourly samples using ${successful.length} fully parsed files after ${files.length} file probes.`);
 console.log(`Successful-file UTC-hour coverage: ${JSON.stringify(successfulHours)}`);
 console.log(`Candidates with at least one unique article: ${snapshot.summary.candidatesWithMatches}/${results.length}.`);
 console.log(`Matched records: ${snapshot.summary.totalMultiwordPhraseMatchedRecords} multiword-phrase / ${snapshot.summary.totalContextFilteredMatchedRecords} context-filtered-single-token.`);
