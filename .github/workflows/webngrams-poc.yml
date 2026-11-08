@@ -64,3 +64,28 @@ jobs:
           path: output/webngrams-snapshot.*
           if-no-files-found: error
           retention-days: 30
+
+      - name: Report sampling completeness
+        if: success()
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from "node:fs/promises";
+          const snapshot = JSON.parse(await fs.readFile("output/webngrams-snapshot.json", "utf8"));
+          const sampling = snapshot.sampling;
+          const summary = [
+            `## Web NGrams sampling: ${sampling.status}`,
+            "",
+            `- Successful hourly samples: **${sampling.successfulSampleHours}/${sampling.sampleHours}**`,
+            `- Missing hourly samples: **${sampling.missingSampleHours}**`,
+            `- Processing/request failures: **${sampling.failedFiles}**`,
+            `- Normal missing-publication probes (HTTP 404): **${sampling.missingPublicationProbes}**`,
+            ""
+          ].join("\\n");
+          await fs.appendFile(process.env.GITHUB_STEP_SUMMARY, summary);
+          if (sampling.status !== "COMPLETE") {
+            console.log(`::warning::PARTIAL sample: ${sampling.successfulSampleHours}/${sampling.sampleHours} hourly samples succeeded.`);
+            process.exitCode = 1;
+          } else {
+            console.log(`COMPLETE sample: all ${sampling.sampleHours} hourly samples succeeded.`);
+          }
+          NODE
