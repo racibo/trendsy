@@ -1,0 +1,30 @@
+name: GDELT proof of concept
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 5 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run GDELT smoke test
+        run: npm run gdelt:smoke
+      - name: Upload raw results
+        uses: actions/upload-artifact@v4
+        with:
+          name: gdelt-poc-${{ github.run_id }}
+          path: artifacts/
+          if-no-files-found: error
+          retention-days: 14
