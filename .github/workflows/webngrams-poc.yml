@@ -80,7 +80,7 @@ jobs:
             `- Processing/request failures: **${sampling.failedFiles}**`,
             `- Normal missing-publication probes (HTTP 404): **${sampling.missingPublicationProbes}**`,
             ""
-          ].join("\\n");
+          ].join("\n");
           await fs.appendFile(process.env.GITHUB_STEP_SUMMARY, summary);
           if (sampling.status !== "COMPLETE") {
             console.log(`::warning::PARTIAL sample: ${sampling.successfulSampleHours}/${sampling.sampleHours} hourly samples succeeded.`);
