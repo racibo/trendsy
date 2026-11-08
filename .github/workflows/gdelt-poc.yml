@@ -1,15 +1,37 @@
 name: GDELT proof of concept
 
 on:
+  push:
   workflow_dispatch:
   schedule:
     - cron: "17 5 * * *"
+  pull_request:
+    paths:
+      - "scripts/gdelt-smoke-test.mjs"
+      - "data/candidates.json"
+      - "docs/data-methodology.md"
+      - "package.json"
+      - ".github/workflows/gdelt-poc.yml"
 
 permissions:
   contents: read
 
 jobs:
+  validate:
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check script syntax
+        run: npm run check
+
   smoke-test:
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
