@@ -1,0 +1,1 @@
+node_modules/\nartifacts/\n.env\n.env.*\n!.env.example\n.DS_Store\n

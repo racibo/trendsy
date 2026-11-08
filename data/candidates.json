@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "description": "Small manually curated GDELT DOC API smoke-test sample; not a production catalogue.",
+  "candidates": [
+    {
+      "id": "person-global-trump",
+      "category": "global_people",
+      "label": "Donald Trump",
+      "query": "\"Donald Trump\"",
+      "notes": "Person name; review article relevance."
+    },
+    {
+      "id": "person-global-swift",
+      "category": "global_people",
+      "label": "Taylor Swift",
+      "query": "\"Taylor Swift\"",
+      "notes": "Person name; review article relevance."
+    },
+    {
+      "id": "event-global-olympics",
+      "category": "global_events",
+      "label": "Olympic Games",
+      "query": "\"Olympic Games\"",
+      "notes": "Recurring event family, not a single dated edition."
+    },
+    {
+      "id": "event-global-cop",
+      "category": "global_events",
+      "label": "COP climate summit",
+      "query": "\"COP climate summit\"",
+      "notes": "May match multiple annual editions."
+    },
+    {
+      "id": "country-france",
+      "category": "countries",
+      "label": "France",
+      "query": "France",
+      "notes": "Review contextual relevance."
+    },
+    {
+      "id": "country-japan",
+      "category": "countries",
+      "label": "Japan",
+      "query": "Japan",
+      "notes": "Review contextual relevance."
+    },
+    {
+      "id": "city-global-paris",
+      "category": "global_cities",
+      "label": "Paris, France",
+      "query": "\"Paris\"",
+      "notes": "Potential homonyms; DOC source-country filters are not topic-location filters."
+    },
+    {
+      "id": "city-global-tokyo",
+      "category": "global_cities",
+      "label": "Tokyo, Japan",
+      "query": "\"Tokyo\"",
+      "notes": "Review false matches and context."
+    },
+    {
+      "id": "city-pl-gdansk",
+      "category": "polish_cities",
+      "label": "Gdańsk",
+      "query": "\"Gdańsk\" OR Gdansk",
+      "notes": "Test diacritic and non-diacritic spelling coverage."
+    },
+    {
+      "id": "city-pl-krakow",
+      "category": "polish_cities",
+      "label": "Kraków",
+      "query": "\"Kraków\" OR Krakow",
+      "notes": "Test diacritic and non-diacritic spelling coverage."
+    },
+    {
+      "id": "person-pl-tusk",
+      "category": "people_in_polish_media",
+      "label": "Donald Tusk",
+      "query": "\"Donald Tusk\"",
+      "notes": "Prominent in Polish media, not a nationality classification."
+    },
+    {
+      "id": "person-pl-lewandowski",
+      "category": "people_in_polish_media",
+      "label": "Robert Lewandowski",
+      "query": "\"Robert Lewandowski\"",
+      "notes": "Prominent in Polish media, not a nationality classification."
+    }
+  ]
+}
