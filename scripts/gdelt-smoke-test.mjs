@@ -105,7 +105,7 @@ async function requestTimeline(candidate, expectedDates) {
       const body = await response.json();
       const series = Array.isArray(body.timeline) ? body.timeline : [];
       const points = series.flatMap(s => Array.isArray(s.data) ? s.data : [])
-        .map(p => ({ date: compactDate(p.date), value: Number(p.value) }))
+        .map(p => ({\n          date: compactDate(p.date),\n          value: Number(p.value),\n          norm: p.norm == null ? null : Number(p.norm)\n        }))
         .filter(p => /^\d{8}$/.test(p.date) && Number.isFinite(p.value));
       const returnedDates = new Set(points.map(p => p.date));
 
@@ -176,10 +176,10 @@ const snapshot = {
 await fs.writeFile(path.join(OUTPUT_DIR, "gdelt-snapshot.json"), JSON.stringify(snapshot, null, 2) + "\n");
 
 const csv = [
-  "id,label,category,query,locale,date,value,status",
+  "id,label,category,query,locale,date,value,norm,status",
   ...results.flatMap(r => r.points?.length
-    ? r.points.map(p => [r.id, r.label, r.category, r.query, r.locale, p.date, p.value, r.status].map(csvCell).join(","))
-    : [[r.id, r.label, r.category, r.query, r.locale, "", "", r.status].map(csvCell).join(",")])
+    ? r.points.map(p => [r.id, r.label, r.category, r.query, r.locale, p.date, p.value, p.norm, r.status].map(csvCell).join(","))
+    : [[r.id, r.label, r.category, r.query, r.locale, "", "", "", r.status].map(csvCell).join(",")])
 ].join("\n") + "\n";
 await fs.writeFile(path.join(OUTPUT_DIR, "gdelt-snapshot.csv"), csv);
 
