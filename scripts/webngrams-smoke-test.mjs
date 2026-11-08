@@ -32,7 +32,7 @@ async function fetchWithRetry(url) {
     try {
       const response = await fetch(url, {
         headers: { "User-Agent": "Trendsy-WebNgrams-PoC/0.3 (research prototype)" },
-        signal: AbortSignal.timeout(30000)
+        signal: AbortSignal.timeout(120000)
       });
       if (response.status === 404) return { kind: "missing", status: 404 };
       if (response.ok) return { kind: "ok", response, attempts: attempt + 1 };
@@ -108,6 +108,8 @@ for (let offset = LOOKBACK_MINUTES; offset >= 1; offset--) {
     let parseErrors = 0;
     const gunzip = createGunzip();
     const streamDone = pipeline(Readable.fromWeb(fetched.response.body), gunzip);
+    // Attach a rejection handler immediately; the awaited pipeline is still checked below.
+    streamDone.catch(() => {});
     const lines = createInterface({ input: gunzip, crlfDelay: Infinity });
 
     for await (const line of lines) {
