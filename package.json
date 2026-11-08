@@ -1,0 +1,12 @@
+{
+  "name": "trendsy-gdelt-poc",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Proof of concept for daily Trendsy popularity measurements using GDELT DOC API",
+  "scripts": {
+    "gdelt:test": "node scripts/gdelt-smoke-test.mjs",
+    "check": "node --check scripts/gdelt-smoke-test.mjs"
+  },
+  "engines": { "node": ">=20" }
+}
