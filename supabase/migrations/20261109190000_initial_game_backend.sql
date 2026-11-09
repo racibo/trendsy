@@ -282,7 +282,6 @@ $$;
 -- Leaderboard exposes only display names and aggregate values, never emails or transaction details.
 create or replace function public.get_leaderboard(p_limit integer default 50)
 returns table (
-  user_id uuid,
   display_name text,
   portfolio_value numeric,
   profit numeric
@@ -292,8 +291,7 @@ stable
 security definer
 set search_path = ''
 as $$
-  select p.user_id,
-         pr.display_name,
+  select pr.display_name,
          round(p.cash + coalesce(sum(i.price * h.units), 0), 2) as portfolio_value,
          round(p.cash + coalesce(sum(i.price * h.units), 0) - 100.00, 2) as profit
   from public.portfolios p
