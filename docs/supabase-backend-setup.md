@@ -1,60 +1,23 @@
-# Etap backendu Trendsy — Supabase
+# Trendsy — backend Supabase i logowanie e-mail
 
-## Co dodaje ta migracja
+## Stan
+Frontend korzysta z Supabase Auth przez jednorazowy link e-mail (Magic Link), pobiera katalog, portfel, historię i ranking z bazy oraz wykonuje zakupy/wymiany przez RPC. Google Cloud i Google OAuth nie są potrzebne.
 
-Migracja `supabase/migrations/20261109190000_initial_game_backend.sql` przygotowuje wspólny backend gry:
+## Konfiguracja frontendu
+W pliku `web/config.js` ustaw:
+- Project URL: `https://gczshjesskufedzwgoss.supabase.co`
+- klucz `anon/public` lub nowy `publishable` z Supabase → Project Settings → API Keys.
 
-- logowanie obsługiwane przez Supabase Auth (Google będzie jedynym włączonym dostawcą w konfiguracji projektu);
-- automatyczne utworzenie profilu i portfela z kapitałem 100 TR po pierwszym logowaniu;
-- wspólny katalog instrumentów z przykładowymi cenami;
-- portfele, pozycje i historia transakcji w PostgreSQL;
-- ranking oparty na rzeczywistej wartości portfeli;
-- reguły zakupów i wymian sprawdzane atomowo po stronie bazy;
-- RLS: gracz odczytuje wyłącznie swój portfel, pozycje i transakcje; nie ma bezpośredniego zapisu z przeglądarki.
+Do przeglądarki wolno wkleić wyłącznie klucz publiczny anon/publishable. **Nigdy** nie używaj `service_role`, secret key ani hasła bazy danych.
 
-**Ważne:** to jest fundament backendu, a nie jeszcze podłączona wersja produkcyjna strony. Frontend pozostaje w trybie demo do czasu skonfigurowania projektu Supabase i dodania bezpiecznych ustawień publicznych. Klucz `service_role` nigdy nie może trafić do przeglądarki ani repozytorium.
+## Konfiguracja Supabase Auth
+1. Authentication → Sign In / Providers → Email: włącz Email.
+2. Wyłącz Google, jeśli jest włączony.
+3. Authentication → URL Configuration:
+   - Site URL: `https://trends.racibo.pl`
+   - Redirect URLs: `https://trends.racibo.pl/**`
+   - adres Netlify Deploy Preview dodaj na czas testów, jeśli logowanie będzie testowane z preview.
+4. Supabase domyślnie może ograniczać wysyłkę wiadomości testowych. Do szerszego użycia skonfigurujemy własny SMTP — nie jest do tego potrzebny Google Cloud.
 
-## Konfiguracja projektu — do wykonania raz
-
-1. Wejdź na https://supabase.com/dashboard i utwórz projekt o nazwie `trendsy` (region Frankfurt, jeśli jest dostępny).
-2. Wybierz silne hasło bazy i zachowaj je poza repozytorium.
-3. W **Authentication → Providers → Google** włącz Google. Konfiguracja OAuth wymaga Client ID i Client Secret z Google Cloud; wpisz je wyłącznie w panelu Supabase.
-4. W **Authentication → URL Configuration** dodaj:
-   - Site URL: `https://trends.racibo.pl` (po uruchomieniu domeny produkcyjnej);
-   - Redirect URL: `https://trends.racibo.pl/**`;
-   - na czas testów dodaj także adres Deploy Preview, jeśli test logowania ma odbywać się z podglądu Netlify.
-5. Otwórz **SQL Editor → New query**, wklej całą zawartość migracji i uruchom ją.
-6. W **Project Settings → API** skopiuj Project URL oraz klucz `anon/public`. To jedyne wartości, które później mogą być użyte w publicznym froncie. Nie wysyłaj klucza `service_role`.
-
-## Kontrola po migracji
-
-W SQL Editor można sprawdzić tabele:
-
-```sql
-select table_name
-from information_schema.tables
-where table_schema = 'public'
-order by table_name;
-```
-
-Oczekiwane: `holdings`, `instruments`, `portfolios`, `profiles`, `transactions`.
-
-Kontrola katalogu:
-
-```sql
-select id, name, category, edition, price, price_source
-from public.instruments
-order by id;
-```
-
-## Co będzie w następnym kroku kodowania
-
-Po utworzeniu projektu i zastosowaniu migracji podłączymy frontend do Supabase:
-
-1. ekran logowania Google i obsługa sesji;
-2. pobieranie katalogu, portfela i rankingu z bazy;
-3. wywołania RPC `buy_instrument` i `exchange_instrument` zamiast lokalnej modyfikacji `localStorage`;
-4. stan ładowania, błędy i wylogowanie;
-5. test dwóch niezależnych kont i test wymiany z blokadą 24 h.
-
-Dopiero po tych testach wyłączymy tryb demo. Ceny w tej migracji są oznaczone jako `demo`; nie są jeszcze cenami wyliczonymi z GDELT/Web NGrams.
+## Ważne
+Migracja SQL została już uruchomiona w projekcie. Konto i portfel 100 TR tworzy trigger po pierwszym logowaniu. Reguły zakupów i wymian są egzekwowane przez funkcje SQL, a nie przez przeglądarkę. Ceny instrumentów nadal mają źródło `demo`.
