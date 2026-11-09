@@ -48,6 +48,7 @@ function buy(id){
   save();render();notify("Dodano "+item.name+" do portfela.");
 }
 function exchange(oldId,newId){
+  if(state.holdings.length!==MAX_HOLDINGS){notify("Najpierw zbuduj pełny portfel z trzech instrumentów.");return;}
   const oldItem=byId(oldId),newItem=byId(newId);
   if(cooldownRemaining()>0){notify("Następna wymiana za "+formatRemaining(cooldownRemaining())+".");return;}
   if(oldId===newId){notify("Wybierz inny instrument.");return;}
@@ -64,6 +65,7 @@ function exchange(oldId,newId){
   save();render();notify("Wymieniono "+oldItem.name+" na "+newItem.name+".");
 }
 function startExchange(oldId){
+  if(state.holdings.length!==MAX_HOLDINGS){notify("Wymiana będzie dostępna po zapełnieniu portfela.");return;}
   const oldItem=byId(oldId);
   if(cooldownRemaining()>0){notify("Następna wymiana za "+formatRemaining(cooldownRemaining())+".");return;}
   const candidates=instruments.filter(item=>item.id!==oldId && !state.holdings.some(h=>h.id!==oldId && byId(h.id).category===item.category) && !(oldItem.edition==="national" && item.edition!=="national" && !state.holdings.some(h=>h.id!==oldId && byId(h.id).edition==="national")));
@@ -102,7 +104,7 @@ function renderPortfolio(){
   el.innerHTML=state.holdings.map(h=>{
     const item=byId(h.id),value=h.units*item.price;
     const disabled=cooldownRemaining()>0;
-    return '<article class="holding"><div class="instrument-main"><span class="instrument-icon">'+item.icon+'</span><div><div class="instrument-name">'+item.name+'</div><div class="instrument-meta">'+item.category+' · '+h.units+' szt.</div></div></div><div class="holding-value">'+money(value)+'<small>Wartość pozycji</small></div><button class="exchange-button" data-exchange="'+item.id+'" '+(disabled?'disabled title="Wymiana dostępna za '+formatRemaining(cooldownRemaining())+'"':'')+'>Wymień ↗</button></article>';
+    return '<article class="holding"><div class="instrument-main"><span class="instrument-icon">'+item.icon+'</span><div><div class="instrument-name">'+item.name+'</div><div class="instrument-meta">'+item.category+' · '+h.units+' szt.</div></div></div><div class="holding-value">'+money(value)+'<small>Wartość pozycji</small></div>'+(state.holdings.length===MAX_HOLDINGS?'<button class="exchange-button" data-exchange="'+item.id+'" '+(disabled?'disabled title="Wymiana dostępna za '+formatRemaining(cooldownRemaining())+'"':'')+'>Wymień ↗</button>':'<span class="muted">Zapełnij portfel</span>')+'</article>';
   }).join("");
   el.querySelectorAll("[data-exchange]").forEach(button=>button.addEventListener("click",()=>startExchange(button.dataset.exchange)));
 }
