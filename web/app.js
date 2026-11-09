@@ -66,7 +66,7 @@ function exchange(oldId,newId){
 function startExchange(oldId){
   const oldItem=byId(oldId);
   if(cooldownRemaining()>0){notify("Następna wymiana za "+formatRemaining(cooldownRemaining())+".");return;}
-  const candidates=instruments.filter(item=>item.id!==oldId && !state.holdings.some(h=>h.id!==oldId && byId(h.id).category===item.category));
+  const candidates=instruments.filter(item=>item.id!==oldId && !state.holdings.some(h=>h.id!==oldId && byId(h.id).category===item.category) && !(oldItem.edition==="national" && item.edition!=="national" && !state.holdings.some(h=>h.id!==oldId && byId(h.id).edition==="national")));
   const select=document.querySelector("#exchange-select");
   select.innerHTML=candidates.map(item=>'<option value="'+item.id+'">'+item.icon+' '+item.name+' · '+item.category+' · '+money(item.price)+'</option>').join("");
   document.querySelector("#exchange-description").textContent="Sprzedasz "+oldItem.name+" i kupisz wybrany instrument. Wymiana zablokuje kolejną zmianę składu portfela na 24 godziny.";
@@ -74,6 +74,7 @@ function startExchange(oldId){
   dialog.dataset.oldId=oldId;
   dialog.showModal();
 }
+document.querySelector("#cancel-exchange").addEventListener("click",()=>document.querySelector("#exchange-dialog").close());
 document.querySelector("#exchange-form").addEventListener("submit",event=>{
   event.preventDefault();
   const dialog=document.querySelector("#exchange-dialog");
@@ -88,8 +89,9 @@ function renderInstruments(){
   list.innerHTML=filtered.map(item=>{
     const sameCategory=state.holdings.some(h=>byId(h.id).category===item.category);
     const full=state.holdings.length>=MAX_HOLDINGS;
-    const disabled=full||sameCategory||state.cash<item.price;
-    const reason=full?"Portfel pełny":sameCategory?"Kategoria zajęta":state.cash<item.price?"Za mało TR":"Kup 1 szt.";
+    const needsNational=state.holdings.length===MAX_HOLDINGS-1 && !hasNational() && item.edition!=="national";
+    const disabled=full||sameCategory||needsNational||state.cash<item.price;
+    const reason=full?"Portfel pełny":sameCategory?"Kategoria zajęta":needsNational?"Wymagany instrument krajowy":state.cash<item.price?"Za mało TR":"Kup 1 szt.";
     return '<article class="instrument"><div class="instrument-main"><span class="instrument-icon">'+item.icon+'</span><div><div class="instrument-name">'+item.name+'</div><div class="instrument-meta">'+item.category+' <span class="edition">· '+(item.edition==="national"?"Edycja krajowa":"Edycja światowa")+'</span></div></div></div><div class="price">'+money(item.price)+'<small>'+(item.change>=0?"+":"")+item.change.toFixed(1).replace(".",",")+'% · demo</small></div><button class="buy-button" data-buy="'+item.id+'" '+(disabled?'disabled title="'+reason+'"':'')+'>'+(disabled?reason:"Kup")+'</button></article>';
   }).join("");
   list.querySelectorAll("[data-buy]").forEach(button=>button.addEventListener("click",()=>buy(button.dataset.buy)));
