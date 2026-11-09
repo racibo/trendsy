@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildHourlyTargets, summarizeHourlyCoverage } from "../scripts/webngrams-sampling.mjs";
+import { buildHourlyTargets, summarizeHourlyCoverage, appendUniqueEvidence } from "../scripts/webngrams-sampling.mjs";
 
 test("builds one timestamp per hour across the previous 24 complete UTC hours", () => {
   const now = new Date("2026-11-08T23:42:00.000Z");
@@ -62,4 +62,27 @@ test("uses a five-minute default file timeout and bounds configured values", asy
   assert.equal(getWebNgramsFileTimeoutMs("1"), 30000);
   assert.equal(getWebNgramsFileTimeoutMs("900000"), 600000);
   assert.equal(getWebNgramsFileTimeoutMs("invalid"), 300000);
+});
+
+
+test("retains up to the configured evidence cap across multiple files", () => {
+  const retained = [];
+  const firstBatch = Array.from({ length: 8 }, (_, i) => ({ url: `https://example.com/${i}` }));
+  const secondBatch = Array.from({ length: 20 }, (_, i) => ({ url: `https://example.com/${i + 8}` }));
+  appendUniqueEvidence(retained, firstBatch, 25);
+  appendUniqueEvidence(retained, secondBatch, 25);
+  assert.equal(retained.length, 25);
+  assert.equal(new Set(retained.map(item => item.url)).size, 25);
+});
+
+test("does not add duplicate article URLs and respects the evidence limit", () => {
+  const retained = [{ url: "https://example.com/a" }];
+  appendUniqueEvidence(retained, [
+    { url: "https://example.com/a" },
+    { url: "https://example.com/b" },
+    { url: "https://example.com/c" }
+  ], 2);
+  assert.deepEqual(retained.map(item => item.url), [
+    "https://example.com/a", "https://example.com/b"
+  ]);
 });
