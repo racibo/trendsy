@@ -2,7 +2,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const SUPABASE_URL = window.TRENDSY_CONFIG?.url || "";
 const SUPABASE_ANON_KEY = window.TRENDSY_CONFIG?.anonKey || "";
-const client = SUPABASE_URL && SUPABASE_ANON_KEY
+const client = SUPABASE_URL && SUPABASE_ANON_KEY && !SUPABASE_ANON_KEY.includes("PASTE_")
   ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
   : null;
 
@@ -164,6 +164,6 @@ document.querySelector("#exchange-form").addEventListener("submit",async event=>
 if(!client){
   showAuth("Aplikacja jest przygotowana do logowania e-mail, ale wymaga jeszcze publicznego klucza anon/publishable z ustawień Supabase.");
 } else {
-  client.auth.onAuthStateChange((_event)=>{loadGame().catch(error=>{console.error(error);notify(error.message||"Nie udało się pobrać danych gry.");});});
+  client.auth.onAuthStateChange((_event)=>{setTimeout(()=>loadGame().catch(error=>{console.error(error);notify(error.message||"Nie udało się pobrać danych gry.");}),0);});
   loadGame().catch(error=>{console.error(error);showAuth("Błąd połączenia z Supabase: "+error.message);});
 }
