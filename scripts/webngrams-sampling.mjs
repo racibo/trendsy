@@ -40,3 +40,17 @@ export function getWebNgramsFileTimeoutMs(value = process.env.WEBNGRAMS_FILE_TIM
   if (!Number.isFinite(parsed) || parsed <= 0) return 300000;
   return Math.min(600000, Math.max(30000, Math.floor(parsed)));
 }
+
+
+// Retain distinct article URLs up to the configured per-candidate evidence cap.
+export function appendUniqueEvidence(target, incoming, limit = 25) {
+  const max = Math.max(0, Math.floor(Number(limit) || 0));
+  const seen = new Set(target.map(item => item.url));
+  for (const item of incoming) {
+    if (target.length >= max) break;
+    if (!item?.url || seen.has(item.url)) continue;
+    target.push(item);
+    seen.add(item.url);
+  }
+  return target;
+}

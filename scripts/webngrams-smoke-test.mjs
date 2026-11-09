@@ -5,7 +5,7 @@ import { Readable } from "node:stream";
 import { pipeline } from "node:stream/promises";
 import { createInterface } from "node:readline";
 import { matchCandidate } from "./webngrams-matching.mjs";
-import { buildHourlyTargets, summarizeHourlyCoverage, getWebNgramsFileTimeoutMs } from "./webngrams-sampling.mjs";
+import { buildHourlyTargets, summarizeHourlyCoverage, getWebNgramsFileTimeoutMs, appendUniqueEvidence } from "./webngrams-sampling.mjs";
 
 const BASE_URL = "https://data.gdeltproject.org/gdeltv3/webngrams";
 const INPUT = new URL("../data/webngrams-candidates.json", import.meta.url);
@@ -173,15 +173,13 @@ for (const sample of hourlyTargets) {
         }
         if (match.matchType === "context_filtered_single_token") item.contextFilteredMatchedRecords++;
         else item.multiwordPhraseMatchedRecords++;
-        if (item.evidence.length < EVIDENCE_LIMIT && !item.evidence.some(entry => entry.url === articleUrl)) {
-          item.evidence.push({
-            aliasMatches: match.matchedAliases,
-            matchType: match.matchType,
-            lang,
-            context: match.context,
-            url: articleUrl
-          });
-        }
+        appendUniqueEvidence(item.evidence, [{
+          aliasMatches: match.matchedAliases,
+          matchType: match.matchType,
+          lang,
+          context: match.context,
+          url: articleUrl
+        }], EVIDENCE_LIMIT);
       }
     }
 
@@ -207,11 +205,7 @@ for (const sample of hourlyTargets) {
       }
       total.contextFilteredMatchedRecords += delta.contextFilteredMatchedRecords;
       total.multiwordPhraseMatchedRecords += delta.multiwordPhraseMatchedRecords;
-      for (const evidence of delta.evidence) {
-        if (total.evidence.length < 8 && !total.evidence.some(entry => entry.url === evidence.url)) {
-          total.evidence.push(evidence);
-        }
-      }
+      appendUniqueEvidence(total.evidence, delta.evidence, EVIDENCE_LIMIT);
     }
 
     files.push({
