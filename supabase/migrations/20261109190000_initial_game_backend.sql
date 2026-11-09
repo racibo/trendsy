@@ -130,6 +130,11 @@ drop policy if exists "Players read own transactions" on public.transactions;
 create policy "Players read own transactions"
   on public.transactions for select to authenticated using (auth.uid() = user_id);
 
+-- SQL privileges are separate from RLS policies: grant reads explicitly,
+-- then let RLS restrict private rows to the current player.
+grant select on public.instruments to anon, authenticated;
+grant select on public.profiles, public.portfolios, public.holdings, public.transactions to authenticated;
+
 -- No INSERT/UPDATE/DELETE policies are granted to clients for game-state tables.
 -- All writes go through the SECURITY DEFINER RPCs below, with auth.uid() checks.
 
