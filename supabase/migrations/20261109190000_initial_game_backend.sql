@@ -262,7 +262,8 @@ begin
     and h.instrument_id <> p_sell_instrument_id
     and i.edition = 'national';
 
-  if other_national_count + case when bought.edition = 'national' then 1 else 0 end <> 1 then
+  if (bought.edition = 'national' and other_national_count <> 0)
+     or (bought.edition <> 'national' and other_national_count <> 1) then
     raise exception 'Pełny portfel musi zawierać dokładnie jeden instrument edycji krajowej.';
   end if;
 
