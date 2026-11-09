@@ -39,6 +39,7 @@ function log(message,amount){state.history.unshift({message,amount,at:Date.now()
 function buy(id){
   const item=byId(id);
   if(state.holdings.length>=MAX_HOLDINGS){notify("Portfel jest pełny. Użyj opcji wymiany.");return;}
+  if(state.holdings.length===MAX_HOLDINGS-1 && !hasNational() && item.edition!=="national"){notify("Ostatnie miejsce w portfelu musi zająć instrument edycji krajowej.");return;}
   if(state.holdings.some(h=>byId(h.id).category===item.category)){notify("Możesz mieć tylko jeden instrument z kategorii: "+item.category+".");return;}
   if(state.cash<item.price){notify("Masz za mało wolnych środków.");return;}
   state.cash-=item.price;
@@ -64,14 +65,23 @@ function exchange(oldId,newId){
 }
 function startExchange(oldId){
   const oldItem=byId(oldId);
+  if(cooldownRemaining()>0){notify("Następna wymiana za "+formatRemaining(cooldownRemaining())+".");return;}
   const candidates=instruments.filter(item=>item.id!==oldId && !state.holdings.some(h=>h.id!==oldId && byId(h.id).category===item.category));
-  const options=candidates.map(item=>'<option value="'+item.id+'">'+item.name+' · '+money(item.price)+'</option>').join("");
-  const choice=prompt("Wybierz ID nowego instrumentu:\n"+candidates.map(x=>x.id+" — "+x.name+" ("+money(x.price)+")").join("\n"));
-  if(!choice)return;
-  const selected=byId(choice.trim());
-  if(!selected){notify("Nie znaleziono takiego instrumentu. Użyj identyfikatora z listy.");return;}
-  exchange(oldId,selected.id);
+  const select=document.querySelector("#exchange-select");
+  select.innerHTML=candidates.map(item=>'<option value="'+item.id+'">'+item.icon+' '+item.name+' · '+item.category+' · '+money(item.price)+'</option>').join("");
+  document.querySelector("#exchange-description").textContent="Sprzedasz "+oldItem.name+" i kupisz wybrany instrument. Wymiana zablokuje kolejną zmianę składu portfela na 24 godziny.";
+  const dialog=document.querySelector("#exchange-dialog");
+  dialog.dataset.oldId=oldId;
+  dialog.showModal();
 }
+document.querySelector("#exchange-form").addEventListener("submit",event=>{
+  event.preventDefault();
+  const dialog=document.querySelector("#exchange-dialog");
+  const newId=document.querySelector("#exchange-select").value;
+  const oldId=dialog.dataset.oldId;
+  dialog.close();
+  if(newId)exchange(oldId,newId);
+});
 function renderInstruments(){
   const list=document.querySelector("#instrument-list");
   const filtered=instruments.filter(item=>activeFilter==="all"||item.edition===activeFilter);
