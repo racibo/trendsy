@@ -21,3 +21,7 @@ To jest lokalny prototyp demonstracyjny. Ceny, zmiany procentowe i ranking nie p
 ## Reguła wymiany
 
 Początkowe budowanie portfela pozwala kupić do trzech instrumentów. Po zapełnieniu portfela zmianę składu wykonuje się przez jedną operację wymiany: sprzedaż jednej pozycji i zakup innej. Wymiana uruchamia 24-godzinny limit. Nie można wykonać samej sprzedaży, która pozwoliłaby obejść limit lub wymóg edycji krajowej.
+
+## Podgląd Netlify
+
+Pull request z gałęzi `feat/game-ui-mvp` do `main` powinien otrzymać osobny Deploy Preview z Netlify. Podgląd służy do testowania prototypu bez publikowania go na adresie produkcyjnym. Produkcyjna gałąź pozostaje ustawiona na `main`; PR należy scalać dopiero po sprawdzeniu podglądu.
