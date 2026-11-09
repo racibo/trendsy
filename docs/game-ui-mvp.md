@@ -8,7 +8,7 @@ Frontend znajduje się w katalogu `web/`. Netlify publikuje bez procesu kompilac
 - lista przykładowych instrumentów i demonstracyjne ceny;
 - filtrowanie edycji krajowej i światowej;
 - zakup maksymalnie trzech instrumentów z różnych kategorii;
-- wymóg utrzymania co najmniej jednego instrumentu edycji krajowej;
+- wymóg utrzymania dokładnie jednego instrumentu edycji krajowej w pełnym portfelu (maksymalnie jednego na każdym etapie);
 - wycena portfela, wolne środki i wynik względem 100 TR;
 - wymiana jednej pozycji na inną, z blokadą kolejnej wymiany przez 24 godziny;
 - lokalny zapis stanu w przeglądarce (`localStorage`);
@@ -20,7 +20,7 @@ To jest lokalny prototyp demonstracyjny. Ceny, zmiany procentowe i ranking nie p
 
 ## Reguła wymiany
 
-Początkowe budowanie portfela pozwala kupić do trzech instrumentów. Po zapełnieniu portfela zmianę składu wykonuje się przez jedną operację wymiany: sprzedaż jednej pozycji i zakup innej. Wymiana uruchamia 24-godzinny limit. Nie można wykonać samej sprzedaży, która pozwoliłaby obejść limit lub wymóg edycji krajowej.
+Początkowe budowanie portfela pozwala kupić do trzech instrumentów. Po zapełnieniu portfela zmianę składu wykonuje się przez jedną operację wymiany: sprzedaż jednej pozycji i zakup innej. Wymiana uruchamia 24-godzinny limit. Nie można wykonać samej sprzedaży, która pozwoliłaby obejść limit lub wymóg edycji krajowej. Portfel może zawierać maksymalnie jeden instrument edycji krajowej; jeśli ma już taki instrument, nie można kupić ani wymienić na kolejny krajowy.
 
 ## Podgląd Netlify
 
