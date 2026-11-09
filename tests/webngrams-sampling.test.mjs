@@ -53,3 +53,13 @@ test("marks a sample with a timed-out hour as partial", () => {
     missingPublicationProbes: 0
   });
 });
+
+
+test("uses a five-minute default file timeout and bounds configured values", async () => {
+  const { getWebNgramsFileTimeoutMs } = await import("../scripts/webngrams-sampling.mjs");
+  assert.equal(getWebNgramsFileTimeoutMs(undefined), 300000);
+  assert.equal(getWebNgramsFileTimeoutMs("45000"), 45000);
+  assert.equal(getWebNgramsFileTimeoutMs("1"), 30000);
+  assert.equal(getWebNgramsFileTimeoutMs("900000"), 600000);
+  assert.equal(getWebNgramsFileTimeoutMs("invalid"), 300000);
+});

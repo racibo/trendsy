@@ -5,7 +5,7 @@ import { Readable } from "node:stream";
 import { pipeline } from "node:stream/promises";
 import { createInterface } from "node:readline";
 import { matchCandidate } from "./webngrams-matching.mjs";
-import { buildHourlyTargets, summarizeHourlyCoverage } from "./webngrams-sampling.mjs";
+import { buildHourlyTargets, summarizeHourlyCoverage, getWebNgramsFileTimeoutMs } from "./webngrams-sampling.mjs";
 
 const BASE_URL = "https://data.gdeltproject.org/gdeltv3/webngrams";
 const INPUT = new URL("../data/webngrams-candidates.json", import.meta.url);
@@ -13,6 +13,7 @@ const OUTPUT_DIR = path.resolve("output");
 const SAMPLE_HOURS = Math.min(24, Math.max(1, Number(process.env.WEBNGRAMS_SAMPLE_HOURS ?? 24)));
 const REQUEST_GAP_MS = Math.max(0, Number(process.env.WEBNGRAMS_REQUEST_GAP_MS ?? 750));
 const MAX_RETRIES = 2;
+const FILE_TIMEOUT_MS = getWebNgramsFileTimeoutMs();
 const requestedEvidenceLimit = Number(process.env.WEBNGRAMS_EVIDENCE_LIMIT ?? 25);
 const EVIDENCE_LIMIT = Number.isFinite(requestedEvidenceLimit)
   ? Math.min(100, Math.max(8, Math.floor(requestedEvidenceLimit)))
@@ -36,7 +37,7 @@ async function fetchWithRetry(url) {
     try {
       const response = await fetch(url, {
         headers: { "User-Agent": "Trendsy-WebNgrams-PoC/0.3 (research prototype)" },
-        signal: AbortSignal.timeout(120000)
+        signal: AbortSignal.timeout(FILE_TIMEOUT_MS)
       });
       if (response.status === 404) return { kind: "missing", status: 404 };
       if (response.ok) return { kind: "ok", response, attempts: attempt + 1 };
@@ -108,27 +109,46 @@ for (const sample of hourlyTargets) {
 
   if (!fetched || fetched.kind !== "ok") continue;
 
-  // Stage every candidate result locally. Nothing is merged into the snapshot until
-  // the complete gzip stream has been read and every non-empty line parsed.
-  const staged = new Map(candidates.map(candidate => [candidate.id, {
-    matchedRecords: 0,
-    articleUrls: new Set(),
-    languageCounts: {},
-    aliasCounts: {},
-    contextFilteredMatchedRecords: 0,
-    multiwordPhraseMatchedRecords: 0,
-    evidence: []
-  }]));
+  // Retry the complete file operation (fresh HTTP response + fresh gzip stream).
+  // Every attempt has isolated staged counters; only a fully parsed file is committed.
+  let fileCompleted = false;
+  let processingAttempts = 0;
+  let lastProcessingError = null;
 
-  try {
+  for (let processingAttempt = 1; processingAttempt <= MAX_RETRIES + 1; processingAttempt++) {
+    processingAttempts = processingAttempt;
+    const attemptStartedAt = Date.now();
+    let processingStage = "stream_setup";
     let records = 0;
     let parseErrors = 0;
+    const staged = new Map(candidates.map(candidate => [candidate.id, {
+      matchedRecords: 0,
+      articleUrls: new Set(),
+      languageCounts: {},
+      aliasCounts: {},
+      contextFilteredMatchedRecords: 0,
+      multiwordPhraseMatchedRecords: 0,
+      evidence: []
+    }]));
+
+    try {
+      if (processingAttempt > 1) {
+        await sleep(1500 * (processingAttempt - 1));
+        const retryFetch = await fetchWithRetry(url);
+        if (retryFetch.kind !== "ok") {
+          throw new Error(`Retry fetch failed: ${retryFetch.error ?? `HTTP ${retryFetch.status}`}`);
+        }
+        fetched = retryFetch;
+        console.log(`retrying complete file operation (attempt ${processingAttempt}/${MAX_RETRIES + 1})`);
+      }
+    processingStage = "gzip_stream";
     const gunzip = createGunzip();
     const streamDone = pipeline(Readable.fromWeb(fetched.response.body), gunzip);
     // Attach a rejection handler immediately; the awaited pipeline is still checked below.
     streamDone.catch(() => {});
     const lines = createInterface({ input: gunzip, crlfDelay: Infinity });
 
+    processingStage = "json_parse_and_match";
     for await (const line of lines) {
       if (!line.trim()) continue;
       let record;
@@ -204,12 +224,34 @@ for (const sample of hourlyTargets) {
       uniqueCandidateArticleMatches,
       utcHour: minute.getUTCHours(),
       sampleHour: sample.sampleHour,
-      attempts: fetched.attempts
+      attempts: fetched.attempts,
+      processingAttempts,
+      processingElapsedMs: Date.now() - attemptStartedAt
     });
-    console.log(`${records.toLocaleString()} records; ${matchedCandidateCount} candidates matched`);
-  } catch (error) {
-    files.push({ filename, url, status: "processing_error", error: String(error), attempts: fetched.attempts, sampleHour: sample.sampleHour });
-    console.log(`processing error: ${String(error)}`);
+    console.log(`${records.toLocaleString()} records; ${matchedCandidateCount} candidates matched; processing attempt ${processingAttempt}`);
+    fileCompleted = true;
+    break;
+    } catch (error) {
+      lastProcessingError = error;
+      console.log(`processing attempt ${processingAttempt}/${MAX_RETRIES + 1} failed at ${processingStage} after ${((Date.now() - attemptStartedAt) / 1000).toFixed(1)}s: ${String(error)}`);
+      // Abort the response body before starting a fresh request. A retry must never
+      // continue from a partially consumed stream.
+      try { await fetched.response?.body?.cancel(); } catch {}
+      if (processingAttempt === MAX_RETRIES + 1) break;
+    }
+  }
+
+  if (!fileCompleted) {
+    files.push({
+      filename,
+      url,
+      status: "processing_error",
+      error: String(lastProcessingError),
+      attempts: fetched.attempts,
+      processingAttempts,
+      sampleHour: sample.sampleHour
+    });
+    console.log(`processing error after ${processingAttempts} full-file attempts: ${String(lastProcessingError)}`);
   }
 }
 
