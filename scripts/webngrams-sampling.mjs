@@ -33,3 +33,10 @@ export function summarizeHourlyCoverage(requestedHours, files) {
     missingPublicationProbes: files.filter(file => file.status === "missing").length
   };
 }
+
+
+export function getWebNgramsFileTimeoutMs(value = process.env.WEBNGRAMS_FILE_TIMEOUT_MS) {
+  const parsed = Number(value ?? 300000);
+  if (!Number.isFinite(parsed) || parsed <= 0) return 300000;
+  return Math.min(600000, Math.max(30000, Math.floor(parsed)));
+}
