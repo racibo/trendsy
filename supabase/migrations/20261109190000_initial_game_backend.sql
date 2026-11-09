@@ -133,7 +133,11 @@ create policy "Players read own transactions"
 -- SQL privileges are separate from RLS policies: grant reads explicitly,
 -- then let RLS restrict private rows to the current player.
 grant select on public.instruments to anon, authenticated;
-grant select on public.profiles, public.portfolios, public.holdings, public.transactions to authenticated;
+-- Profile rows are public for leaderboard names, but internal user UUIDs are not.
+-- Use a column-level grant so the Data API cannot expose profiles.id.
+revoke select on public.profiles from anon, authenticated;
+grant select (display_name) on public.profiles to authenticated;
+grant select on public.portfolios, public.holdings, public.transactions to authenticated;
 
 -- No INSERT/UPDATE/DELETE policies are granted to clients for game-state tables.
 -- All writes go through the SECURITY DEFINER RPCs below, with auth.uid() checks.
