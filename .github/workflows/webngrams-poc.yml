@@ -27,10 +27,13 @@ on:
       - "scripts/webngrams-smoke-test.mjs"
       - "scripts/webngrams-matching.mjs"
       - "scripts/webngrams-sampling.mjs"
+      - "scripts/archive-webngrams-daily.mjs"
       - "tests/webngrams-matching.test.mjs"
       - "tests/webngrams-sampling.test.mjs"
+      - "tests/webngrams-archive.test.mjs"
       - "data/webngrams-candidates.json"
       - "package.json"
+      - "docs/daily-data-archive.md"
       - ".github/workflows/webngrams-poc.yml"
 
 permissions:
