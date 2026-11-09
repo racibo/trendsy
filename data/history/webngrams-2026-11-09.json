@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "source": "GDELT Web News NGrams 3.0",
+  "date": "2026-11-09",
+  "generatedAt": "2026-11-09T10:16:48.143Z",
+  "sampling": {
+    "status": "COMPLETE",
+    "sampleHours": 24,
+    "successfulSampleHours": 24,
+    "missingSampleHours": 0,
+    "failedFiles": 0,
+    "coverageStartUtc": "20261108094700",
+    "coverageEndUtc": "20261109080100"
+  },
+  "summary": {
+    "totalCandidates": 12,
+    "candidatesWithMatches": 10,
+    "totalUniqueCandidateArticleMatches": 2063,
+    "totalContextFilteredMatchedRecords": 5896,
+    "totalMultiwordPhraseMatchedRecords": 37852
+  },
+  "results": [
+    {"id":"person-donald-trump","label":"Donald Trump","category":"global_people","locale":"global","matchedRecords":36610,"uniqueArticles":1649,"multiwordPhraseMatchedRecords":36610,"contextFilteredMatchedRecords":0,"languageCounts":{"en":18219,"de":3896,"it":1548,"es":3720,"ro":629,"hu":248,"pt":517,"da":180,"fr":2953,"tr":627,"sq":134,"zh-tw":93,"vi":1787,"ru":14,"el":112,"hr":248,"cs":56,"no":192,"id":254,"sv":142,"uk":28,"fi":411,"sk":60,"nl":176,"is":37,"sl":98,"eu":14,"ar":14,"bs":38,"ca":28,"gu":12,"ko":28,"zh":6,"ms":28,"te":21,"pl":28,"hi":14},"aliasCounts":{"Donald Trump":36610},"matchQuality":"multiword_phrase_candidate_review_required"},
+    {"id":"person-taylor-swift","label":"Taylor Swift","category":"global_people","locale":"global","matchedRecords":921,"uniqueArticles":30,"multiwordPhraseMatchedRecords":921,"contextFilteredMatchedRecords":0,"languageCounts":{"de":14,"en":541,"it":68,"pt":14,"es":56,"zh":6,"fr":14,"hr":208},"aliasCounts":{"Taylor Swift":921},"matchQuality":"multiword_phrase_candidate_review_required"},
+    {"id":"event-youth-olympics-2026","label":"2026 Youth Olympic Games","category":"global_events","locale":"global","matchedRecords":108,"uniqueArticles":6,"multiwordPhraseMatchedRecords":108,"contextFilteredMatchedRecords":0,"languageCounts":{"en":108},"aliasCounts":{"2026 Youth Olympic Games":108,"Dakar 2026 Youth Olympic Games":88},"matchQuality":"multiword_phrase_candidate_review_required"},
+    {"id":"event-cop31","label":"COP31 — 2026 UN Climate Change Conference","category":"global_events","locale":"global","matchedRecords":2822,"uniqueArticles":119,"multiwordPhraseMatchedRecords":0,"contextFilteredMatchedRecords":2822,"languageCounts":{"en":2244,"tr":222,"it":28,"de":109,"ro":35,"es":17,"fr":71,"sw":28,"id":32,"az":24,"ha":12},"aliasCounts":{"COP31":2822,"COP31 Antalya":178},"matchQuality":"context_filtered_candidate_review_required"},
+    {"id":"country-france","label":"France","category":"countries","locale":"global","matchedRecords":518,"uniqueArticles":52,"multiwordPhraseMatchedRecords":0,"contextFilteredMatchedRecords":518,"languageCounts":{"fr":90,"en":416,"sq":12},"aliasCounts":{"France":518},"matchQuality":"context_filtered_candidate_review_required"},
+    {"id":"country-japan","label":"Japan","category":"countries","locale":"global","matchedRecords":436,"uniqueArticles":30,"multiwordPhraseMatchedRecords":0,"contextFilteredMatchedRecords":436,"languageCounts":{"en":424,"de":12},"aliasCounts":{"Japan":436},"matchQuality":"context_filtered_candidate_review_required"},
+    {"id":"city-paris","label":"Paris, France","category":"global_cities","locale":"global","matchedRecords":1411,"uniqueArticles":103,"multiwordPhraseMatchedRecords":0,"contextFilteredMatchedRecords":1411,"languageCounts":{"en":1006,"fr":358,"es":41,"de":4,"vi":2},"aliasCounts":{"Paris":1411},"matchQuality":"context_filtered_candidate_review_required"},
+    {"id":"city-tokyo","label":"Tokyo, Japan","category":"global_cities","locale":"global","matchedRecords":467,"uniqueArticles":39,"multiwordPhraseMatchedRecords":0,"contextFilteredMatchedRecords":467,"languageCounts":{"en":409,"tr":9,"it":14,"es":9,"de":17,"id":9},"aliasCounts":{"Tokyo":467},"matchQuality":"context_filtered_candidate_review_required"},
+    {"id":"city-gdansk","label":"Gdańsk, Poland","category":"polish_cities","locale":"polish_language_media","matchedRecords":0,"uniqueArticles":0,"multiwordPhraseMatchedRecords":0,"contextFilteredMatchedRecords":0,"languageCounts":{},"aliasCounts":{},"matchQuality":"context_filtered_candidate_review_required"},
+    {"id":"city-krakow","label":"Kraków, Poland","category":"polish_cities","locale":"polish_language_media","matchedRecords":242,"uniqueArticles":24,"multiwordPhraseMatchedRecords":0,"contextFilteredMatchedRecords":242,"languageCounts":{"pl":242},"aliasCounts":{"Krakowie":155,"Krakowa":83,"Kraków":15,"Krakow":15},"matchQuality":"context_filtered_candidate_review_required"},
+    {"id":"person-donald-tusk","label":"Donald Tusk","category":"people_in_polish_media","locale":"polish_language_media","matchedRecords":213,"uniqueArticles":11,"multiwordPhraseMatchedRecords":213,"contextFilteredMatchedRecords":0,"languageCounts":{"pl":213},"aliasCounts":{"Donald Tusk":213},"matchQuality":"multiword_phrase_candidate_review_required"},
+    {"id":"person-robert-lewandowski","label":"Robert Lewandowski","category":"people_in_polish_media","locale":"polish_language_media","matchedRecords":0,"uniqueArticles":0,"multiwordPhraseMatchedRecords":0,"contextFilteredMatchedRecords":0,"languageCounts":{},"aliasCounts":{},"matchQuality":"multiword_phrase_candidate_review_required"}
+  ]
+}

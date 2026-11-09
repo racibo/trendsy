@@ -14,24 +14,30 @@ on:
       - "scripts/webngrams-smoke-test.mjs"
       - "scripts/webngrams-matching.mjs"
       - "scripts/webngrams-sampling.mjs"
+      - "scripts/archive-webngrams-daily.mjs"
       - "tests/webngrams-matching.test.mjs"
       - "tests/webngrams-sampling.test.mjs"
+      - "tests/webngrams-archive.test.mjs"
       - "data/webngrams-candidates.json"
       - "package.json"
+      - "docs/daily-data-archive.md"
       - ".github/workflows/webngrams-poc.yml"
   pull_request:
     paths:
       - "scripts/webngrams-smoke-test.mjs"
       - "scripts/webngrams-matching.mjs"
       - "scripts/webngrams-sampling.mjs"
+      - "scripts/archive-webngrams-daily.mjs"
       - "tests/webngrams-matching.test.mjs"
       - "tests/webngrams-sampling.test.mjs"
+      - "tests/webngrams-archive.test.mjs"
       - "data/webngrams-candidates.json"
       - "package.json"
+      - "docs/daily-data-archive.md"
       - ".github/workflows/webngrams-poc.yml"
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   validate:
@@ -89,3 +95,21 @@ jobs:
             console.log(`COMPLETE sample: all ${sampling.sampleHours} hourly samples succeeded.`);
           }
           NODE
+
+      - name: Create compact daily history record
+        if: github.event_name == 'schedule' && success()
+        run: npm run webngrams:archive
+
+      - name: Commit daily history
+        if: github.event_name == 'schedule' && success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/history/
+          if git diff --cached --quiet; then
+            echo "No daily history changes to commit."
+          else
+            git commit -m "Archive Web NGrams daily metrics"
+            git push
+          fi
+
