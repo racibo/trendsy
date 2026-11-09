@@ -19,6 +19,10 @@ This repository starts with a small, manually curated candidate set. It is a dat
 
 GDELT Project: https://www.gdeltproject.org/ . GDELT is the sole source for popularity measurements in this project. Candidate curation and entity disambiguation are separate from the measurement source.
 
+## Daily history
+
+Complete scheduled Web NGrams samples are archived as compact daily records in `data/history/`. See `docs/daily-data-archive.md` for the stored fields and completeness rules.
+
 ## Status
 
 Initial repository scaffold. See `docs/data-methodology.md` for the measurement design and `data/candidates.json` for the initial test set.
