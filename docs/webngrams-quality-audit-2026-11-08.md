@@ -29,6 +29,12 @@ The audit inspected the eight distinct article-context examples retained by the 
 2. Removed `Tokyo Bay` as a positive context for Tokyo city and added it as an explicit exclusion. A regression test covers the false-positive case and a positive Tokyo-city case.
 3. Kept the other candidate policies unchanged. The current evidence does not justify broad alias expansion or aggressive exclusions for France, Japan, Paris, Gdańsk or Kraków.
 
+## Follow-up verification — run #72, 9 November 2026
+
+Run #72 completed all 24 hourly samples, but its JSON artifact retained only eight evidence URLs per candidate even though the configured default was 25. Inspection found a second, hard-coded cap of eight in the cross-file aggregation step. The initial per-file staging respected the configured cap, but the final snapshot aggregation truncated it. This did not affect aggregate match counters; it reduced the evidence available for manual quality review.
+
+A follow-up code change replaces both evidence insertion paths with one deduplicating helper that applies the same configured cap. A regression test covers accumulation across multiple files, duplicate URLs and the configured limit. The next complete sample must verify that `sampling.evidenceLimitPerCandidate` and the actual per-candidate `evidence.length` agree (up to the number of available distinct matches).
+
 ## Interpretation and next gate
 
 - A successful download/parse run establishes pipeline reliability, not measurement validity.
