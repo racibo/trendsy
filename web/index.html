@@ -42,6 +42,15 @@
       <footer><span>TRENDSY <b>·</b> WERSJA TESTOWA</span><span>Wszystkie ceny i wyniki są demonstracyjne.</span></footer>
     </main>
   </div>
+  <dialog class="exchange-dialog" id="exchange-dialog">
+    <form method="dialog" id="exchange-form">
+      <p class="eyebrow">ZMIANA PORTFELA</p><h2>Wymień instrument</h2>
+      <p class="dialog-copy" id="exchange-description">Wybierz instrument, który ma zastąpić obecną pozycję.</p>
+      <label for="exchange-select">Nowy instrument</label>
+      <select id="exchange-select" required></select>
+      <div class="dialog-actions"><button class="cancel-button" value="cancel">Anuluj</button><button class="buy-button" id="confirm-exchange" value="default">Potwierdź wymianę</button></div>
+    </form>
+  </dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script type="module" src="./app.js"></script>
 </body>
