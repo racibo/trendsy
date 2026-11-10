@@ -1,0 +1,289 @@
+{
+  "schemaVersion": 1,
+  "source": "GDELT Web News NGrams 3.0",
+  "date": "2026-11-10",
+  "generatedAt": "2026-11-10T10:19:39.312Z",
+  "sampling": {
+    "status": "COMPLETE",
+    "sampleHours": 24,
+    "successfulSampleHours": 24,
+    "missingSampleHours": 0,
+    "failedFiles": 0,
+    "coverageStartUtc": "20261109094600",
+    "coverageEndUtc": "20261110080100"
+  },
+  "summary": {
+    "totalCandidates": 12,
+    "candidatesWithMatches": 11,
+    "totalUniqueCandidateArticleMatches": 2140,
+    "totalContextFilteredMatchedRecords": 6688,
+    "totalMultiwordPhraseMatchedRecords": 32445
+  },
+  "results": [
+    {
+      "id": "person-donald-trump",
+      "label": "Donald Trump",
+      "category": "global_people",
+      "locale": "global",
+      "matchedRecords": 31110,
+      "uniqueArticles": 1645,
+      "multiwordPhraseMatchedRecords": 31110,
+      "contextFilteredMatchedRecords": 0,
+      "languageCounts": {
+        "en": 18820,
+        "pt": 863,
+        "zh-tw": 59,
+        "hu": 92,
+        "it": 429,
+        "fr": 1142,
+        "de": 2759,
+        "tr": 402,
+        "cs": 165,
+        "el": 42,
+        "sk": 112,
+        "sq": 317,
+        "es": 2322,
+        "ro": 760,
+        "vi": 1113,
+        "ar": 42,
+        "hr": 136,
+        "fi": 451,
+        "da": 108,
+        "sv": 135,
+        "bs": 42,
+        "id": 246,
+        "nl": 14,
+        "et": 154,
+        "sl": 42,
+        "no": 56,
+        "is": 14,
+        "hi": 14,
+        "sw": 78,
+        "ca": 14,
+        "zh": 6,
+        "ms": 41,
+        "gu": 8,
+        "tl": 14,
+        "pl": 98
+      },
+      "aliasCounts": {
+        "Donald Trump": 31110
+      },
+      "matchQuality": "multiword_phrase_candidate_review_required"
+    },
+    {
+      "id": "person-taylor-swift",
+      "label": "Taylor Swift",
+      "category": "global_people",
+      "locale": "global",
+      "matchedRecords": 1183,
+      "uniqueArticles": 59,
+      "multiwordPhraseMatchedRecords": 1183,
+      "contextFilteredMatchedRecords": 0,
+      "languageCounts": {
+        "en": 850,
+        "de": 137,
+        "hr": 70,
+        "es": 84,
+        "pt": 14,
+        "is": 14,
+        "id": 14
+      },
+      "aliasCounts": {
+        "Taylor Swift": 1183
+      },
+      "matchQuality": "multiword_phrase_candidate_review_required"
+    },
+    {
+      "id": "event-youth-olympics-2026",
+      "label": "2026 Youth Olympic Games",
+      "category": "global_events",
+      "locale": "global",
+      "matchedRecords": 95,
+      "uniqueArticles": 8,
+      "multiwordPhraseMatchedRecords": 95,
+      "contextFilteredMatchedRecords": 0,
+      "languageCounts": {
+        "en": 95
+      },
+      "aliasCounts": {
+        "2026 Youth Olympic Games": 84,
+        "Dakar 2026 Youth Olympic Games": 77,
+        "Youth Olympic Games Dakar 2026": 11
+      },
+      "matchQuality": "multiword_phrase_candidate_review_required"
+    },
+    {
+      "id": "event-cop31",
+      "label": "COP31 — 2026 UN Climate Change Conference",
+      "category": "global_events",
+      "locale": "global",
+      "matchedRecords": 3763,
+      "uniqueArticles": 170,
+      "multiwordPhraseMatchedRecords": 1,
+      "contextFilteredMatchedRecords": 3762,
+      "languageCounts": {
+        "en": 2804,
+        "tr": 281,
+        "es": 141,
+        "it": 333,
+        "sv": 8,
+        "vi": 11,
+        "sq": 18,
+        "de": 18,
+        "ro": 12,
+        "fr": 77,
+        "id": 23,
+        "pt": 13,
+        "da": 13,
+        "el": 11
+      },
+      "aliasCounts": {
+        "COP31": 3762,
+        "2026 United Nations Climate Change Conference": 10,
+        "COP31 Antalya": 111
+      },
+      "matchQuality": "context_filtered_candidate_review_required"
+    },
+    {
+      "id": "country-france",
+      "label": "France",
+      "category": "countries",
+      "locale": "global",
+      "matchedRecords": 674,
+      "uniqueArticles": 56,
+      "multiwordPhraseMatchedRecords": 0,
+      "contextFilteredMatchedRecords": 674,
+      "languageCounts": {
+        "en": 598,
+        "fr": 62,
+        "es": 14
+      },
+      "aliasCounts": {
+        "France": 674
+      },
+      "matchQuality": "context_filtered_candidate_review_required"
+    },
+    {
+      "id": "country-japan",
+      "label": "Japan",
+      "category": "countries",
+      "locale": "global",
+      "matchedRecords": 398,
+      "uniqueArticles": 41,
+      "multiwordPhraseMatchedRecords": 0,
+      "contextFilteredMatchedRecords": 398,
+      "languageCounts": {
+        "en": 387,
+        "pl": 10,
+        "th": 1
+      },
+      "aliasCounts": {
+        "Japan": 398
+      },
+      "matchQuality": "context_filtered_candidate_review_required"
+    },
+    {
+      "id": "city-paris",
+      "label": "Paris, France",
+      "category": "global_cities",
+      "locale": "global",
+      "matchedRecords": 1492,
+      "uniqueArticles": 122,
+      "multiwordPhraseMatchedRecords": 0,
+      "contextFilteredMatchedRecords": 1492,
+      "languageCounts": {
+        "en": 1333,
+        "fr": 145,
+        "da": 14
+      },
+      "aliasCounts": {
+        "Paris": 1492
+      },
+      "matchQuality": "context_filtered_candidate_review_required"
+    },
+    {
+      "id": "city-tokyo",
+      "label": "Tokyo, Japan",
+      "category": "global_cities",
+      "locale": "global",
+      "matchedRecords": 313,
+      "uniqueArticles": 27,
+      "multiwordPhraseMatchedRecords": 0,
+      "contextFilteredMatchedRecords": 313,
+      "languageCounts": {
+        "en": 313
+      },
+      "aliasCounts": {
+        "Tokyo": 313
+      },
+      "matchQuality": "context_filtered_candidate_review_required"
+    },
+    {
+      "id": "city-gdansk",
+      "label": "Gdańsk, Poland",
+      "category": "polish_cities",
+      "locale": "polish_language_media",
+      "matchedRecords": 6,
+      "uniqueArticles": 1,
+      "multiwordPhraseMatchedRecords": 0,
+      "contextFilteredMatchedRecords": 6,
+      "languageCounts": {
+        "pl": 6
+      },
+      "aliasCounts": {
+        "Gdańsk": 6,
+        "Gdansk": 6
+      },
+      "matchQuality": "context_filtered_candidate_review_required"
+    },
+    {
+      "id": "city-krakow",
+      "label": "Kraków, Poland",
+      "category": "polish_cities",
+      "locale": "polish_language_media",
+      "matchedRecords": 43,
+      "uniqueArticles": 7,
+      "multiwordPhraseMatchedRecords": 0,
+      "contextFilteredMatchedRecords": 43,
+      "languageCounts": {
+        "pl": 43
+      },
+      "aliasCounts": {
+        "Krakowie": 31,
+        "Krakowa": 12
+      },
+      "matchQuality": "context_filtered_candidate_review_required"
+    },
+    {
+      "id": "person-donald-tusk",
+      "label": "Donald Tusk",
+      "category": "people_in_polish_media",
+      "locale": "polish_language_media",
+      "matchedRecords": 56,
+      "uniqueArticles": 4,
+      "multiwordPhraseMatchedRecords": 56,
+      "contextFilteredMatchedRecords": 0,
+      "languageCounts": {
+        "pl": 56
+      },
+      "aliasCounts": {
+        "Donald Tusk": 56
+      },
+      "matchQuality": "multiword_phrase_candidate_review_required"
+    },
+    {
+      "id": "person-robert-lewandowski",
+      "label": "Robert Lewandowski",
+      "category": "people_in_polish_media",
+      "locale": "polish_language_media",
+      "matchedRecords": 0,
+      "uniqueArticles": 0,
+      "multiwordPhraseMatchedRecords": 0,
+      "contextFilteredMatchedRecords": 0,
+      "languageCounts": {},
+      "aliasCounts": {},
+      "matchQuality": "multiword_phrase_candidate_review_required"
+    }
+  ]
+}
