@@ -101,7 +101,7 @@ jobs:
         run: npm run webngrams:archive
 
       - name: Commit daily history
-        if: github.event_name == 'schedule' && success()
+        if: (github.event_name == 'schedule' || github.event_name == 'push') && success()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
