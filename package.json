@@ -3,11 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Proofs of concept for daily Trendsy popularity measurements using GDELT datasets",
+  "description": "Proofs of concepts for daily Trendsy popularity measurements using GDELT datasets",
   "scripts": {
     "gdelt:test": "node scripts/gdelt-smoke-test.mjs",
     "webngrams:test": "node scripts/webngrams-smoke-test.mjs",
-    "check": "node --check scripts/gdelt-smoke-test.mjs",
+    "gkg:probe": "node scripts/gkg-join-probe.mjs",
+    "check": "node --check scripts/gdelt-smoke-test.mjs && npm run check:gkg",
+    "check:gkg": "node --check scripts/gkg-audit-utils.mjs && node --check scripts/gkg-join-probe.mjs && node --test tests/gkg-audit-utils.test.mjs",
     "check:webngrams": "node --check scripts/webngrams-smoke-test.mjs && node --check scripts/webngrams-matching.mjs && node --check scripts/webngrams-sampling.mjs && node --check scripts/archive-webngrams-daily.mjs && node --test tests/webngrams-matching.test.mjs tests/webngrams-sampling.test.mjs tests/webngrams-archive.test.mjs",
     "webngrams:archive": "node scripts/archive-webngrams-daily.mjs"
   },

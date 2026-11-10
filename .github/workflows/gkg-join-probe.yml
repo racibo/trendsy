@@ -1,0 +1,64 @@
+name: GKG and Web NGrams join probe
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "scripts/gkg-audit-utils.mjs"
+      - "scripts/gkg-join-probe.mjs"
+      - "tests/gkg-audit-utils.test.mjs"
+      - "package.json"
+      - ".github/workflows/gkg-join-probe.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+      - run: npm run check:gkg
+
+  live-probe:
+    if: github.event_name == 'workflow_dispatch'
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+      - run: npm run check:gkg
+      - name: Download latest GKG batch and corresponding Web NGrams sample
+        run: npm run gkg:probe
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gkg-webngrams-join-probe
+          path: output/gkg-join-probe.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Add probe summary
+        if: always() && hashFiles('output/gkg-join-probe.json') != ''
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from "node:fs/promises";
+          const result = JSON.parse(await fs.readFile("output/gkg-join-probe.json", "utf8"));
+          const lines = [
+            `## GKG ↔ Web NGrams URL join: ${result.status}`,
+            "",
+            `- GKG records: **${result.gkg.recordCount}** (valid: ${result.gkg.validRecordCount})`,
+            `- GKG field counts: \`${JSON.stringify(result.gkg.observedFieldCounts)}\``,
+            `- Web NGrams records: **${result.webNgrams.recordCount}** (${result.webNgrams.status})`,
+            `- Exact URL matches: **${result.urlJoin.exactMatches}**`,
+            `- Conservative normalized URL matches: **${result.urlJoin.normalizedMatches}**`,
+            `- GKG URL match rate: **${result.urlJoin.gkgToWebNgramMatchRate}**`,
+            "",
+            "This is one batch only; do not treat it as a multi-day coverage estimate."
+          ];
+          await fs.appendFile(process.env.GITHUB_STEP_SUMMARY, lines.join("\\n") + "\\n");
+          NODE
