@@ -5,7 +5,9 @@ import {
   parseGkgLine,
   normalizeUrlForJoin,
   summarizeUrlJoin,
-  nextWebNgramsFilename
+  nextWebNgramsFilename,
+  webNgramsWindowFilenames,
+  summarizeWebNgramsWindow
 } from "../scripts/gkg-audit-utils.mjs";
 
 function makeGkgLine(overrides = {}) {
@@ -68,4 +70,57 @@ test("maps a GKG quarter-hour batch to the next Web NGrams publication minute", 
     nextWebNgramsFilename("20261110223000.gkg.csv.zip"),
     "20261110223100.webngrams.json.gz"
   );
+});
+
+
+test("builds a bounded Web NGrams minute window across UTC hour boundaries", () => {
+  const files = webNgramsWindowFilenames("20261111000000.gkg.csv.zip", 2, 2);
+  assert.deepEqual(files.map(file => file.offsetMinutes), [-2, -1, 0, 1, 2]);
+  assert.equal(files[0].filename, "20261110235800.webngrams.json.gz");
+  assert.equal(files[2].filename, "20261111000000.webngrams.json.gz");
+  assert.equal(files[4].filename, "20261111000200.webngrams.json.gz");
+});
+
+test("rejects invalid Web NGrams search windows", () => {
+  assert.throws(() => webNgramsWindowFilenames("20261111000000.gkg.csv.zip", -1, 2));
+  assert.throws(() => webNgramsWindowFilenames("20261111000000.gkg.csv.zip", 2, 1.5));
+});
+
+test("summarizes each available minute and the deduplicated union separately", () => {
+  const summary = summarizeWebNgramsWindow(
+    ["https://example.com/a", "https://example.com/b"],
+    [
+      {
+        filename: "a.webngrams.json.gz",
+        offsetMinutes: -1,
+        status: "ok",
+        records: 3,
+        urls: new Set(["https://example.com/a", "https://example.com/shared"]),
+        languages: { en: 3 }
+      },
+      {
+        filename: "b.webngrams.json.gz",
+        offsetMinutes: 0,
+        status: "ok",
+        records: 2,
+        urls: new Set(["https://example.com/b", "https://example.com/shared"]),
+        languages: { pl: 2 }
+      },
+      {
+        filename: "c.webngrams.json.gz",
+        offsetMinutes: 1,
+        status: "missing"
+      }
+    ]
+  );
+
+  assert.equal(summary.probedFileCount, 3);
+  assert.equal(summary.availableFileCount, 2);
+  assert.equal(summary.missingFileCount, 1);
+  assert.equal(summary.files[0].join.normalizedMatches, 1);
+  assert.equal(summary.files[1].join.normalizedMatches, 1);
+  assert.equal(summary.aggregate.normalizedMatches, 2);
+  assert.equal(summary.aggregate.webNgramUniqueUrls, 3);
+  assert.equal(summary.aggregate.duplicateUrlOccurrencesAcrossFiles, 1);
+  assert.deepEqual(summary.aggregate.availableFiles, ["a.webngrams.json.gz", "b.webngrams.json.gz"]);
 });
