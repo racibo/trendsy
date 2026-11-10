@@ -92,6 +92,8 @@ test("drops unsafe and duplicate evidence URLs and flags candidates with no evid
   assert.equal(archive.results[0].evidenceCount, 1);
   assert.equal(archive.results[0].evidence[0].context, "first");
   assert.equal(archive.results[0].evidenceCoverage, 0.3333);
+  assert.equal(archive.summary.candidatesWithEvidence, 1);
+  assert.equal(archive.summary.totalArchivedEvidenceArticles, 1);
 
   const empty = createDailyArchive(makeSnapshot({
     results: [{ ...makeSnapshot().results[0], uniqueArticles: 0, evidence: [] }]
