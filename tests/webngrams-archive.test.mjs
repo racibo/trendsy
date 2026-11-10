@@ -28,7 +28,7 @@ function makeSnapshot(overrides = {}) {
       languageCounts: { en: 123 },
       aliasCounts: { "Example Person": 123 },
       matchQuality: "multiword_phrase_candidate_review_required",
-      evidence: [{ url: "https://example.com/story", context: "example" }]
+      evidence: [{ url: "https://example.com/story", context: "example context", lang: "en", matchType: "multiword_phrase", aliasMatches: ["Example Person"], sampleHour: "2026-11-09T08:00:00.000Z" }]
     }],
     ...overrides
   };
@@ -40,7 +40,14 @@ test("creates a compact daily archive from a complete 24-hour snapshot", () => {
   assert.equal(archive.sampling.status, "COMPLETE");
   assert.equal(archive.results[0].uniqueArticles, 12);
   assert.deepEqual(archive.results[0].languageCounts, { en: 123 });
-  assert.equal("evidence" in archive.results[0], false);
+  assert.equal(archive.schemaVersion, 2);
+  assert.equal(archive.results[0].evidenceCount, 1);
+  assert.equal(archive.results[0].evidence[0].url, "https://example.com/story");
+  assert.equal(archive.results[0].evidence[0].domain, "example.com");
+  assert.equal(archive.results[0].evidence[0].context, "example context");
+  assert.equal(archive.results[0].reviewStatus, "manual_review_required");
+  assert.ok(archive.results[0].qualityFlags.includes("evidence_is_capped_sample_not_full_article_list"));
+  assert.equal(archive.summary.totalArchivedEvidenceArticles, 1);
   assert.equal("files" in archive.sampling, false);
 });
 
@@ -70,4 +77,24 @@ test("rejects malformed coverage timestamps and empty candidate lists", () => {
     () => createDailyArchive(makeSnapshot({ results: [] })),
     /no candidate/
   );
+});
+
+
+test("drops unsafe and duplicate evidence URLs and flags candidates with no evidence", () => {
+  const snapshot = makeSnapshot();
+  snapshot.results[0].uniqueArticles = 3;
+  snapshot.results[0].evidence = [
+    { url: "javascript:alert(1)", context: "unsafe" },
+    { url: "https://example.com/story", context: "first" },
+    { url: "https://example.com/story", context: "duplicate" }
+  ];
+  const archive = createDailyArchive(snapshot);
+  assert.equal(archive.results[0].evidenceCount, 1);
+  assert.equal(archive.results[0].evidence[0].context, "first");
+  assert.equal(archive.results[0].evidenceCoverage, 0.3333);
+
+  const empty = createDailyArchive(makeSnapshot({
+    results: [{ ...makeSnapshot().results[0], uniqueArticles: 0, evidence: [] }]
+  }));
+  assert.ok(empty.results[0].qualityFlags.includes("no_unique_articles_in_sample"));
 });
