@@ -57,7 +57,7 @@ function loadState(){
   try{localStorage.removeItem(STORAGE_KEY);}catch{}
   return initialState();
 }
-function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}
+function save(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch{notify("Przeglądarka blokuje zapis. Zmiany pozostaną tylko do odświeżenia strony.");}}
 function portfolioValue(){return state.cash + state.holdings.reduce((sum,h)=>sum+h.units*byId(h.id).price,0);}
 function totalUnits(id){return state.holdings.find(h=>h.id===id)?.units||0;}
 function hasNational(){return state.holdings.some(h=>byId(h.id).edition==="national");}
