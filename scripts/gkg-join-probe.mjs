@@ -142,9 +142,9 @@ async function main() {
 
   try {
     const lastUpdate = await (await fetchResponse(LAST_UPDATE_URL)).text();
-    const gkgLine = lastUpdate.split(/\\r?\\n/).find(line => line.includes(".gkg.csv.zip"));
+    const gkgLine = lastUpdate.split(/\r?\n/).find(line => line.includes(".gkg.csv.zip"));
     if (!gkgLine) throw new Error("GDELT lastupdate.txt did not contain a GKG archive.");
-    const gkgParts = gkgLine.trim().split(/\\s+/);
+    const gkgParts = gkgLine.trim().split(/\s+/);
     const gkgUrl = gkgParts.at(-1);
     const gkgFilename = new URL(gkgUrl).pathname.split("/").at(-1);
     const zipPath = path.join(tempDir, gkgFilename);
@@ -210,7 +210,7 @@ async function main() {
       ]
     };
     const outputPath = path.join(OUTPUT_DIR, "gkg-join-probe.json");
-    await fs.writeFile(outputPath, JSON.stringify(output, null, 2) + "\\n");
+    await fs.writeFile(outputPath, JSON.stringify(output, null, 2) + "\n");
     console.log(JSON.stringify({
       status: output.status,
       gkgRecords: gkg.records,
