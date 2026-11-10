@@ -2,6 +2,15 @@ name: GKG and Web NGrams join probe
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "scripts/gkg-audit-utils.mjs"
+      - "scripts/gkg-join-probe.mjs"
+      - "tests/gkg-audit-utils.test.mjs"
+      - "package.json"
+      - ".github/workflows/gkg-join-probe.yml"
   pull_request:
     paths:
       - "scripts/gkg-audit-utils.mjs"
@@ -24,7 +33,7 @@ jobs:
       - run: npm run check:gkg
 
   live-probe:
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push'
     needs: validate
     runs-on: ubuntu-latest
     timeout-minutes: 20
