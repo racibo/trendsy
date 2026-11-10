@@ -61,6 +61,10 @@ async function fetchWebNgrams(url) {
 async function readGkgZip(zipPath, summary) {
   const child = spawn("unzip", ["-p", zipPath], { stdio: ["ignore", "pipe", "pipe"] });
   let stderr = "";
+  const exitPromise = new Promise((resolve, reject) => {
+    child.once("error", reject);
+    child.once("close", resolve);
+  });
   child.stderr.setEncoding("utf8");
   child.stderr.on("data", chunk => { stderr += chunk.slice(0, 4000); });
   const lines = createInterface({ input: child.stdout, crlfDelay: Infinity });
@@ -106,10 +110,7 @@ async function readGkgZip(zipPath, summary) {
     }
   }
 
-  const exitCode = await new Promise((resolve, reject) => {
-    child.once("error", reject);
-    child.once("close", resolve);
-  });
+  const exitCode = await exitPromise;
   if (exitCode !== 0) throw new Error(`unzip exited with ${exitCode}: ${stderr}`);
 
   const top = map => [...map.entries()]
