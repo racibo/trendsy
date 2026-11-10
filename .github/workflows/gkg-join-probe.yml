@@ -76,5 +76,5 @@ jobs:
             "",
             "This is a diagnostic time window only; do not treat it as a multi-day coverage estimate."
           ];
-          await fs.appendFile(process.env.GITHUB_STEP_SUMMARY, lines.join("\\n") + "\\n");
+          await fs.appendFile(process.env.GITHUB_STEP_SUMMARY, lines.join("\n") + "\n");
           NODE
