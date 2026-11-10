@@ -8,14 +8,17 @@ import { createInterface } from "node:readline";
 import {
   GKG_FIELD_COUNT,
   parseGkgLine,
-  summarizeUrlJoin,
-  nextWebNgramsFilename
+  summarizeWebNgramsWindow,
+  webNgramsWindowFilenames
 } from "./gkg-audit-utils.mjs";
 
 const LAST_UPDATE_URL = "https://data.gdeltproject.org/gdeltv2/lastupdate.txt";
 const WEBNGRAMS_BASE_URL = "https://data.gdeltproject.org/gdeltv3/webngrams";
-const USER_AGENT = "Trendsy-GKG-Join-Audit/0.1 (research prototype)";
+const USER_AGENT = "Trendsy-GKG-Join-Audit/0.2 (research prototype)";
 const OUTPUT_DIR = path.resolve("output");
+const WINDOW_BEFORE_MINUTES = 20;
+const WINDOW_AFTER_MINUTES = 5;
+const PROBE_CONCURRENCY = 4;
 
 async function fetchResponse(url) {
   const response = await fetch(url, {
@@ -56,6 +59,36 @@ async function fetchWebNgrams(url) {
 
   if (parseErrors) throw new Error(`Web NGrams JSON parse errors: ${parseErrors}`);
   return { status: "ok", records, urls, languages };
+}
+
+async function probeWebNgramsFile(file) {
+  const url = `${WEBNGRAMS_BASE_URL}/${file.filename}`;
+  const head = await fetch(url, {
+    method: "HEAD",
+    headers: { "User-Agent": USER_AGENT },
+    signal: AbortSignal.timeout(45_000)
+  });
+
+  if (head.status === 404) {
+    return { ...file, status: "missing", records: 0, urls: new Set(), languages: {} };
+  }
+  // Some static-file frontends do not implement HEAD. In that case, use GET
+  // as the authoritative existence check rather than treating it as missing.
+  if (!head.ok && ![403, 405, 501].includes(head.status)) {
+    throw new Error(`HTTP ${head.status} during HEAD for ${url}`);
+  }
+
+  const result = await fetchWebNgrams(url);
+  return { ...file, ...result };
+}
+
+async function probeWindow(files) {
+  const results = [];
+  for (let index = 0; index < files.length; index += PROBE_CONCURRENCY) {
+    const batch = files.slice(index, index + PROBE_CONCURRENCY);
+    results.push(...await Promise.all(batch.map(probeWebNgramsFile)));
+  }
+  return results;
 }
 
 async function readGkgZip(zipPath, summary) {
@@ -145,7 +178,7 @@ async function main() {
     const gkgLine = lastUpdate.split(/\r?\n/).find(line => line.includes(".gkg.csv.zip"));
     if (!gkgLine) throw new Error("GDELT lastupdate.txt did not contain a GKG archive.");
     const gkgParts = gkgLine.trim().split(/\s+/);
-    const gkgUrl = gkgParts.at(-1);
+    const gkgUrl = gkgParts.at(-1).replace(/^http:/i, "https:");
     const gkgFilename = new URL(gkgUrl).pathname.split("/").at(-1);
     const zipPath = path.join(tempDir, gkgFilename);
 
@@ -155,25 +188,30 @@ async function main() {
     await fs.writeFile(zipPath, zipBytes);
 
     const gkg = await readGkgZip(zipPath);
-    const ngramFilename = nextWebNgramsFilename(gkgFilename, 1);
-    const ngramUrl = `${WEBNGRAMS_BASE_URL}/${ngramFilename}`;
-    console.log(`Checking corresponding Web NGrams batch: ${ngramFilename}`);
-    let ngrams = await fetchWebNgrams(ngramUrl);
-    let actualNgramUrl = ngramUrl;
-    if (ngrams.status === "missing") {
-      const fallbackFilename = nextWebNgramsFilename(gkgFilename, 2);
-      actualNgramUrl = `${WEBNGRAMS_BASE_URL}/${fallbackFilename}`;
-      console.log(`First Web NGrams minute not published; trying ${fallbackFilename}`);
-      ngrams = await fetchWebNgrams(actualNgramUrl);
-    }
+    const candidateFiles = webNgramsWindowFilenames(
+      gkgFilename,
+      WINDOW_BEFORE_MINUTES,
+      WINDOW_AFTER_MINUTES
+    );
+    console.log(
+      `Probing ${candidateFiles.length} Web NGrams minute files ` +
+      `(${-WINDOW_BEFORE_MINUTES} to +${WINDOW_AFTER_MINUTES} minutes around GKG timestamp)`
+    );
+    const fileResults = await probeWindow(candidateFiles);
+    const windowSummary = summarizeWebNgramsWindow(gkg.urls, fileResults);
+    const aggregate = windowSummary.aggregate;
+    const hasNgrams = windowSummary.availableFileCount > 0;
 
-    const join = summarizeUrlJoin(gkg.urls, [...ngrams.urls]);
     const output = {
-      schemaVersion: 1,
-      status: ngrams.status === "ok" ? "COMPLETE" : "PARTIAL",
+      schemaVersion: 2,
+      status: hasNgrams ? "COMPLETE" : "PARTIAL",
       source: "GDELT GKG 2.1 + Web NGrams 3.0",
       startedAt,
       completedAt: new Date().toISOString(),
+      searchWindowMinutes: {
+        before: WINDOW_BEFORE_MINUTES,
+        after: WINDOW_AFTER_MINUTES
+      },
       gkg: {
         filename: gkgFilename,
         url: gkgUrl,
@@ -193,16 +231,27 @@ async function main() {
         topThemesByDocumentCount: gkg.topThemes
       },
       webNgrams: {
-        status: ngrams.status,
-        filename: ngrams.status === "ok" ? new URL(actualNgramUrl).pathname.split("/").at(-1) : null,
-        url: ngrams.status === "ok" ? actualNgramUrl : null,
-        recordCount: ngrams.records,
-        uniqueUrlCount: ngrams.urls.size,
-        languageRecordCounts: ngrams.languages
+        status: hasNgrams ? "ok" : "missing",
+        probedFileCount: windowSummary.probedFileCount,
+        availableFileCount: windowSummary.availableFileCount,
+        missingFileCount: windowSummary.missingFileCount,
+        files: windowSummary.files,
+        recordCount: fileResults.reduce((sum, file) => sum + (file.records ?? 0), 0),
+        uniqueUrlCount: aggregate.webNgramUniqueUrls,
+        languageRecordCounts: fileResults.reduce((counts, file) => {
+          for (const [language, count] of Object.entries(file.languages ?? {})) {
+            counts[language] = (counts[language] ?? 0) + count;
+          }
+          return counts;
+        }, {})
       },
-      urlJoin: join,
+      urlJoin: aggregate,
       notes: [
-        "This is one matched publication batch, not a representative multi-day coverage estimate.",
+        "The scan checks every minute filename in a bounded window around the GKG archive timestamp; it does not assume a fixed +1/+2 minute offset.",
+        "Missing minute files (HTTP 404) are expected between Web NGrams publication bursts and are reported separately from request or parsing failures.",
+        "Per-file URL joins and the deduplicated union across all available files are both reported.",
+        "The union can include URLs repeated across minute files; duplicate occurrences are reported and URLs are deduplicated before calculating the aggregate join rate.",
+        "This is a diagnostic time window, not proof that all files correspond to the same GKG publication batch or a representative multi-day coverage estimate.",
         "Exact URL matching and conservative URL normalization are reported separately.",
         "URL normalization removes fragments and normalizes URL host/default-port formatting only; query parameters are retained.",
         "GKG entity/theme occurrence counts are discovery signals, not validated topic relevance or popularity scores.",
@@ -213,15 +262,17 @@ async function main() {
     await fs.writeFile(outputPath, JSON.stringify(output, null, 2) + "\n");
     console.log(JSON.stringify({
       status: output.status,
+      gkgFilename,
       gkgRecords: gkg.records,
       validGkgRecords: gkg.validRecords,
-      fieldCounts: gkg.fieldCounts,
-      webNgramsStatus: ngrams.status,
-      gkgUniqueUrls: join.gkgUniqueUrls,
-      webNgramUniqueUrls: join.webNgramUniqueUrls,
-      exactMatches: join.exactMatches,
-      normalizedMatches: join.normalizedMatches,
-      matchRate: join.gkgToWebNgramMatchRate,
+      probedNgramFiles: windowSummary.probedFileCount,
+      availableNgramFiles: windowSummary.availableFileCount,
+      missingNgramFiles: windowSummary.missingFileCount,
+      gkgUniqueUrls: aggregate.gkgUniqueUrls,
+      webNgramUniqueUrls: aggregate.webNgramUniqueUrls,
+      exactMatches: aggregate.exactMatches,
+      normalizedMatches: aggregate.normalizedMatches,
+      matchRate: aggregate.gkgToWebNgramMatchRate,
       outputPath
     }, null, 2));
   } finally {

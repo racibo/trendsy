@@ -62,12 +62,19 @@ jobs:
             "",
             `- GKG records: **${result.gkg.recordCount}** (valid: ${result.gkg.validRecordCount})`,
             `- GKG field counts: \`${JSON.stringify(result.gkg.observedFieldCounts)}\``,
-            `- Web NGrams records: **${result.webNgrams.recordCount}** (${result.webNgrams.status})`,
+            `- Web NGrams files: **${result.webNgrams.availableFileCount}/${result.webNgrams.probedFileCount} available** (${result.webNgrams.missingFileCount} missing)`,
+            `- Web NGrams records: **${result.webNgrams.recordCount}**`,
+            `- Unique Web NGrams URLs (union): **${result.webNgrams.uniqueUrlCount}**`,
             `- Exact URL matches: **${result.urlJoin.exactMatches}**`,
             `- Conservative normalized URL matches: **${result.urlJoin.normalizedMatches}**`,
             `- GKG URL match rate: **${result.urlJoin.gkgToWebNgramMatchRate}**`,
             "",
-            "This is one batch only; do not treat it as a multi-day coverage estimate."
+            "### Available Web NGrams minute files",
+            ...result.webNgrams.files.filter(file => file.status === "ok").map(file =>
+              `- ${file.filename} (${file.offsetMinutes} min): ${file.recordCount} records, ${file.uniqueUrlCount} URLs, ${file.join.normalizedMatches} normalized matches`
+            ),
+            "",
+            "This is a diagnostic time window only; do not treat it as a multi-day coverage estimate."
           ];
-          await fs.appendFile(process.env.GITHUB_STEP_SUMMARY, lines.join("\\n") + "\\n");
+          await fs.appendFile(process.env.GITHUB_STEP_SUMMARY, lines.join("\n") + "\n");
           NODE
