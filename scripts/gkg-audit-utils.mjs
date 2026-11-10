@@ -77,11 +77,11 @@ export function summarizeUrlJoin(gkgUrls, webNgramUrls) {
   };
 }
 
-export function nextWebNgramsFilename(gkgFilename, minuteOffset = 1) {
+function timestampFromGkgFilename(gkgFilename) {
   const match = String(gkgFilename ?? "").match(/(\d{14})\.gkg\.csv\.zip$/);
   if (!match) throw new Error("Unrecognized GKG filename timestamp.");
   const stamp = match[1];
-  const date = new Date(Date.UTC(
+  return new Date(Date.UTC(
     Number(stamp.slice(0, 4)),
     Number(stamp.slice(4, 6)) - 1,
     Number(stamp.slice(6, 8)),
@@ -89,6 +89,51 @@ export function nextWebNgramsFilename(gkgFilename, minuteOffset = 1) {
     Number(stamp.slice(10, 12)),
     Number(stamp.slice(12, 14))
   ));
+}
+
+export function webNgramsFilenameAtOffset(gkgFilename, minuteOffset) {
+  const date = timestampFromGkgFilename(gkgFilename);
   date.setUTCMinutes(date.getUTCMinutes() + minuteOffset);
   return date.toISOString().slice(0, 19).replaceAll("-", "").replaceAll(":", "").replace("T", "") + ".webngrams.json.gz";
+}
+
+export function webNgramsWindowFilenames(gkgFilename, beforeMinutes = 20, afterMinutes = 5) {
+  if (!Number.isInteger(beforeMinutes) || beforeMinutes < 0 ||
+      !Number.isInteger(afterMinutes) || afterMinutes < 0) {
+    throw new Error("Web NGrams search window must use non-negative integer minute offsets.");
+  }
+  const filenames = [];
+  for (let offset = -beforeMinutes; offset <= afterMinutes; offset++) {
+    filenames.push({ offsetMinutes: offset, filename: webNgramsFilenameAtOffset(gkgFilename, offset) });
+  }
+  return filenames;
+}
+
+export function nextWebNgramsFilename(gkgFilename, minuteOffset = 1) {
+  return webNgramsFilenameAtOffset(gkgFilename, minuteOffset);
+}
+
+export function summarizeWebNgramsWindow(gkgUrls, fileResults) {
+  const available = fileResults.filter(file => file.status === "ok");
+  const allUrls = new Set(available.flatMap(file => [...file.urls]));
+  const aggregateJoin = summarizeUrlJoin(gkgUrls, [...allUrls]);
+  return {
+    probedFileCount: fileResults.length,
+    availableFileCount: available.length,
+    missingFileCount: fileResults.filter(file => file.status === "missing").length,
+    files: fileResults.map(file => ({
+      filename: file.filename,
+      offsetMinutes: file.offsetMinutes,
+      status: file.status,
+      recordCount: file.records ?? 0,
+      uniqueUrlCount: file.urls?.size ?? 0,
+      join: file.status === "ok" ? summarizeUrlJoin(gkgUrls, [...file.urls]) : null,
+      languageRecordCounts: file.languages ?? {}
+    })),
+    aggregate: {
+      ...aggregateJoin,
+      availableFiles: available.map(file => file.filename),
+      duplicateUrlOccurrencesAcrossFiles: available.reduce((sum, file) => sum + file.urls.size, 0) - allUrls.size
+    }
+  };
 }
