@@ -178,8 +178,9 @@ for (const sample of hourlyTargets) {
           matchType: match.matchType,
           lang,
           context: match.context,
-          url: articleUrl
-        }], EVIDENCE_LIMIT);
+          url: articleUrl,
+          sampleHour: sample.sampleHour
+        }], 1);
       }
     }
 
