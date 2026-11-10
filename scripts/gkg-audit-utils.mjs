@@ -15,14 +15,14 @@ export const GKG_FIELD_INDEX = Object.freeze({
 });
 
 export function parseGkgLine(line) {
-  const columns = String(line ?? "").replace(/\\r$/, "").split("\\t");
+  const columns = String(line ?? "").replace(/\r$/, "").split("\t");
   if (!columns[0] || columns.length < GKG_FIELD_COUNT) {
     return { valid: false, fieldCount: columns.length };
   }
 
   const get = key => columns[GKG_FIELD_INDEX[key]] ?? "";
   const translationInfo = get("translationInfo");
-  const languageMatch = translationInfo.match(/(?:^|;)\\s*srclc:([a-z]{3})/i);
+  const languageMatch = translationInfo.match(/(?:^|;)\s*srclc:([a-z]{3})/i);
   const allNames = get("allNames").split(";").map(entry => {
     const separator = entry.lastIndexOf(",");
     return (separator >= 0 ? entry.slice(0, separator) : entry).trim();
@@ -78,7 +78,7 @@ export function summarizeUrlJoin(gkgUrls, webNgramUrls) {
 }
 
 export function nextWebNgramsFilename(gkgFilename, minuteOffset = 1) {
-  const match = String(gkgFilename ?? "").match(/(\\d{14})\\.gkg\\.csv\\.zip$/);
+  const match = String(gkgFilename ?? "").match(/(\d{14})\.gkg\.csv\.zip$/);
   if (!match) throw new Error("Unrecognized GKG filename timestamp.");
   const stamp = match[1];
   const date = new Date(Date.UTC(
