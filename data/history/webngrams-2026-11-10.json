@@ -2,22 +2,22 @@
   "schemaVersion": 1,
   "source": "GDELT Web News NGrams 3.0",
   "date": "2026-11-10",
-  "generatedAt": "2026-11-10T10:19:39.312Z",
+  "generatedAt": "2026-11-10T15:34:43.377Z",
   "sampling": {
     "status": "COMPLETE",
     "sampleHours": 24,
     "successfulSampleHours": 24,
     "missingSampleHours": 0,
     "failedFiles": 0,
-    "coverageStartUtc": "20261109094600",
-    "coverageEndUtc": "20261110080100"
+    "coverageStartUtc": "20261109154600",
+    "coverageEndUtc": "20261110140100"
   },
   "summary": {
     "totalCandidates": 12,
     "candidatesWithMatches": 11,
-    "totalUniqueCandidateArticleMatches": 2140,
-    "totalContextFilteredMatchedRecords": 6688,
-    "totalMultiwordPhraseMatchedRecords": 32445
+    "totalUniqueCandidateArticleMatches": 2229,
+    "totalContextFilteredMatchedRecords": 6385,
+    "totalMultiwordPhraseMatchedRecords": 32674
   },
   "results": [
     {
@@ -25,49 +25,47 @@
       "label": "Donald Trump",
       "category": "global_people",
       "locale": "global",
-      "matchedRecords": 31110,
-      "uniqueArticles": 1645,
-      "multiwordPhraseMatchedRecords": 31110,
+      "matchedRecords": 29969,
+      "uniqueArticles": 1679,
+      "multiwordPhraseMatchedRecords": 29969,
       "contextFilteredMatchedRecords": 0,
       "languageCounts": {
-        "en": 18820,
-        "pt": 863,
-        "zh-tw": 59,
-        "hu": 92,
-        "it": 429,
-        "fr": 1142,
-        "de": 2759,
-        "tr": 402,
-        "cs": 165,
-        "el": 42,
-        "sk": 112,
-        "sq": 317,
-        "es": 2322,
-        "ro": 760,
-        "vi": 1113,
-        "ar": 42,
-        "hr": 136,
-        "fi": 451,
-        "da": 108,
-        "sv": 135,
-        "bs": 42,
-        "id": 246,
-        "nl": 14,
+        "en": 17016,
+        "de": 2708,
+        "fr": 1085,
+        "pl": 83,
+        "pt": 1169,
+        "es": 3055,
+        "hu": 100,
+        "vi": 608,
+        "sk": 80,
+        "tr": 588,
+        "sq": 370,
+        "bs": 110,
+        "hr": 150,
+        "it": 633,
+        "ro": 441,
+        "el": 256,
+        "nl": 332,
+        "sv": 139,
+        "ko": 14,
+        "fi": 193,
+        "no": 112,
         "et": 154,
-        "sl": 42,
-        "no": 56,
-        "is": 14,
+        "da": 67,
+        "zh": 11,
+        "id": 186,
+        "zh-tw": 30,
+        "sw": 14,
+        "te": 77,
+        "cs": 119,
         "hi": 14,
-        "sw": 78,
-        "ca": 14,
-        "zh": 6,
-        "ms": 41,
-        "gu": 8,
-        "tl": 14,
-        "pl": 98
+        "bh": 13,
+        "ar": 28,
+        "ceb": 14
       },
       "aliasCounts": {
-        "Donald Trump": 31110
+        "Donald Trump": 29969
       },
       "matchQuality": "multiword_phrase_candidate_review_required"
     },
@@ -76,21 +74,23 @@
       "label": "Taylor Swift",
       "category": "global_people",
       "locale": "global",
-      "matchedRecords": 1183,
-      "uniqueArticles": 59,
-      "multiwordPhraseMatchedRecords": 1183,
+      "matchedRecords": 2289,
+      "uniqueArticles": 116,
+      "multiwordPhraseMatchedRecords": 2289,
       "contextFilteredMatchedRecords": 0,
       "languageCounts": {
-        "en": 850,
-        "de": 137,
-        "hr": 70,
-        "es": 84,
-        "pt": 14,
-        "is": 14,
-        "id": 14
+        "en": 1876,
+        "de": 27,
+        "hr": 56,
+        "pt": 42,
+        "es": 106,
+        "vi": 28,
+        "it": 126,
+        "tr": 14,
+        "el": 14
       },
       "aliasCounts": {
-        "Taylor Swift": 1183
+        "Taylor Swift": 2289
       },
       "matchQuality": "multiword_phrase_candidate_review_required"
     },
@@ -99,17 +99,16 @@
       "label": "2026 Youth Olympic Games",
       "category": "global_events",
       "locale": "global",
-      "matchedRecords": 95,
-      "uniqueArticles": 8,
-      "multiwordPhraseMatchedRecords": 95,
+      "matchedRecords": 240,
+      "uniqueArticles": 18,
+      "multiwordPhraseMatchedRecords": 240,
       "contextFilteredMatchedRecords": 0,
       "languageCounts": {
-        "en": 95
+        "en": 240
       },
       "aliasCounts": {
-        "2026 Youth Olympic Games": 84,
-        "Dakar 2026 Youth Olympic Games": 77,
-        "Youth Olympic Games Dakar 2026": 11
+        "2026 Youth Olympic Games": 240,
+        "Dakar 2026 Youth Olympic Games": 220
       },
       "matchQuality": "multiword_phrase_candidate_review_required"
     },
@@ -118,30 +117,29 @@
       "label": "COP31 — 2026 UN Climate Change Conference",
       "category": "global_events",
       "locale": "global",
-      "matchedRecords": 3763,
-      "uniqueArticles": 170,
+      "matchedRecords": 3743,
+      "uniqueArticles": 161,
       "multiwordPhraseMatchedRecords": 1,
-      "contextFilteredMatchedRecords": 3762,
+      "contextFilteredMatchedRecords": 3742,
       "languageCounts": {
-        "en": 2804,
-        "tr": 281,
-        "es": 141,
-        "it": 333,
-        "sv": 8,
-        "vi": 11,
-        "sq": 18,
-        "de": 18,
-        "ro": 12,
-        "fr": 77,
-        "id": 23,
-        "pt": 13,
+        "en": 3033,
+        "it": 138,
+        "tr": 96,
+        "fr": 142,
+        "es": 83,
+        "de": 120,
+        "id": 62,
         "da": 13,
-        "el": 11
+        "nl": 13,
+        "pt": 13,
+        "ca": 12,
+        "sv": 10,
+        "sw": 8
       },
       "aliasCounts": {
-        "COP31": 3762,
+        "COP31": 3742,
         "2026 United Nations Climate Change Conference": 10,
-        "COP31 Antalya": 111
+        "COP31 Antalya": 42
       },
       "matchQuality": "context_filtered_candidate_review_required"
     },
@@ -150,17 +148,16 @@
       "label": "France",
       "category": "countries",
       "locale": "global",
-      "matchedRecords": 674,
-      "uniqueArticles": 56,
+      "matchedRecords": 525,
+      "uniqueArticles": 53,
       "multiwordPhraseMatchedRecords": 0,
-      "contextFilteredMatchedRecords": 674,
+      "contextFilteredMatchedRecords": 525,
       "languageCounts": {
-        "en": 598,
-        "fr": 62,
-        "es": 14
+        "en": 476,
+        "fr": 49
       },
       "aliasCounts": {
-        "France": 674
+        "France": 525
       },
       "matchQuality": "context_filtered_candidate_review_required"
     },
@@ -169,17 +166,15 @@
       "label": "Japan",
       "category": "countries",
       "locale": "global",
-      "matchedRecords": 398,
-      "uniqueArticles": 41,
+      "matchedRecords": 217,
+      "uniqueArticles": 18,
       "multiwordPhraseMatchedRecords": 0,
-      "contextFilteredMatchedRecords": 398,
+      "contextFilteredMatchedRecords": 217,
       "languageCounts": {
-        "en": 387,
-        "pl": 10,
-        "th": 1
+        "en": 217
       },
       "aliasCounts": {
-        "Japan": 398
+        "Japan": 217
       },
       "matchQuality": "context_filtered_candidate_review_required"
     },
@@ -188,17 +183,20 @@
       "label": "Paris, France",
       "category": "global_cities",
       "locale": "global",
-      "matchedRecords": 1492,
-      "uniqueArticles": 122,
+      "matchedRecords": 1415,
+      "uniqueArticles": 130,
       "multiwordPhraseMatchedRecords": 0,
-      "contextFilteredMatchedRecords": 1492,
+      "contextFilteredMatchedRecords": 1415,
       "languageCounts": {
-        "en": 1333,
-        "fr": 145,
-        "da": 14
+        "en": 1210,
+        "fr": 134,
+        "pt": 6,
+        "de": 16,
+        "sq": 12,
+        "es": 37
       },
       "aliasCounts": {
-        "Paris": 1492
+        "Paris": 1415
       },
       "matchQuality": "context_filtered_candidate_review_required"
     },
@@ -207,15 +205,16 @@
       "label": "Tokyo, Japan",
       "category": "global_cities",
       "locale": "global",
-      "matchedRecords": 313,
-      "uniqueArticles": 27,
+      "matchedRecords": 382,
+      "uniqueArticles": 33,
       "multiwordPhraseMatchedRecords": 0,
-      "contextFilteredMatchedRecords": 313,
+      "contextFilteredMatchedRecords": 382,
       "languageCounts": {
-        "en": 313
+        "en": 376,
+        "de": 6
       },
       "aliasCounts": {
-        "Tokyo": 313
+        "Tokyo": 382
       },
       "matchQuality": "context_filtered_candidate_review_required"
     },
@@ -224,16 +223,16 @@
       "label": "Gdańsk, Poland",
       "category": "polish_cities",
       "locale": "polish_language_media",
-      "matchedRecords": 6,
+      "matchedRecords": 3,
       "uniqueArticles": 1,
       "multiwordPhraseMatchedRecords": 0,
-      "contextFilteredMatchedRecords": 6,
+      "contextFilteredMatchedRecords": 3,
       "languageCounts": {
-        "pl": 6
+        "pl": 3
       },
       "aliasCounts": {
-        "Gdańsk": 6,
-        "Gdansk": 6
+        "Gdańsk": 3,
+        "Gdansk": 3
       },
       "matchQuality": "context_filtered_candidate_review_required"
     },
@@ -242,16 +241,17 @@
       "label": "Kraków, Poland",
       "category": "polish_cities",
       "locale": "polish_language_media",
-      "matchedRecords": 43,
-      "uniqueArticles": 7,
+      "matchedRecords": 101,
+      "uniqueArticles": 11,
       "multiwordPhraseMatchedRecords": 0,
-      "contextFilteredMatchedRecords": 43,
+      "contextFilteredMatchedRecords": 101,
       "languageCounts": {
-        "pl": 43
+        "pl": 101
       },
       "aliasCounts": {
-        "Krakowie": 31,
-        "Krakowa": 12
+        "Krakowie": 57,
+        "Krakowskie": 10,
+        "Krakowa": 34
       },
       "matchQuality": "context_filtered_candidate_review_required"
     },
@@ -260,15 +260,15 @@
       "label": "Donald Tusk",
       "category": "people_in_polish_media",
       "locale": "polish_language_media",
-      "matchedRecords": 56,
-      "uniqueArticles": 4,
-      "multiwordPhraseMatchedRecords": 56,
+      "matchedRecords": 175,
+      "uniqueArticles": 9,
+      "multiwordPhraseMatchedRecords": 175,
       "contextFilteredMatchedRecords": 0,
       "languageCounts": {
-        "pl": 56
+        "pl": 175
       },
       "aliasCounts": {
-        "Donald Tusk": 56
+        "Donald Tusk": 175
       },
       "matchQuality": "multiword_phrase_candidate_review_required"
     },
