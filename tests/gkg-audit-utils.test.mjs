@@ -21,7 +21,7 @@ function makeGkgLine(overrides = {}) {
   fields[23] = "Climate Summit,120;World Cup,450";
   fields[25] = "srclc:pol; eng:Example translation model";
   for (const [index, value] of Object.entries(overrides)) fields[Number(index)] = value;
-  return fields.join("\\t");
+  return fields.join("\t");
 }
 
 test("parses GKG document identity, themes, names and original language", () => {
@@ -35,7 +35,7 @@ test("parses GKG document identity, themes, names and original language", () => 
 });
 
 test("rejects rows shorter than the documented GKG 2.1 field set", () => {
-  const parsed = parseGkgLine("only\\ttwo");
+  const parsed = parseGkgLine("only\ttwo");
   assert.equal(parsed.valid, false);
   assert.equal(parsed.fieldCount, 2);
 });
