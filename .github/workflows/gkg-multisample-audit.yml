@@ -1,0 +1,61 @@
+name: GKG multi-sample coverage audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "scripts/gkg-multisample-audit.mjs"
+      - "scripts/gkg-multisample-utils.mjs"
+      - "tests/gkg-multisample-audit.test.mjs"
+      - "package.json"
+      - ".github/workflows/gkg-multisample-audit.yml"
+  pull_request:
+    paths:
+      - "scripts/gkg-multisample-audit.mjs"
+      - "scripts/gkg-multisample-utils.mjs"
+      - "tests/gkg-multisample-audit.test.mjs"
+      - "package.json"
+      - ".github/workflows/gkg-multisample-audit.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+      - run: npm run check:gkg-multisample
+
+  live-audit:
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push'
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+      - run: npm run check:gkg-multisample
+      - name: Collect ten GKG batches and matching Web NGrams windows
+        run: npm run gkg:multisample
+        env:
+          GKG_SAMPLE_COUNT: 10
+          GKG_SAMPLE_SPACING_MINUTES: 150
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gkg-multisample-audit
+          path: |
+            output/gkg-multisample-audit.json
+            output/gkg-multisample-audit.md
+          if-no-files-found: error
+          retention-days: 30
+      - name: Publish audit summary
+        if: always() && hashFiles('output/gkg-multisample-audit.md') != ''
+        run: cat output/gkg-multisample-audit.md >> "$GITHUB_STEP_SUMMARY"
