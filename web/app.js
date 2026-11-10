@@ -46,7 +46,8 @@ function isValidSavedState(saved){
 }
 
 function loadState(){
-  const raw = localStorage.getItem(STORAGE_KEY);
+  let raw;
+  try{raw = localStorage.getItem(STORAGE_KEY);}catch{return initialState();}
   if(raw === null) return initialState();
   try{
     const saved = JSON.parse(raw);
