@@ -4,15 +4,15 @@ const COOLDOWN_MS = 24 * 60 * 60 * 1000;
 const STORAGE_KEY = "trendsy-demo-v1";
 
 const instruments = [
-  {id:"poland",name:"Polska",category:"Kraj",edition:"national",icon:"🇵🇱",price:12.4,change:8.2,description:"Zainteresowanie Polską"},
-  {id:"tusk",name:"Donald Tusk",category:"Osoba",edition:"national",icon:"👤",price:9.8,change:4.6,description:"Polityka i życie publiczne"},
-  {id:"gdansk",name:"Gdańsk",category:"Miejsce",edition:"national",icon:"🏙️",price:7.2,change:2.1,description:"Miasto i region"},
-  {id:"cop31",name:"COP31",category:"Wydarzenie",edition:"world",icon:"🌍",price:14.6,change:12.8,description:"Szczyt klimatyczny"},
-  {id:"taylor",name:"Taylor Swift",category:"Osoba",edition:"world",icon:"🎤",price:18.3,change:-1.4,description:"Muzyka i popkultura"},
-  {id:"japan",name:"Japonia",category:"Kraj",edition:"world",icon:"🇯🇵",price:11.1,change:3.7,description:"Kraj i wydarzenia"},
-  {id:"youth-olympics",name:"Młodzieżowe Igrzyska",category:"Wydarzenie",edition:"world",icon:"🏅",price:8.9,change:5.3,description:"Sport międzynarodowy"},
-  {id:"paris",name:"Paryż",category:"Miejsce",edition:"world",icon:"🗼",price:10.5,change:-2.2,description:"Miasto i kultura"},
-  {id:"lewandowski",name:"Robert Lewandowski",category:"Osoba",edition:"national",icon:"⚽",price:13.7,change:6.1,description:"Sport i piłka nożna"}
+  {id:"poland",name:"Polska",category:"Kraj",edition:"national",icon:"🇵🇱",price:12.4,change:8.2,owners:38,description:"Zainteresowanie Polską"},
+  {id:"tusk",name:"Donald Tusk",category:"Osoba",edition:"national",icon:"👤",price:9.8,change:4.6,owners:24,description:"Polityka i życie publiczne"},
+  {id:"gdansk",name:"Gdańsk",category:"Miejsce",edition:"national",icon:"🏙️",price:7.2,change:2.1,owners:9,description:"Miasto i region"},
+  {id:"cop31",name:"COP31",category:"Wydarzenie",edition:"world",icon:"🌍",price:14.6,change:12.8,owners:31,description:"Szczyt klimatyczny"},
+  {id:"taylor",name:"Taylor Swift",category:"Osoba",edition:"world",icon:"🎤",price:18.3,change:-1.4,owners:17,description:"Muzyka i popkultura"},
+  {id:"japan",name:"Japonia",category:"Kraj",edition:"world",icon:"🇯🇵",price:11.1,change:3.7,owners:27,description:"Kraj i wydarzenia"},
+  {id:"youth-olympics",name:"Młodzieżowe Igrzyska",category:"Wydarzenie",edition:"world",icon:"🏅",price:8.9,change:5.3,owners:14,description:"Sport międzynarodowy"},
+  {id:"paris",name:"Paryż",category:"Miejsce",edition:"world",icon:"🗼",price:10.5,change:-2.2,owners:5,description:"Miasto i kultura"},
+  {id:"lewandowski",name:"Robert Lewandowski",category:"Osoba",edition:"national",icon:"⚽",price:13.7,change:6.1,owners:21,description:"Sport i piłka nożna"}
 ];
 const byId = id => instruments.find(item => item.id === id);
 const money = value => value.toLocaleString("pl-PL",{minimumFractionDigits:2,maximumFractionDigits:2}) + " TR";
@@ -136,13 +136,32 @@ function renderInstruments(){
   }).join("");
   list.querySelectorAll("[data-buy]").forEach(button=>button.addEventListener("click",()=>buy(button.dataset.buy)));
 }
+
+function renderMarketRankings(){
+  const lists=[
+    {id:"fastest-risers",items:[...instruments].sort((x,y)=>y.change-x.change).slice(0,4),mode:"change"},
+    {id:"most-held",items:[...instruments].sort((x,y)=>y.owners-x.owners).slice(0,4),mode:"owners"},
+    {id:"biggest-falls",items:[...instruments].filter(x=>x.change<0).sort((x,y)=>x.change-y.change).slice(0,4),mode:"change"},
+    {id:"least-held",items:[...instruments].sort((x,y)=>x.owners-y.owners).slice(0,4),mode:"owners"}
+  ];
+  for(const group of lists){
+    const el=document.querySelector("#"+group.id);
+    el.innerHTML=group.items.map((item,index)=>{
+      const positive=item.change>=0;
+      const metric=group.mode==="change"?(positive?"+":"")+item.change.toFixed(1).replace(".",",")+"%":item.owners+" graczy";
+      const bar=group.mode==="change"?Math.min(100,Math.abs(item.change)/13*100):Math.min(100,item.owners/40*100);
+      return '<div class="market-rank-row"><span class="market-rank-number">'+String(index+1).padStart(2,"0")+'</span><span class="market-rank-icon">'+item.icon+'</span><span class="market-rank-main"><b>'+item.name+'</b><span class="market-bar"><i style="width:'+bar+'%"></i></span></span><strong class="'+(group.mode==="change"?(positive?"positive":"negative"):"")+'">'+metric+'</strong></div>';
+    }).join("")||'<p class="empty-small">Brak trendów w tej kategorii.</p>';
+  }
+}
 function renderPortfolio(){
   const el=document.querySelector("#portfolio");
   if(!state.holdings.length){el.innerHTML='<div class="empty-state"><b>Twój portfel jest pusty.</b><br>Wybierz instrumenty z tablicy powyżej. Możesz kupić maksymalnie trzy instrumenty z różnych kategorii. Pełny portfel musi zawierać dokładnie jeden instrument edycji krajowej.</div>';return;}
   el.innerHTML=state.holdings.map(h=>{
     const item=byId(h.id),value=h.units*item.price;
+    const previousValue=value/(1+item.change/100),delta=value-previousValue;
     const disabled=cooldownRemaining()>0;
-    return '<article class="holding"><div class="instrument-main"><span class="instrument-icon">'+item.icon+'</span><div><div class="instrument-name">'+item.name+'</div><div class="instrument-meta">'+item.category+' · '+h.units+' szt.</div></div></div><div class="holding-value">'+money(value)+'<small>Wartość pozycji</small></div>'+(state.holdings.length===MAX_HOLDINGS?'<button class="exchange-button" data-exchange="'+item.id+'" '+(disabled?'disabled title="Wymiana dostępna za '+formatRemaining(cooldownRemaining())+'"':'')+'>Wymień ↗</button>':'<span class="muted">Zapełnij portfel</span>')+'</article>';
+    return '<article class="holding"><div class="instrument-main"><span class="instrument-icon">'+item.icon+'</span><div><div class="instrument-name">'+item.name+'</div><div class="instrument-meta">'+item.category+' · '+h.units+' szt.</div></div></div><div class="holding-value">'+money(value)+'<small>Wartość pozycji</small><em class="'+(delta>=0?'positive':'negative')+'">'+(delta>=0?'+':'−')+money(Math.abs(delta))+' ('+(delta>=0?'+':'')+item.change.toFixed(1).replace('.',',')+'%) / 24 h</em></div>'+(state.holdings.length===MAX_HOLDINGS?'<button class="exchange-button" data-exchange="'+item.id+'" '+(disabled?'disabled title="Wymiana dostępna za '+formatRemaining(cooldownRemaining())+'"':'')+'>Wymień ↗</button>':'<span class="muted">Zapełnij portfel</span>')+'</article>';
   }).join("");
   el.querySelectorAll("[data-exchange]").forEach(button=>button.addEventListener("click",()=>startExchange(button.dataset.exchange)));
 }
@@ -160,7 +179,7 @@ function render(){
   document.querySelector("#total-change").textContent=profit===0?"Twoje saldo początkowe":(profit>=0?"Wzrost wartości portfela":"Spadek wartości portfela");
   document.querySelector("#ranking-value").textContent=money(value);
   document.querySelector("#exchange-status").textContent=remaining>0?"Wymiana ponownie za "+formatRemaining(remaining):state.holdings.length?"Wymiana dostępna":"Możesz rozpocząć inwestowanie";
-  renderInstruments();renderPortfolio();renderActivity();
+  renderMarketRankings();renderInstruments();renderPortfolio();renderActivity();
   scheduleCooldownRefresh();
 }
 document.querySelector("#filters").addEventListener("click",event=>{
