@@ -62,6 +62,7 @@ export function createDailyArchive(snapshot) {
 
   const results = Array.isArray(snapshot.results) ? snapshot.results : [];
   if (!results.length) throw new Error("Snapshot contains no candidate results.");
+  const auditedResults = results.map(item => ({ item, audit: buildEvidenceAudit(item) }));
 
   return {
     schemaVersion: 2,
@@ -80,15 +81,15 @@ export function createDailyArchive(snapshot) {
     summary: {
       ...(snapshot.summary ?? {}),
       candidatesRequiringManualReview: results.length,
-      candidatesWithEvidence: results.filter(item => Array.isArray(item.evidence) && item.evidence.length > 0).length,
-      totalArchivedEvidenceArticles: results.reduce((sum, item) => sum + (Array.isArray(item.evidence) ? item.evidence.length : 0), 0)
+      candidatesWithEvidence: auditedResults.filter(entry => entry.audit.evidenceCount > 0).length,
+      totalArchivedEvidenceArticles: auditedResults.reduce((sum, entry) => sum + entry.audit.evidenceCount, 0)
     },
     evidencePolicy: {
       maxArticlesPerCandidate: MAX_ARCHIVED_EVIDENCE,
       selection: "At most one representative article per successful sampled UTC hour; URLs deduplicated.",
       note: "Evidence is a review sample, not the complete list of matching articles or a popularity score."
     },
-    results: results.map(item => ({
+    results: auditedResults.map(({ item, audit }) => ({
       id: item.id,
       label: item.label,
       category: item.category,
@@ -100,7 +101,7 @@ export function createDailyArchive(snapshot) {
       languageCounts: item.languageCounts ?? {},
       aliasCounts: item.aliasCounts ?? {},
       matchQuality: item.matchQuality ?? "unreviewed",
-      ...buildEvidenceAudit(item)
+      ...audit
     }))
   };
 }
