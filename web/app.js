@@ -17,15 +17,43 @@ const instruments = [
 const byId = id => instruments.find(item => item.id === id);
 const money = value => value.toLocaleString("pl-PL",{minimumFractionDigits:2,maximumFractionDigits:2}) + " TR";
 const initialState = () => ({cash:STARTING_CASH,holdings:[],lastExchangeAt:null,history:[]});
+let invalidSavedState = false;
 let state = loadState();
 let activeFilter = "all";
 let toastTimer;
+let cooldownRefreshTimer;
+
+function isValidSavedState(saved){
+  if(!saved || typeof saved.cash !== "number" || !Number.isFinite(saved.cash) || saved.cash < 0) return false;
+  if(!Array.isArray(saved.holdings) || saved.holdings.length > MAX_HOLDINGS) return false;
+  if(saved.lastExchangeAt !== null && saved.lastExchangeAt !== undefined && (!Number.isFinite(saved.lastExchangeAt) || saved.lastExchangeAt < 0)) return false;
+  if(saved.history !== undefined && !Array.isArray(saved.history)) return false;
+
+  const ids = new Set();
+  const categories = new Set();
+  let nationalCount = 0;
+  for(const holding of saved.holdings){
+    const item = byId(holding?.id);
+    if(!item || holding.units !== 1 || ids.has(holding.id)) return false;
+    if(categories.has(item.category)) return false;
+    ids.add(holding.id);
+    categories.add(item.category);
+    if(item.edition === "national") nationalCount++;
+  }
+  if(nationalCount > 1) return false;
+  if(saved.holdings.length === MAX_HOLDINGS && nationalCount !== 1) return false;
+  return true;
+}
 
 function loadState(){
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if(raw === null) return initialState();
   try{
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if(saved && typeof saved.cash === "number" && Array.isArray(saved.holdings)) return saved;
+    const saved = JSON.parse(raw);
+    if(isValidSavedState(saved)) return {...initialState(),...saved,history:saved.history||[]};
   }catch{}
+  invalidSavedState = true;
+  try{localStorage.removeItem(STORAGE_KEY);}catch{}
   return initialState();
 }
 function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}
@@ -34,6 +62,11 @@ function totalUnits(id){return state.holdings.find(h=>h.id===id)?.units||0;}
 function hasNational(){return state.holdings.some(h=>byId(h.id).edition==="national");}
 function hasOtherNational(exceptId){return state.holdings.some(h=>h.id!==exceptId && byId(h.id).edition==="national");}
 function cooldownRemaining(){return state.lastExchangeAt ? Math.max(0,COOLDOWN_MS-(Date.now()-state.lastExchangeAt)) : 0;}
+function scheduleCooldownRefresh(){
+  clearTimeout(cooldownRefreshTimer);
+  const remaining = cooldownRemaining();
+  if(remaining > 0) cooldownRefreshTimer = setTimeout(()=>render(),remaining+50);
+}
 function formatRemaining(ms){const h=Math.floor(ms/3600000),m=Math.ceil((ms%3600000)/60000);return h+" godz. "+m+" min";}
 function notify(message){const el=document.querySelector("#toast");el.textContent=message;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),2600);}
 function log(message,amount){state.history.unshift({message,amount,at:Date.now()});state.history=state.history.slice(0,8);}
@@ -127,6 +160,7 @@ function render(){
   document.querySelector("#ranking-value").textContent=money(value);
   document.querySelector("#exchange-status").textContent=remaining>0?"Wymiana ponownie za "+formatRemaining(remaining):state.holdings.length?"Wymiana dostępna":"Możesz rozpocząć inwestowanie";
   renderInstruments();renderPortfolio();renderActivity();
+  scheduleCooldownRefresh();
 }
 document.querySelector("#filters").addEventListener("click",event=>{
   const button=event.target.closest("[data-filter]");if(!button)return;
@@ -137,4 +171,6 @@ document.querySelector("#filters").addEventListener("click",event=>{
 document.querySelector("#reset-button").addEventListener("click",()=>{
   if(confirm("Zresetować konto demo? Usunie to portfel i historię transakcji.")){state=initialState();save();render();notify("Konto demo zostało zresetowane.");}
 });
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)render();});
 render();
+if(invalidSavedState) notify("Poprzedni zapis nie spełnia aktualnych zasad gry. Konto demo zostało zresetowane.");
