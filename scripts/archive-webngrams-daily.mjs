@@ -2,6 +2,51 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+const MAX_ARCHIVED_EVIDENCE = 25;
+
+function buildEvidenceAudit(item) {
+  const seen = new Set();
+  const evidence = [];
+  for (const record of Array.isArray(item.evidence) ? item.evidence : []) {
+    const rawUrl = typeof record?.url === "string" ? record.url : "";
+    let parsed;
+    try { parsed = new URL(rawUrl); } catch { continue; }
+    if (!["http:", "https:"].includes(parsed.protocol) || seen.has(parsed.href)) continue;
+    seen.add(parsed.href);
+    evidence.push({
+      url: parsed.href,
+      domain: parsed.hostname.toLowerCase(),
+      lang: String(record.lang ?? "unknown").toLowerCase(),
+      matchType: record.matchType ?? "unknown",
+      aliasMatches: Array.isArray(record.aliasMatches) ? record.aliasMatches.slice(0, 10) : [],
+      context: String(record.context ?? "").slice(0, 500),
+      sampleHour: record.sampleHour ?? null
+    });
+    if (evidence.length >= MAX_ARCHIVED_EVIDENCE) break;
+  }
+
+  const evidenceDomains = {};
+  for (const record of evidence) {
+    evidenceDomains[record.domain] = (evidenceDomains[record.domain] ?? 0) + 1;
+  }
+  const uniqueArticles = Math.max(0, Number(item.uniqueArticles) || 0);
+  const qualityFlags = [];
+  if (uniqueArticles === 0) qualityFlags.push("no_unique_articles_in_sample");
+  else if (uniqueArticles < 10) qualityFlags.push("low_unique_article_volume");
+  if ((Number(item.contextFilteredMatchedRecords) || 0) > 0) qualityFlags.push("single_token_context_filtering_used");
+  if (evidence.length < uniqueArticles) qualityFlags.push("evidence_is_capped_sample_not_full_article_list");
+  if (evidence.length >= MAX_ARCHIVED_EVIDENCE) qualityFlags.push("evidence_sample_cap_reached");
+
+  return {
+    evidence,
+    evidenceCount: evidence.length,
+    evidenceDomains,
+    evidenceCoverage: uniqueArticles ? Number((evidence.length / uniqueArticles).toFixed(4)) : 0,
+    reviewStatus: "manual_review_required",
+    qualityFlags
+  };
+}
+
 export function createDailyArchive(snapshot) {
   const sampling = snapshot?.sampling;
   if (sampling?.status !== "COMPLETE") {
@@ -19,7 +64,7 @@ export function createDailyArchive(snapshot) {
   if (!results.length) throw new Error("Snapshot contains no candidate results.");
 
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     source: snapshot.source ?? "GDELT Web News NGrams 3.0",
     date: `${dateMatch[1]}-${dateMatch[2]}-${dateMatch[3]}`,
     generatedAt: snapshot.generatedAt ?? null,
@@ -32,7 +77,17 @@ export function createDailyArchive(snapshot) {
       coverageStartUtc: sampling.coverageStartUtc,
       coverageEndUtc: sampling.coverageEndUtc
     },
-    summary: snapshot.summary ?? {},
+    summary: {
+      ...(snapshot.summary ?? {}),
+      candidatesRequiringManualReview: results.length,
+      candidatesWithEvidence: results.filter(item => Array.isArray(item.evidence) && item.evidence.length > 0).length,
+      totalArchivedEvidenceArticles: results.reduce((sum, item) => sum + (Array.isArray(item.evidence) ? item.evidence.length : 0), 0)
+    },
+    evidencePolicy: {
+      maxArticlesPerCandidate: MAX_ARCHIVED_EVIDENCE,
+      selection: "At most one representative article per successful sampled UTC hour; URLs deduplicated.",
+      note: "Evidence is a review sample, not the complete list of matching articles or a popularity score."
+    },
     results: results.map(item => ({
       id: item.id,
       label: item.label,
@@ -44,7 +99,8 @@ export function createDailyArchive(snapshot) {
       contextFilteredMatchedRecords: item.contextFilteredMatchedRecords ?? 0,
       languageCounts: item.languageCounts ?? {},
       aliasCounts: item.aliasCounts ?? {},
-      matchQuality: item.matchQuality ?? "unreviewed"
+      matchQuality: item.matchQuality ?? "unreviewed",
+      ...buildEvidenceAudit(item)
     }))
   };
 }
