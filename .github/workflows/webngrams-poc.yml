@@ -50,7 +50,7 @@ jobs:
       - run: npm run check:webngrams
 
   sample:
-    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || github.event_name == 'push'
     needs: validate
     runs-on: ubuntu-latest
     timeout-minutes: 40
@@ -97,7 +97,7 @@ jobs:
           NODE
 
       - name: Create compact daily history record
-        if: github.event_name == 'schedule' && success()
+        if: (github.event_name == 'schedule' || github.event_name == 'push') && success()
         run: npm run webngrams:archive
 
       - name: Commit daily history
