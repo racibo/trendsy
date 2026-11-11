@@ -317,6 +317,7 @@ export function summarizeCandidateDiscovery(accumulator, sampleStats, limit = 20
     },
     sampleStats,
     candidates,
+    possibleAliasPairs,
     manualReviewSample: buildReviewSample(allCandidates)
   };
 }
