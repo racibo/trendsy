@@ -10,14 +10,15 @@
     "gkg:probe": "node scripts/gkg-join-probe.mjs",
     "check": "node --check scripts/gdelt-smoke-test.mjs && npm run check:gkg",
     "check:gkg": "node --check scripts/gkg-audit-utils.mjs && node --check scripts/gkg-join-probe.mjs && node --test tests/gkg-audit-utils.test.mjs",
-    "check:webngrams": "node --check scripts/webngrams-smoke-test.mjs && node --check scripts/webngrams-matching.mjs && node --check scripts/webngrams-sampling.mjs && node --check scripts/archive-webngrams-daily.mjs && node --test tests/webngrams-matching.test.mjs tests/webngrams-sampling.test.mjs tests/webngrams-archive.test.mjs",
+    "check:webngrams": "node --check scripts/webngrams-smoke-test.mjs && node --check scripts/webngrams-matching.mjs && node --check scripts/webngrams-sampling.mjs && node --check scripts/archive-webngrams-daily.mjs && node --check scripts/webngrams-review-audit-utils.mjs && node --check scripts/webngrams-review-audit.mjs && node --test tests/webngrams-matching.test.mjs tests/webngrams-sampling.test.mjs tests/webngrams-archive.test.mjs tests/webngrams-review-audit.test.mjs",
     "webngrams:archive": "node scripts/archive-webngrams-daily.mjs",
     "gkg:multisample": "node scripts/gkg-multisample-audit.mjs",
     "check:gkg-multisample": "node --check scripts/gkg-multisample-utils.mjs && node --check scripts/gkg-multisample-audit.mjs && node --test tests/gkg-multisample-audit.test.mjs",
     "gkg:discover": "node scripts/gkg-candidate-discovery-audit.mjs",
     "check:gkg-discovery": "node --check scripts/gkg-candidate-discovery-utils.mjs && node --check scripts/gkg-candidate-discovery-audit.mjs && node --test tests/gkg-candidate-discovery.test.mjs",
     "gkg:relevance": "node scripts/gkg-article-relevance-audit.mjs",
-    "check:gkg-relevance": "node --check scripts/gkg-article-relevance-utils.mjs && node --check scripts/gkg-article-relevance-audit.mjs && node --test tests/gkg-article-relevance.test.mjs"
+    "check:gkg-relevance": "node --check scripts/gkg-article-relevance-utils.mjs && node --check scripts/gkg-article-relevance-audit.mjs && node --test tests/gkg-article-relevance.test.mjs",
+    "webngrams:review-audit": "node scripts/webngrams-review-audit.mjs"
   },
   "engines": {
     "node": ">=20"
