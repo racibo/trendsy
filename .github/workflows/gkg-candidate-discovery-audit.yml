@@ -1,0 +1,66 @@
+name: GKG ALLNAMES candidate discovery audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "scripts/gkg-candidate-discovery-audit.mjs"
+      - "scripts/gkg-candidate-discovery-utils.mjs"
+      - "scripts/gkg-audit-utils.mjs"
+      - "scripts/gkg-multisample-utils.mjs"
+      - "tests/gkg-candidate-discovery.test.mjs"
+      - "package.json"
+      - ".github/workflows/gkg-candidate-discovery-audit.yml"
+  pull_request:
+    paths:
+      - "scripts/gkg-candidate-discovery-audit.mjs"
+      - "scripts/gkg-candidate-discovery-utils.mjs"
+      - "scripts/gkg-audit-utils.mjs"
+      - "scripts/gkg-multisample-utils.mjs"
+      - "tests/gkg-candidate-discovery.test.mjs"
+      - "package.json"
+      - ".github/workflows/gkg-candidate-discovery-audit.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+      - run: npm run check:gkg-discovery
+
+  live-audit:
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push'
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+      - run: npm run check:gkg-discovery
+      - name: Discover names from sampled GKG batches
+        run: npm run gkg:discover
+        env:
+          GKG_DISCOVERY_SAMPLE_COUNT: 10
+          GKG_DISCOVERY_SPACING_MINUTES: 150
+          GKG_DISCOVERY_CANDIDATE_LIMIT: 200
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gkg-candidate-discovery
+          path: |
+            output/gkg-candidate-discovery.json
+            output/gkg-candidate-discovery.md
+          if-no-files-found: error
+          retention-days: 30
+      - name: Publish discovery summary
+        if: always() && hashFiles('output/gkg-candidate-discovery.md') != ''
+        run: cat output/gkg-candidate-discovery.md >> "$GITHUB_STEP_SUMMARY"
