@@ -1,0 +1,14 @@
+[
+  {
+    "date": "2026-11-11",
+    "startedAt": "2026-11-11T17:54:09.923Z",
+    "completedAt": "2026-11-11T17:55:39.423Z",
+    "status": "PARTIAL",
+    "requestedSamples": 10,
+    "completeSamples": 9,
+    "weightedMatchRate": 0.9072,
+    "meanMatchRate": 0.9069,
+    "totalGkgUniqueUrls": 10221,
+    "totalMatchedUrls": 9272
+  }
+]\n
