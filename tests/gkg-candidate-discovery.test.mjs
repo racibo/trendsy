@@ -11,7 +11,7 @@ import {
 test("parses ALLNAMES name and trailing character offset", () => {
   assert.deepEqual(parseAllNameMention("Donald Trump,1234"), { name: "Donald Trump", offset: 1234 });
   assert.deepEqual(parseAllNameMention("ACME, Inc.,42"), { name: "ACME, Inc.", offset: 42 });
-  assert.deepEqual(parseAllNameMention("World Cup"), { name: "World Cup", offset: null });
+  assert.deepEqual(parseAllNameMention("World Cup"), { name: "World Cup", offset: null });\n  assert.deepEqual(parseAllNameMention("Miller, John"), { name: "Miller, John", offset: null });
   assert.equal(parseAllNameMention(""), null);
 });
 
@@ -110,4 +110,36 @@ test("adds transparent quality flags and a stratified manual review sample", () 
     item.normalizedName === "chief executive officer" && item.strata.includes("domain_concentrated")
   ));
   assert.equal(report.manualReviewSample[0].manualAssessment.relevance, null);
+});
+
+
+test("suggests possible aliases from shared tokens and repeated article co-occurrence without merging them", () => {
+  const accumulator = createCandidateAccumulator();
+  for (let index = 0; index < 4; index++) {
+    const common = {
+      valid: true, sourceCollectionId: "1",
+      url: `https://news-${index}.example/story`,
+      persons: ["Donald Trump"], organizations: [], themes: []
+    };
+    addGkgDocument(accumulator, {
+      ...common,
+      allNames: ["Donald Trump,1", "President Donald Trump,2"]
+    }, `batch-${index}`);
+  }
+  addGkgDocument(accumulator, {
+    valid: true, sourceCollectionId: "1", url: "https://extra.example/one",
+    allNames: ["Donald Trump,1"], persons: ["Donald Trump"], organizations: [], themes: []
+  }, "batch-extra");
+  const report = summarizeCandidateDiscovery(accumulator, [
+    { status: "COMPLETE" }, { status: "COMPLETE" }, { status: "COMPLETE" }, { status: "COMPLETE" }
+  ]);
+  const pair = report.possibleAliasPairs.find(item =>
+    new Set([item.first, item.second]).has("Donald Trump") &&
+    new Set([item.first, item.second]).has("President Donald Trump")
+  );
+  assert.ok(pair);
+  assert.equal(pair.sharedArticleCount, 4);
+  assert.deepEqual(pair.sharedTokens, ["donald", "trump"]);
+  assert.equal(pair.assessment, null);
+  assert.equal(report.candidates.length, 2);
 });
