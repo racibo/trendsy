@@ -16,10 +16,7 @@ export function parseAllNameMention(value) {
   const name = entry.slice(0, separator).trim();
   const rawOffset = entry.slice(separator + 1).trim();
   if (!name) return null;
-  return {
-    name,
-    offset: /^\d+$/.test(rawOffset) ? Number(rawOffset) : null
-  };
+  return { name, offset: /^\d+$/.test(rawOffset) ? Number(rawOffset) : null };
 }
 
 export function createCandidateAccumulator() {
@@ -53,7 +50,6 @@ export function addGkgDocument(accumulator, row, sampleFilename) {
         nameVariants: new Map(),
         documents: new Set(),
         domains: new Set(),
-        samples: new Set(),
         languages: {},
         themes: {},
         batches: new Set(),
@@ -64,10 +60,10 @@ export function addGkgDocument(accumulator, row, sampleFilename) {
       };
       accumulator.set(key, candidate);
     }
-    candidate.nameVariants.set(item.name, (candidate.nameVariants.get(item.name) ?? 0) + 1);
-    candidate.mentionOccurrences += item.occurrences;
     if (candidate.documents.has(row.url)) continue;
     candidate.documents.add(row.url);
+    candidate.nameVariants.set(item.name, (candidate.nameVariants.get(item.name) ?? 0) + 1);
+    candidate.mentionOccurrences += item.occurrences;
     candidate.domains.add(domain);
     candidate.batches.add(sampleFilename);
     const language = row.sourceLanguage ?? "unknown";
