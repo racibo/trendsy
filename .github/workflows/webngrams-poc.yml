@@ -12,6 +12,10 @@ on:
   push:
     paths:
       - "scripts/webngrams-smoke-test.mjs"
+      - "scripts/webngrams-review-audit.mjs"
+      - "scripts/webngrams-review-audit-utils.mjs"
+      - "tests/webngrams-review-audit.test.mjs"
+      - "docs/webngrams-evidence-review.md"
       - "scripts/webngrams-matching.mjs"
       - "scripts/webngrams-sampling.mjs"
       - "scripts/archive-webngrams-daily.mjs"
@@ -25,6 +29,10 @@ on:
   pull_request:
     paths:
       - "scripts/webngrams-smoke-test.mjs"
+      - "scripts/webngrams-review-audit.mjs"
+      - "scripts/webngrams-review-audit-utils.mjs"
+      - "tests/webngrams-review-audit.test.mjs"
+      - "docs/webngrams-evidence-review.md"
       - "scripts/webngrams-matching.mjs"
       - "scripts/webngrams-sampling.mjs"
       - "scripts/archive-webngrams-daily.mjs"
@@ -95,6 +103,19 @@ jobs:
             console.log(`COMPLETE sample: all ${sampling.sampleHours} hourly samples succeeded.`);
           }
           NODE
+
+      - name: Prepare Web NGrams evidence review worksheet
+        if: success()
+        run: npm run webngrams:review-audit
+
+      - name: Upload Web NGrams evidence review worksheet
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: webngrams-evidence-review
+          path: output/webngrams-review-audit.*
+          if-no-files-found: error
+          retention-days: 30
 
       - name: Create compact daily history record
         if: (github.event_name == 'schedule' || github.event_name == 'push') && success()
