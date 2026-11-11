@@ -79,8 +79,8 @@ function renderMarkdown(report) {
     "|---:|---|---:|---:|---:|:---:|---:|---:|---:|---|", ...rows, "",
     "## Quality diagnostics (review flags, not automatic exclusions)", "",
     "Flags identify evidence that deserves inspection; they do not reject candidates. Domain concentration, low domain count, sparse batch coverage, missing person/organization cross-signals, multiple name variants, source-domain overlap, and a small explicit boilerplate phrase list are reported.",
-    "A deterministic stratified manual-review sample with blank human-assessment fields is included in the JSON artifact.",
-    "", "## Interpretation limits", "",
+    "A deterministic stratified manual-review sample with blank human-assessment fields is included in the JSON artifact.",\n    `- Possible alias pairs for human review: ${report.possibleAliasPairs.length}`,
+    "", "## Possible alias pairs (review suggestions only)", "",\n    "Pairs are surfaced only when names share tokens and co-occur in at least three unique sampled article URLs. Shared coverage is evidence for inspection, not proof of identity; no names are merged automatically. Full pairs and shared evidence URLs are in the JSON artifact.",\n    "", "## Interpretation limits", "",
     "- ALLNAMES is intentionally inclusive: a detected name can be a passing mention, ambiguous string, or extraction false positive.",
     "- This report counts unique WEB article URLs, not raw name mentions or independently verified topic relevance.",
     "- Person/organization signals are cross-checks against GKG PERSONS and ORGANIZATIONS fields, not a definitive entity type.",
@@ -88,7 +88,7 @@ function renderMarkdown(report) {
     "- The sample is sparse (150-minute spacing), not a continuous scan of all GKG batches.",
     "- Source-language codes are read from GKG TranslationInfo srclc; coverage is explicit and missing values are not language classifications.",
     "- This is a candidate-discovery audit only. It does not calculate popularity scores, change league membership, or alter game data.",
-    "", "Full candidate evidence, quality diagnostics, stratified manual-review sample, and language/theme distributions are in the JSON artifact.", ""
+    "", "Full candidate evidence, quality diagnostics, stratified manual-review sample, possible alias pairs with co-occurrence evidence, and language/theme distributions are in the JSON artifact.", ""
   ].join("\n");
 }
 
