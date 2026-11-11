@@ -14,7 +14,7 @@ The GKG 2.1 codebook defines `V2.1ALLNAMES` as semicolon-separated name referenc
 
 The audit therefore:
 - aggregates by normalized name and unique URL, not raw mention count;
-- preserves common display variants;
+- preserves common display variants;\n- emits conservative possible-alias pairs only when two names share tokens and co-occur in at least three sampled article URLs; these pairs are review suggestions, never automatic merges;
 - uses `V1PERSONS` and `V1ORGANIZATIONS` only as supporting signals;
 - exposes `singleTokenName` as a review warning;
 - reports GKG themes and source-language metadata as evidence, not as quotas or definitive classification;\n- reports language coverage from GKG TranslationInfo `srclc` separately from missing values; it does not label missing metadata as a language;\n- adds transparent review flags for domain concentration, low domain count, sparse batch coverage, missing person/organization cross-signals, multiple name variants, source-domain overlap, and a small explicit boilerplate phrase list;\n- creates a deterministic stratified manual-review sample with blank human-assessment fields;
@@ -29,18 +29,18 @@ The JSON artifact contains up to 200 candidates with at least two unique article
 - person/organization cross-signals;
 - common name variants;
 - known-language article counts, missing-language article counts, language coverage, and theme distributions;\n- quality diagnostics: top-domain share, batch coverage, entity cross-signal count, name-variant count, source-domain overlap, and review flags;
-- up to three public evidence URLs.
+- up to three public evidence URLs;\n- possible alias pairs with shared tokens, article co-occurrence counts, Jaccard overlap, and up to three shared evidence URLs.
 
 The Markdown summary includes the candidate-frequency distribution and top 50 names. Names found in only one article are counted in the frequency histogram but are not emitted as candidate rows.
 
-## Manual review sample\n\nThe JSON artifact includes a reproducible sample drawn from high-, medium-, and low-frequency candidates, domain-concentrated candidates, candidates with few domains, candidates without PERSON/ORGANIZATION cross-signals, variant-rich candidates, and candidates whose name overlaps a source domain. Strata can overlap. The sample is a review aid, not a representative probability sample. Human reviewers should record whether the name is a meaningful topic, whether aliases refer to the same entity, whether the evidence is actually about the candidate, and whether URLs appear syndicated or near-duplicated.\n\nReview flags are diagnostic only. They must not automatically remove a candidate. In particular, a legitimate topic may be concentrated in a small number of sources, and an entity may lack a PERSON/ORGANIZATION cross-signal.\n\n## Limitations and interpretation
+## Possible alias pairs\n\nPossible alias pairs are generated from candidates in the top 200 by article count. A pair must share at least half of the tokens in the shorter name and co-occur in at least three unique sampled article URLs. The report includes shared-token overlap, article Jaccard overlap, and shared evidence URLs. This is a conservative review queue, not entity resolution: two distinct people or organizations can share a surname and appear in the same stories. No candidate names are merged or have their counts combined.\n\n## Manual review sample\n\nThe JSON artifact includes a reproducible sample drawn from high-, medium-, and low-frequency candidates, domain-concentrated candidates, candidates with few domains, candidates without PERSON/ORGANIZATION cross-signals, variant-rich candidates, and candidates whose name overlaps a source domain. Strata can overlap. The sample is a review aid, not a representative probability sample. Human reviewers should record whether the name is a meaningful topic, whether aliases refer to the same entity, whether the evidence is actually about the candidate, and whether URLs appear syndicated or near-duplicated.\n\nReview flags are diagnostic only. They must not automatically remove a candidate. In particular, a legitimate topic may be concentrated in a small number of sources, and an entity may lack a PERSON/ORGANIZATION cross-signal.\n\n## Limitations and interpretation
 
 - Ten samples spaced 150 minutes apart are a sparse snapshot, not a continuous 22.5-hour crawl.
 - Unique domains are not necessarily independent publishers and do not reveal publisher country.
 - Source-language metadata is extracted only from GKG TranslationInfo `srclc`. Coverage is explicitly measured; missing values are not language classifications. A zero-coverage sample means language distribution is unavailable from this extraction.
 - A name appearing in an article does not mean the article is mainly about that name.
 - Person/organization cross-signals are not authoritative identity resolution.
-- URL deduplication does not detect syndication or near-duplicate stories under different URLs.
+- URL deduplication does not detect syndication or near-duplicate stories under different URLs.\n- Alias suggestions are based on token overlap and co-occurrence only; they do not prove that two names identify the same entity.
 - A candidate appearing frequently may still be ambiguous or irrelevant. A stratified manual relevance audit is required before any scoring or league decisions.
 
 ## Next validation after the report
