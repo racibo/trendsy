@@ -67,3 +67,21 @@ Review flags are diagnostic only. They must not automatically remove a candidate
 3. Manually judge a stratified sample of evidence URLs, including high-volume, medium-volume, single-token, and multilingual candidates.
 4. Measure whether the candidate ordering is stable across additional days and denser samples.
 5. Only then design identity resolution, relevance filtering, deduplication beyond exact URLs, and a candidate-quality gate.
+
+
+## Article-level relevance audit (headline evidence)
+
+The follow-up audit uses the GDELT DOC 2.0 Article List API for every candidate in the deterministic manual-review sample produced by the discovery audit. For each name it runs:
+- an exact quoted-phrase search;
+- the same quoted phrase with GDELT's `repeat2` operator applied to the candidate's longest token.
+
+It stores article title, URL, date seen, domain, language, and source-country metadata. It compares returned URLs with the up-to-three GKG evidence URLs and computes mechanical headline phrase/token overlap. It leaves the human assessment fields blank.
+
+This is deliberately an evidence-gathering step, not an automated relevance classifier:
+- DOC searches article text, but this audit only receives article-list metadata and headlines; it does not fetch or read full article bodies;
+- a repeated name mention is not proof that the article focuses on the candidate;
+- headline matching is a useful but incomplete signal;
+- the DOC search result set is not the same fixed sample of URLs as GKG, so intersections are shown separately;
+- query results are time-windowed and can vary between runs.
+
+The workflow runs this audit only after the GKG discovery JSON has been generated, and stores both reports in one artifact. The expected run time is several minutes because requests are spaced at least six seconds apart to respect GDELT DOC API request guidance. No league scores or membership are changed.
