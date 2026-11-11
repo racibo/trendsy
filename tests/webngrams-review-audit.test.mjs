@@ -30,11 +30,11 @@ function snapshot() {
 test("builds a review worksheet with sample-only source concentration diagnostics", () => {
   const audit = createWebNgramsReviewAudit(snapshot());
   const candidate = audit.candidates[0];
-  assert.equal(audit.summary.evidenceRows, 3);
+  assert.equal(audit.summary.evidenceRows, 4);
   assert.equal(candidate.domainCount, 2);
-  assert.equal(candidate.domainCounts["example.com"], 2);
+  assert.equal(candidate.domainCounts["example.com"], 3);
   assert.equal(candidate.topDomain, "example.com");
-  assert.equal(candidate.topDomainShare, 0.6667);
+  assert.equal(candidate.topDomainShare, 0.75);
   assert.equal(candidate.topThreeDomainShare, 1);
   assert.ok(candidate.qualityFlags.includes("evidence_sample_concentrated_in_one_domain"));
   assert.equal(candidate.evidence[0].relevanceAssessment, "");
