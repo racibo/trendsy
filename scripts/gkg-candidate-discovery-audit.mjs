@@ -31,7 +31,7 @@ async function scanGkg(zipPath, filename, accumulator) {
     child.once("close", resolve);
   });
   const lines = createInterface({ input: child.stdout, crlfDelay: Infinity });
-  let records = 0, validRecords = 0, validWebDocuments = 0, documentsWithAllNames = 0;
+  let records = 0, validRecords = 0, validWebDocuments = 0, documentsWithAllNames = 0, documentsWithSourceLanguage = 0, documentsWithoutSourceLanguage = 0;
   for await (const line of lines) {
     if (!line.trim()) continue;
     records++;
@@ -45,7 +45,7 @@ async function scanGkg(zipPath, filename, accumulator) {
   }
   const code = await closed;
   if (code !== 0) throw new Error(`unzip exited ${code}: ${stderr}`);
-  return { records, validRecords, validWebDocuments, documentsWithAllNames };
+  return { records, validRecords, validWebDocuments, documentsWithAllNames, documentsWithSourceLanguage, documentsWithoutSourceLanguage };
 }
 
 function renderMarkdown(report) {
@@ -60,7 +60,7 @@ function renderMarkdown(report) {
     `- Sampling: ${s.requestedSamples} batches, ${report.spacingMinutes} minutes apart (approximately ${((s.requestedSamples - 1) * report.spacingMinutes / 60).toFixed(1)} hours)`,
     `- Complete GKG batches: ${s.completeSamples}/${s.requestedSamples}`,
     `- Valid WEB documents: ${s.validWebDocuments}`,
-    `- Documents with ALLNAMES: ${s.documentsWithAllNames}`,
+    `- Documents with ALLNAMES: ${s.documentsWithAllNames}`,\n    `- Source-language metadata coverage: ${s.languageMetadata.documentsWithLanguage}/${s.languageMetadata.documentsWithLanguage + s.languageMetadata.documentsWithoutLanguage} WEB documents (${(s.languageMetadata.coverage * 100).toFixed(1)}%)`,\n    `- Language metadata status: ${s.languageMetadata.status} — ${s.languageMetadata.note}`,
     `- Unique normalized names: ${s.uniqueCandidateNames}`,
     `- Names with at least 2 unique articles: ${s.candidatesWithAtLeastTwoArticles}`,
     "", "## Candidate frequency distribution", "",
@@ -69,14 +69,14 @@ function renderMarkdown(report) {
     "", "## Top 50 name candidates", "",
     "| # | Name | Unique articles | Domains | Batches | Single token? | Person signal | Organization signal |",
     "|---:|---|---:|---:|---:|:---:|---:|---:|", ...rows, "",
-    "## Interpretation limits", "",
+    "## Quality diagnostics (review flags, not automatic exclusions)", "",\n    "Each candidate includes domain concentration, sample-batch coverage, person/organization cross-signals, name-variant count, possible source-domain overlap, and transparent review flags.",\n    "A stratified manual-review sample is included in the JSON artifact. Each row has blank fields for human relevance, identity, syndication, and notes assessment.",\n    "", "## Interpretation limits", "",
     "- ALLNAMES is intentionally inclusive: a detected name can be a passing mention, ambiguous string, or extraction false positive.",
     "- This report counts unique WEB article URLs, not raw name mentions or independently verified topic relevance.",
     "- Person/organization signals are cross-checks against GKG PERSONS and ORGANIZATIONS fields, not a definitive entity type.",
     "- Domain count is not publisher-country coverage and does not prove editorial independence.",
     "- The sample is sparse (150-minute spacing), not a continuous scan of all GKG batches.",
     "- This is a candidate-discovery audit only. It does not calculate popularity scores, change league membership, or alter game data.",
-    "", "Full candidate evidence, language/theme distributions, and up to three URLs per candidate are in the JSON artifact.", ""
+    "", "Full candidate evidence, quality diagnostics, stratified manual-review sample, and language/theme distributions are in the JSON artifact.", ""
   ].join("\n");
 }
 
