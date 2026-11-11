@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { gkgSampleFilenames, summarizeMultiSample } from "../scripts/gkg-multisample-utils.mjs";
+import { gkgSampleFilenames, summarizeMultiSample, summarizeDailyHistory, renderDailyHistoryMarkdown } from "../scripts/gkg-multisample-utils.mjs";
 
 test("selects evenly spaced quarter-hour GKG batches backwards from latest", () => {
   const samples = gkgSampleFilenames("20261111200000.gkg.csv.zip", 10, 150);
@@ -33,4 +33,16 @@ test("summarizes per-sample join stability and weighted coverage", () => {
   assert.equal(summary.weightedMatchRate, 0.6667);
   assert.equal(summary.minNgramsOffsetMinutes, -14);
   assert.equal(summary.maxNgramsOffsetMinutes, -12);
+});
+
+
+test("daily history requires three consecutive complete UTC days",()=>{
+ const h=["2026-11-09","2026-11-10","2026-11-11"].map((date,i)=>({date,status:"COMPLETE",weightedMatchRate:[.9,.92,.94][i],completeSamples:10,requestedSamples:10,meanMatchRate:.91,totalGkgUniqueUrls:100}));
+ const s=summarizeDailyHistory(h);
+ assert.equal(s.threeDay.ready,true); assert.equal(s.threeDay.meanWeightedMatchRate,.92); assert.equal(s.sevenDay.ready,false);
+ assert.match(renderDailyHistoryMarkdown({generatedAt:"2026-11-11",summary:s}),/3 dni: gotowe/);
+});
+test("partial or missing UTC days do not count toward consecutive windows",()=>{
+ const h=[{date:"2026-11-08",status:"COMPLETE",weightedMatchRate:.9},{date:"2026-11-09",status:"PARTIAL",weightedMatchRate:.5},{date:"2026-11-10",status:"COMPLETE",weightedMatchRate:.92},{date:"2026-11-11",status:"COMPLETE",weightedMatchRate:.94}];
+ const s=summarizeDailyHistory(h); assert.equal(s.completeDays,3); assert.equal(s.consecutiveCompleteDays,2); assert.equal(s.threeDay.ready,false);
 });
