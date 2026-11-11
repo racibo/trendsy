@@ -48,3 +48,6 @@ The GitHub Actions workflow exposes the lookback and target-file settings for ma
 ## Attribution
 
 Any public use of this dataset should credit and link to the GDELT Project: https://www.gdeltproject.org/.
+
+
+See [Web NGrams evidence review worksheet](./webngrams-evidence-review.md) for the manual evidence-level review output and source-concentration diagnostics.
