@@ -7,7 +7,7 @@ test("selects evenly spaced quarter-hour GKG batches backwards from latest", () 
   assert.equal(samples.length, 10);
   assert.equal(samples[0].filename, "20261111200000.gkg.csv.zip");
   assert.equal(samples[1].filename, "20261111173000.gkg.csv.zip");
-  assert.equal(samples[9].filename, "20261110100000.gkg.csv.zip");
+  assert.equal(samples[9].filename, "20261110213000.gkg.csv.zip");
   assert.equal(samples[9].offsetMinutes, -1350);
 });
 
