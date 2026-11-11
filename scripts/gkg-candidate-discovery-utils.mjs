@@ -60,12 +60,12 @@ export function addGkgDocument(accumulator, row, sampleFilename) {
       };
       accumulator.set(key, candidate);
     }
+    candidate.batches.add(sampleFilename);
     if (candidate.documents.has(row.url)) continue;
     candidate.documents.add(row.url);
     candidate.nameVariants.set(item.name, (candidate.nameVariants.get(item.name) ?? 0) + 1);
     candidate.mentionOccurrences += item.occurrences;
     candidate.domains.add(domain);
-    candidate.batches.add(sampleFilename);
     const language = row.sourceLanguage ?? "unknown";
     candidate.languages[language] = (candidate.languages[language] ?? 0) + 1;
     for (const theme of row.themes ?? []) {
@@ -103,8 +103,9 @@ export function summarizeCandidateDiscovery(accumulator, sampleStats, limit = 20
       return {
         name: variants[0]?.[0] ?? item.key,
         normalizedName: item.key,
+        singleTokenName: !item.key.includes(" "),
         uniqueArticles: item.documents.size,
-        independentDomains: item.domains.size,
+        uniqueDomains: item.domains.size,
         sampledBatches: item.batches.size,
         mentionOccurrences: item.mentionOccurrences,
         personSignalArticles: item.personDocuments.size,
