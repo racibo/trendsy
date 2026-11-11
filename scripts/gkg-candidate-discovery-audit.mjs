@@ -51,7 +51,7 @@ async function scanGkg(zipPath, filename, accumulator) {
 function renderMarkdown(report) {
   const s = report.summary;
   const rows = report.candidates.slice(0, 50).map((item, index) =>
-    `| ${index + 1} | ${item.name.replaceAll("|", "\\|")} | ${item.uniqueArticles} | ${item.independentDomains} | ${item.sampledBatches} | ${item.personSignalArticles} | ${item.organizationSignalArticles} |`
+    `| ${index + 1} | ${item.name.replaceAll("|", "\\|")} | ${item.uniqueArticles} | ${item.uniqueDomains} | ${item.sampledBatches} | ${item.singleTokenName ? "yes" : "no"} | ${item.personSignalArticles} | ${item.organizationSignalArticles} |`
   );
   return [
     "# GKG ALLNAMES candidate discovery — research audit", "",
@@ -67,8 +67,8 @@ function renderMarkdown(report) {
     "| Unique articles per name | Number of names |", "|---|---:|",
     ...Object.entries(s.frequencyBuckets).map(([bucket, count]) => `| ${bucket.replaceAll("_", " ")} | ${count} |`),
     "", "## Top 50 name candidates", "",
-    "| # | Name | Unique articles | Domains | Batches | Person signal | Organization signal |",
-    "|---:|---|---:|---:|---:|---:|---:|", ...rows, "",
+    "| # | Name | Unique articles | Domains | Batches | Single token? | Person signal | Organization signal |",
+    "|---:|---|---:|---:|---:|:---:|---:|---:|", ...rows, "",
     "## Interpretation limits", "",
     "- ALLNAMES is intentionally inclusive: a detected name can be a passing mention, ambiguous string, or extraction false positive.",
     "- This report counts unique WEB article URLs, not raw name mentions or independently verified topic relevance.",
