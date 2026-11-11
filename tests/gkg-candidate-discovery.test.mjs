@@ -50,7 +50,8 @@ test("counts unique articles and domains rather than repeated mentions", () => {
   ]);
   const trump = report.candidates.find(item => item.normalizedName === "donald trump");
   assert.equal(trump.uniqueArticles, 2);
-  assert.equal(trump.independentDomains, 2);
+  assert.equal(trump.uniqueDomains, 2);
+  assert.equal(trump.sampledBatches, 2);
   assert.equal(trump.mentionOccurrences, 3);
   assert.equal(trump.personSignalArticles, 2);
   assert.equal(trump.themes.find(item => item.label === "ELECTION").count, 2);
