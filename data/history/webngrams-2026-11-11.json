@@ -1,0 +1,2171 @@
+{
+  "schemaVersion": 2,
+  "source": "GDELT Web News NGrams 3.0",
+  "date": "2026-11-11",
+  "generatedAt": "2026-11-11T11:00:21.729Z",
+  "sampling": {
+    "status": "COMPLETE",
+    "sampleHours": 24,
+    "successfulSampleHours": 24,
+    "missingSampleHours": 0,
+    "failedFiles": 0,
+    "coverageStartUtc": "20261110104600",
+    "coverageEndUtc": "20261111090100"
+  },
+  "summary": {
+    "totalCandidates": 12,
+    "candidatesWithMatches": 11,
+    "totalUniqueCandidateArticleMatches": 1889,
+    "totalContextFilteredMatchedRecords": 5697,
+    "totalMultiwordPhraseMatchedRecords": 26754,
+    "candidatesRequiringManualReview": 12,
+    "candidatesWithEvidence": 11,
+    "totalArchivedEvidenceArticles": 145
+  },
+  "evidencePolicy": {
+    "maxArticlesPerCandidate": 25,
+    "selection": "At most one representative article per successful sampled UTC hour; URLs deduplicated.",
+    "note": "Evidence is a review sample, not the complete list of matching articles or a popularity score."
+  },
+  "results": [
+    {
+      "id": "person-donald-trump",
+      "label": "Donald Trump",
+      "category": "global_people",
+      "locale": "global",
+      "matchedRecords": 24989,
+      "uniqueArticles": 1417,
+      "multiwordPhraseMatchedRecords": 24989,
+      "contextFilteredMatchedRecords": 0,
+      "languageCounts": {
+        "en": 12852,
+        "de": 3027,
+        "es": 2783,
+        "it": 990,
+        "tr": 403,
+        "fr": 1299,
+        "ro": 682,
+        "hr": 48,
+        "tl": 13,
+        "bs": 14,
+        "pt": 931,
+        "pl": 41,
+        "sl": 56,
+        "ca": 69,
+        "sq": 275,
+        "hu": 205,
+        "sk": 83,
+        "fi": 56,
+        "da": 136,
+        "id": 69,
+        "no": 84,
+        "cs": 28,
+        "so": 14,
+        "nl": 40,
+        "vi": 308,
+        "ar": 13,
+        "nn": 42,
+        "ms": 56,
+        "zh-tw": 66,
+        "th": 142,
+        "sv": 108,
+        "gl": 14,
+        "lb": 42
+      },
+      "aliasCounts": {
+        "Donald Trump": 24989
+      },
+      "matchQuality": "multiword_phrase_candidate_review_required",
+      "evidence": [
+        {
+          "url": "http://www.bignewsnetwork.com/news/279423696/kiss-your-wife-goodnight-donald-trump-says-he-threatened-to-arrest-top-ai-exec",
+          "domain": "www.bignewsnetwork.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Donald Trump"
+          ],
+          "context": "(ANI)  Washington, DC [US], November 10 (ANI): US President Donald Trump has recounted issuing",
+          "sampleHour": "2026-11-10T10:00:00.000Z"
+        },
+        {
+          "url": "https://www.broomfieldenterprise.com/2026/11/08/federal-regulators-crack-down-on-organ-donation-groups/",
+          "domain": "www.broomfieldenterprise.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Donald Trump"
+          ],
+          "context": "from President Donald Trump. Earlier this year, CMS released proposed revisions to that rule. Aiming",
+          "sampleHour": "2026-11-10T11:00:00.000Z"
+        },
+        {
+          "url": "https://www.theadvocate.com.au/story/9389055/stocks-rise-as-oil-prices-dip-heading-into-us-cpi-print/",
+          "domain": "www.theadvocate.com.au",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Donald Trump"
+          ],
+          "context": "drop in oil prices after US President Donald Trump said he planned to hold off",
+          "sampleHour": "2026-11-10T12:00:00.000Z"
+        },
+        {
+          "url": "http://www.shanghaisun.com/news/279423680/could-be-of-great-service-nvidia-ceo-china-pitch-under-scrutiny-after-scandal",
+          "domain": "www.shanghaisun.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Donald Trump"
+          ],
+          "context": "zero under US export controls. In December 2025, US President Donald Trump announced that Nvidia",
+          "sampleHour": "2026-11-10T13:00:00.000Z"
+        },
+        {
+          "url": "https://slguardian.org/chinese-businesswomans-links-to-nvidia-ceo-draw-us-intelligence-and-export-control-scrutiny/",
+          "domain": "slguardian.org",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Donald Trump"
+          ],
+          "context": "trade secrets had been compromised. US President Donald Trump said on Monday that the FBI",
+          "sampleHour": "2026-11-10T14:00:00.000Z"
+        },
+        {
+          "url": "https://wtkg.iheart.com/content/2026-11-10-hegseth-calls-impeachment-effort-a-political-spectacle/",
+          "domain": "wtkg.iheart.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Donald Trump"
+          ],
+          "context": "to come through me,\" he said. President Donald Trump has expressed his support for Hegseth,",
+          "sampleHour": "2026-11-10T15:00:00.000Z"
+        },
+        {
+          "url": "http://www.washingtonexaminer.com/op-eds/4797756/trump-data-center-moratoria-federal-authority/",
+          "domain": "www.washingtonexaminer.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Donald Trump"
+          ],
+          "context": "needs to put them to work. President Donald Trump has more authority to fight state",
+          "sampleHour": "2026-11-10T16:00:00.000Z"
+        },
+        {
+          "url": "https://wiba.iheart.com/content/2026-11-10-hegseth-calls-impeachment-effort-a-political-spectacle/",
+          "domain": "wiba.iheart.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Donald Trump"
+          ],
+          "context": "to come through me,\" he said. President Donald Trump has expressed his support for Hegseth,",
+          "sampleHour": "2026-11-10T17:00:00.000Z"
+        },
+        {
+          "url": "https://ktok.iheart.com/content/2026-11-10-hegseth-calls-impeachment-effort-a-political-spectacle/",
+          "domain": "ktok.iheart.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Donald Trump"
+          ],
+          "context": "to come through me,\" he said. President Donald Trump has expressed his support for Hegseth,",
+          "sampleHour": "2026-11-10T18:00:00.000Z"
+        },
+        {
+          "url": "https://www.ocregister.com/2026/10/20/mailers-touting-young-kim-as-100-pro-trump-are-linked-to-a-group-supporting-ken-calvert-in-the-ca-40-race/",
+          "domain": "www.ocregister.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Donald Trump"
+          ],
+          "context": "in California. Election Day is Nov. 3. \"Young Kim, thank you,\" President Donald Trump says",
+          "sampleHour": "2026-11-10T19:00:00.000Z"
+        },
+        {
+          "url": "https://www.dailymail.com/news/article-16282313/anna-paulina-luna-thomas-markle-child-porn-charge.html",
+          "domain": "www.dailymail.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Donald Trump"
+          ],
+          "context": "37, a close Republican ally of President Donald Trump, was just narrowly re-elected in her",
+          "sampleHour": "2026-11-10T20:00:00.000Z"
+        },
+        {
+          "url": "https://turnto10.com/news/nation-world/trump-administrations-new-rule-could-remove-63-million-from-food-stamp-benefits-snap-supplemental-nutrition-assistance-program-temporary-assistance-for-needy-families-program-tanf-eligibility-house-agriculture-committee-enrollment-angie-craig",
+          "domain": "turnto10.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Donald Trump"
+          ],
+          "context": "have already lost SNAP benefits since President Donald Trump enacted cuts to the program in",
+          "sampleHour": "2026-11-10T21:00:00.000Z"
+        },
+        {
+          "url": "https://www.nrtoday.com/news/a-public-finance-expert-considers-the-way-forward-for-oregon-after-the-nov-3-blue/article_6fd16464-600e-4148-8e07-9bb424d10268.html",
+          "domain": "www.nrtoday.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Donald Trump"
+          ],
+          "context": "to unite against somebody who's distasteful [President Donald Trump] and a lot harder to unite",
+          "sampleHour": "2026-11-10T22:00:00.000Z"
+        },
+        {
+          "url": "https://www.wftv.com/news/local/state-leaders-push-federal-help-florida-flood-victims/ZQHWOZXPEJAPXPE3EHV4SCHRWQ/",
+          "domain": "www.wftv.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Donald Trump"
+          ],
+          "context": "said the request now rests with President Donald Trump. He said he personally raised the",
+          "sampleHour": "2026-11-10T23:00:00.000Z"
+        },
+        {
+          "url": "https://www.hjnews.com/nation/senate-republicans-vote-to-keep-john-thune-as-leader-after-steep-election-losses/article_3b32ceff-aaa7-56df-adac-f2182a3a5134.html",
+          "domain": "www.hjnews.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Donald Trump"
+          ],
+          "context": "— and for their relationship with President Donald Trump, as voters resoundingly rejected their two",
+          "sampleHour": "2026-11-11T00:00:00.000Z"
+        },
+        {
+          "url": "https://nypost.com/2026/11/10/opinion/chinas-jensen-huang-honeypot-trap-is-only-more-reason-to-win-the-ai-race/",
+          "domain": "nypost.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Donald Trump"
+          ],
+          "context": "Huang has allied with President Donald Trump: A major part of the party is eager",
+          "sampleHour": "2026-11-11T01:00:00.000Z"
+        },
+        {
+          "url": "https://www.thewestonmercury.co.uk/news/national/26718015.house-republicans-quash-effort-impeach-us-defence-secretary-hegseth/",
+          "domain": "www.thewestonmercury.co.uk",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Donald Trump"
+          ],
+          "context": "and the resulting surge in gas prices. But, after President Donald Trump signalled strong support",
+          "sampleHour": "2026-11-11T02:00:00.000Z"
+        },
+        {
+          "url": "https://www.whtimes.co.uk/news/national/26718015.house-republicans-quash-effort-impeach-us-defence-secretary-hegseth/",
+          "domain": "www.whtimes.co.uk",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Donald Trump"
+          ],
+          "context": "and the resulting surge in gas prices. But, after President Donald Trump signalled strong support",
+          "sampleHour": "2026-11-11T03:00:00.000Z"
+        },
+        {
+          "url": "https://www.timesleader.com/news/1765173/house-republicans-quash-effort-to-impeach-defense-secretary-hegseth",
+          "domain": "www.timesleader.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Donald Trump"
+          ],
+          "context": "and the resulting surge in gas prices. But after President Donald Trump signaled strong support",
+          "sampleHour": "2026-11-11T04:00:00.000Z"
+        },
+        {
+          "url": "https://www.bbc.co.uk/news/articles/c6ly0y8r54pqo",
+          "domain": "www.bbc.co.uk",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Donald Trump"
+          ],
+          "context": "fortress that President Donald Trump won in 2024 by over 22 points. State law holds",
+          "sampleHour": "2026-11-11T05:00:00.000Z"
+        },
+        {
+          "url": "https://www.kclu.org/national-and-global/2026-11-10/federal-government-failed-to-hold-epstein-accountable-republican-committee-says",
+          "domain": "www.kclu.org",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Donald Trump"
+          ],
+          "context": "by the investigation do not suggest President Donald Trump was implicated in any of Epstein's",
+          "sampleHour": "2026-11-11T06:00:00.000Z"
+        },
+        {
+          "url": "https://www.thenationalnews.com/podcasts/trending-middle-east/2026/11/11/uae-ship-attack-israels-new-parliament-and-the-next-us-ambassador-to-the-uae/",
+          "domain": "www.thenationalnews.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Donald Trump"
+          ],
+          "context": "during its war with Hezbollah. US President Donald Trump has nominated former Kansas governor Jeffrey",
+          "sampleHour": "2026-11-11T07:00:00.000Z"
+        },
+        {
+          "url": "http://www.tucsonpost.com/news/279425740/jensen-huang-could-face-major-trouble-when-dems-take-control-of-congress-report",
+          "domain": "www.tucsonpost.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Donald Trump"
+          ],
+          "context": "and his connections with President Donald Trump. \"There's no way this guy survives after the",
+          "sampleHour": "2026-11-11T08:00:00.000Z"
+        },
+        {
+          "url": "http://www.pakistantelegraph.com/news/279425874/did-nothing-instead-accepted-25m-donation-dems-demand-answers-on-jensen-huang-alleged-links-to-chinese-spy",
+          "domain": "www.pakistantelegraph.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Donald Trump"
+          ],
+          "context": "has launched a scathing attack on President Donald Trump, demanding immediate accountability over what he",
+          "sampleHour": "2026-11-11T09:00:00.000Z"
+        }
+      ],
+      "evidenceCount": 24,
+      "evidenceDomains": {
+        "www.bignewsnetwork.com": 1,
+        "www.broomfieldenterprise.com": 1,
+        "www.theadvocate.com.au": 1,
+        "www.shanghaisun.com": 1,
+        "slguardian.org": 1,
+        "wtkg.iheart.com": 1,
+        "www.washingtonexaminer.com": 1,
+        "wiba.iheart.com": 1,
+        "ktok.iheart.com": 1,
+        "www.ocregister.com": 1,
+        "www.dailymail.com": 1,
+        "turnto10.com": 1,
+        "www.nrtoday.com": 1,
+        "www.wftv.com": 1,
+        "www.hjnews.com": 1,
+        "nypost.com": 1,
+        "www.thewestonmercury.co.uk": 1,
+        "www.whtimes.co.uk": 1,
+        "www.timesleader.com": 1,
+        "www.bbc.co.uk": 1,
+        "www.kclu.org": 1,
+        "www.thenationalnews.com": 1,
+        "www.tucsonpost.com": 1,
+        "www.pakistantelegraph.com": 1
+      },
+      "evidenceCoverage": 0.0169,
+      "reviewStatus": "manual_review_required",
+      "qualityFlags": [
+        "evidence_is_capped_sample_not_full_article_list"
+      ]
+    },
+    {
+      "id": "person-taylor-swift",
+      "label": "Taylor Swift",
+      "category": "global_people",
+      "locale": "global",
+      "matchedRecords": 1541,
+      "uniqueArticles": 77,
+      "multiwordPhraseMatchedRecords": 1541,
+      "contextFilteredMatchedRecords": 0,
+      "languageCounts": {
+        "en": 1151,
+        "da": 13,
+        "lt": 14,
+        "fr": 69,
+        "de": 92,
+        "sq": 28,
+        "es": 112,
+        "pt": 42,
+        "cs": 14,
+        "zh": 6
+      },
+      "aliasCounts": {
+        "Taylor Swift": 1541
+      },
+      "matchQuality": "multiword_phrase_candidate_review_required",
+      "evidence": [
+        {
+          "url": "https://www.stourbridgenews.co.uk/news/national/26714345.billionaire-sir-paul-mccartney-becomes-worlds-third-richest-musician/",
+          "domain": "www.stourbridgenews.co.uk",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Taylor Swift"
+          ],
+          "context": "and Taylor Swift with two billion dollars (£1.4 billion). Forbes has reported that the biggest",
+          "sampleHour": "2026-11-10T10:00:00.000Z"
+        },
+        {
+          "url": "https://www.harrowtimes.co.uk/news/national/26714345.billionaire-sir-paul-mccartney-becomes-worlds-third-richest-musician/",
+          "domain": "www.harrowtimes.co.uk",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Taylor Swift"
+          ],
+          "context": "and Taylor Swift with two billion dollars (£1.4 billion). Forbes has reported that the biggest",
+          "sampleHour": "2026-11-10T11:00:00.000Z"
+        },
+        {
+          "url": "https://www.euronews.com/2026/11/10/pennies-lane-paul-mccartney-becomes-third-richest-musician-in-the-world",
+          "domain": "www.euronews.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Taylor Swift"
+          ],
+          "context": "with $2.8 billion and Taylor Swift with $2 billion. According to Forbes, a sizeable chunk",
+          "sampleHour": "2026-11-10T12:00:00.000Z"
+        },
+        {
+          "url": "https://www.q105.fm/2026/11/10/taylor-swift-reunites-with-karlie-kloss-at-travis-kelces-chiefs-game/",
+          "domain": "www.q105.fm",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Taylor Swift"
+          ],
+          "context": "appearances together, neither confirmed a dispute. Taylor Swift had a familiar face by her side",
+          "sampleHour": "2026-11-10T13:00:00.000Z"
+        },
+        {
+          "url": "https://www.vienna.at/14-milliarden-dollar-vermoegen-das-steckt-hinter-paul-mccartneys-ueberraschenden-einnahmequellen/10949936",
+          "domain": "www.vienna.at",
+          "lang": "de",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Taylor Swift"
+          ],
+          "context": "Taylor Swift (zwei Milliarden US-Dollar) und Jay-Z (2,8 Milliarden US-Dollar) sei größer. Passend zum Thema",
+          "sampleHour": "2026-11-10T14:00:00.000Z"
+        },
+        {
+          "url": "https://www.elle.com/fashion/a74137374/area-toms-collaboration-2026/",
+          "domain": "www.elle.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Taylor Swift"
+          ],
+          "context": "guys in. I'd love to see Jacob Elordi in those. Taylor Swift has been a",
+          "sampleHour": "2026-11-10T15:00:00.000Z"
+        },
+        {
+          "url": "https://www.nme.com/news/music/paul-mccartney-now-officially-a-billionaire-and-worlds-third-wealthiest-musician-3975563",
+          "domain": "www.nme.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Taylor Swift"
+          ],
+          "context": "Taylor Swift who is worth a reported $2billion, and Jay-Z who has a net worth",
+          "sampleHour": "2026-11-10T16:00:00.000Z"
+        },
+        {
+          "url": "https://www.billboard.com/pro/messina-touring-group-founder-louis-messina-25-years/",
+          "domain": "www.billboard.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Taylor Swift"
+          ],
+          "context": "I met Taylor Swift through George Strait. And from Taylor, Ed Sheeran and Shawn Mendes.",
+          "sampleHour": "2026-11-10T17:00:00.000Z"
+        },
+        {
+          "url": "https://www.mentalfloss.com/entertainment/tv/bridgerton-netflix-tv-show-facts",
+          "domain": "www.mentalfloss.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Taylor Swift"
+          ],
+          "context": "by Robyn, \"Enchanted\" by Taylor Swift, and \"Bad Idea Right?\" by Olivia Rodrigo. 13. Bridgerton",
+          "sampleHour": "2026-11-10T18:00:00.000Z"
+        },
+        {
+          "url": "https://local21news.com/news/entertainment/cma-awards-reveals-second-round-of-performers-luke-combs-megan-moroney-vince-gill-megan-moroney-mumford-sons-chris-stapleton-lainey-wilson-stephen-wilson-jr-to-take-the-stage",
+          "domain": "local21news.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Taylor Swift"
+          ],
+          "context": "in Toy Story 5. RELATED COVERAGE | 'I Haven't Yee'd My Last Haw': Taylor Swift",
+          "sampleHour": "2026-11-10T20:00:00.000Z"
+        },
+        {
+          "url": "https://www.theroot.com/why-stephen-a-smith-is-suddenly-ready-to-squash-his-be-2000134793",
+          "domain": "www.theroot.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Taylor Swift"
+          ],
+          "context": "James said that Smith was on a \"Taylor Swift tour run,\" as he constantly addressed",
+          "sampleHour": "2026-11-10T21:00:00.000Z"
+        },
+        {
+          "url": "https://www.sheknows.com/entertainment/articles/1235092177/taylor-swift-travis-kelce-ohio-neighbor-battle-positive/",
+          "domain": "www.sheknows.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Taylor Swift"
+          ],
+          "context": " Taylor Swift loves her husband, Travis Kelce's, hometown of Ohio, as evidenced in the",
+          "sampleHour": "2026-11-10T23:00:00.000Z"
+        },
+        {
+          "url": "https://power96radio.com/ixp/150/p/mall-of-america-best-day-out/",
+          "domain": "power96radio.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Taylor Swift"
+          ],
+          "context": "Taylor Swift there back in the day. Ha! KQCL Power 96 logo / Stephen Maturen,",
+          "sampleHour": "2026-11-11T00:00:00.000Z"
+        },
+        {
+          "url": "https://www.abc.es/gente/paul-mccartney-milmillonario-anos-musicos-ricos-mundo-20261110013141-nt.html",
+          "domain": "www.abc.es",
+          "lang": "es",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Taylor Swift"
+          ],
+          "context": "Taylor Swift, con 2.000 millones de dólares (1.800 millones de euros). En el caso de",
+          "sampleHour": "2026-11-11T01:00:00.000Z"
+        },
+        {
+          "url": "https://squatchrocks.com/ixp/150/p/mall-of-america-best-day-out/",
+          "domain": "squatchrocks.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Taylor Swift"
+          ],
+          "context": "Taylor Swift there back in the day. Ha! Sasquatch 92.1 FM logo / Stephen Maturen,",
+          "sampleHour": "2026-11-11T02:00:00.000Z"
+        },
+        {
+          "url": "https://www.kwongwah.com.my/20261111/%E4%BF%9D%E7%BD%97%E9%BA%A6%E5%8D%A1%E5%B0%BC%E6%99%8B%E8%BA%AB%E4%BA%BF%E4%B8%87%E5%AF%8C%E7%BF%81-%E6%88%90%E4%B8%96%E7%95%8C%E7%AC%AC3%E5%AF%8C%E6%9C%89%E9%9F%B3%E4%B9%90%E4%BA%BA/",
+          "domain": "www.kwongwah.com.my",
+          "lang": "zh",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Taylor Swift"
+          ],
+          "context": "0亿美元（约81亿令吉）的泰勒 丝 （Taylor Swift）和",
+          "sampleHour": "2026-11-11T04:00:00.000Z"
+        },
+        {
+          "url": "http://www.californiatelegraph.com/news/279425285/you-wouldn-t-eat-food-from-a-blindfolded-stranger-so-why-do-we-swallow-what-influencers-feed-us",
+          "domain": "www.californiatelegraph.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Taylor Swift"
+          ],
+          "context": "entertainment are similarly fertile breeding grounds. Taylor Swift could belch into a microphone, and it",
+          "sampleHour": "2026-11-11T05:00:00.000Z"
+        },
+        {
+          "url": "https://www.kentonline.co.uk/whats-on/news/christmas-is-coming-all-the-kent-light-switch-ons-you-wont-347216/",
+          "domain": "www.kentonline.co.uk",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Taylor Swift"
+          ],
+          "context": "be festive entertainment from Dance Alley, Street Academy of Dance and Taylor Swift tribute artist,",
+          "sampleHour": "2026-11-11T06:00:00.000Z"
+        },
+        {
+          "url": "http://www.thesmokinggun.com/backstage/country/taylor-swift-0",
+          "domain": "www.thesmokinggun.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Taylor Swift"
+          ],
+          "context": "Ragu spaghetti sauce. (2 pages) On her 2008 tour rider, Taylor Swift helpfully explains one",
+          "sampleHour": "2026-11-11T08:00:00.000Z"
+        },
+        {
+          "url": "https://www.wncv.com/2026/11/11/paul-mccartney-ranks-among-worlds-three-richest-musicians-with-1-4-billion-fortune/",
+          "domain": "www.wncv.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Taylor Swift"
+          ],
+          "context": "at $2.8 billion, and Taylor Swift, with $2 billion. McCartney's wealth comes from several sources,",
+          "sampleHour": "2026-11-11T09:00:00.000Z"
+        }
+      ],
+      "evidenceCount": 20,
+      "evidenceDomains": {
+        "www.stourbridgenews.co.uk": 1,
+        "www.harrowtimes.co.uk": 1,
+        "www.euronews.com": 1,
+        "www.q105.fm": 1,
+        "www.vienna.at": 1,
+        "www.elle.com": 1,
+        "www.nme.com": 1,
+        "www.billboard.com": 1,
+        "www.mentalfloss.com": 1,
+        "local21news.com": 1,
+        "www.theroot.com": 1,
+        "www.sheknows.com": 1,
+        "power96radio.com": 1,
+        "www.abc.es": 1,
+        "squatchrocks.com": 1,
+        "www.kwongwah.com.my": 1,
+        "www.californiatelegraph.com": 1,
+        "www.kentonline.co.uk": 1,
+        "www.thesmokinggun.com": 1,
+        "www.wncv.com": 1
+      },
+      "evidenceCoverage": 0.2597,
+      "reviewStatus": "manual_review_required",
+      "qualityFlags": [
+        "evidence_is_capped_sample_not_full_article_list"
+      ]
+    },
+    {
+      "id": "event-youth-olympics-2026",
+      "label": "2026 Youth Olympic Games",
+      "category": "global_events",
+      "locale": "global",
+      "matchedRecords": 132,
+      "uniqueArticles": 9,
+      "multiwordPhraseMatchedRecords": 132,
+      "contextFilteredMatchedRecords": 0,
+      "languageCounts": {
+        "en": 132
+      },
+      "aliasCounts": {
+        "2026 Youth Olympic Games": 132,
+        "Dakar 2026 Youth Olympic Games": 88
+      },
+      "matchQuality": "multiword_phrase_candidate_review_required",
+      "evidence": [
+        {
+          "url": "https://www.intlgymnast.com/news/china-sweeps-team-titles-at-youth-olympic-games/",
+          "domain": "www.intlgymnast.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "2026 Youth Olympic Games"
+          ],
+          "context": "with the women's and men's all-around finals. 2026 Youth Olympic Games Dakar, Senegal Women's Team",
+          "sampleHour": "2026-11-10T17:00:00.000Z"
+        },
+        {
+          "url": "https://allafrica.com/stories/202611100763.html",
+          "domain": "allafrica.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "2026 Youth Olympic Games",
+            "Dakar 2026 Youth Olympic Games"
+          ],
+          "context": "at the Dakar 2026 Youth Olympic Games (YOG), the growth of futsal worldwide, and particularly",
+          "sampleHour": "2026-11-10T21:00:00.000Z"
+        },
+        {
+          "url": "https://www.khaama.com/afghanistan-panama-youth-olympic-futsal-2026/",
+          "domain": "www.khaama.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "2026 Youth Olympic Games"
+          ],
+          "context": "their opening match against Panama at the 2026 Youth Olympic Games in Dakar, Senegal. Afghanistan's",
+          "sampleHour": "2026-11-11T03:00:00.000Z"
+        },
+        {
+          "url": "http://www.japanherald.com/news/279425447/russia-sweeps-gymnastics-all-around-golds-at-dakar-youth-olympics",
+          "domain": "www.japanherald.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "2026 Youth Olympic Games"
+          ],
+          "context": "2026 Youth Olympic Games on Tuesday. Smirnov, 17, recovered from a sixth-place finish in qualification",
+          "sampleHour": "2026-11-11T06:00:00.000Z"
+        },
+        {
+          "url": "http://www.sierraleonetimes.com/news/279425446/coventry-hails-dakar-2026-success-praises-china-contribution-to-youth-olympics",
+          "domain": "www.sierraleonetimes.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "2026 Youth Olympic Games",
+            "Dakar 2026 Youth Olympic Games"
+          ],
+          "context": "the organization and atmosphere of the Dakar 2026 Youth Olympic Games, saying the first Olympic",
+          "sampleHour": "2026-11-11T08:00:00.000Z"
+        },
+        {
+          "url": "http://www.mexicostar.com/news/279425548/day-10-roundup-china-wins-2-athletics-golds-russia-dominates-gymnastics-at-youth-olympics",
+          "domain": "www.mexicostar.com",
+          "lang": "en",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "2026 Youth Olympic Games",
+            "Dakar 2026 Youth Olympic Games"
+          ],
+          "context": "of the athletics competition at the Dakar 2026 Youth Olympic Games on Tuesday, while Russia",
+          "sampleHour": "2026-11-11T09:00:00.000Z"
+        }
+      ],
+      "evidenceCount": 6,
+      "evidenceDomains": {
+        "www.intlgymnast.com": 1,
+        "allafrica.com": 1,
+        "www.khaama.com": 1,
+        "www.japanherald.com": 1,
+        "www.sierraleonetimes.com": 1,
+        "www.mexicostar.com": 1
+      },
+      "evidenceCoverage": 0.6667,
+      "reviewStatus": "manual_review_required",
+      "qualityFlags": [
+        "low_unique_article_volume",
+        "evidence_is_capped_sample_not_full_article_list"
+      ]
+    },
+    {
+      "id": "event-cop31",
+      "label": "COP31 — 2026 UN Climate Change Conference",
+      "category": "global_events",
+      "locale": "global",
+      "matchedRecords": 3595,
+      "uniqueArticles": 185,
+      "multiwordPhraseMatchedRecords": 10,
+      "contextFilteredMatchedRecords": 3585,
+      "languageCounts": {
+        "en": 2772,
+        "it": 89,
+        "de": 222,
+        "es": 79,
+        "tr": 110,
+        "ro": 19,
+        "fr": 159,
+        "vi": 23,
+        "pt": 40,
+        "id": 49,
+        "sv": 13,
+        "az": 10,
+        "da": 10
+      },
+      "aliasCounts": {
+        "COP31": 3585,
+        "COP31 Antalya": 69,
+        "2026 United Nations Climate Change Conference": 10
+      },
+      "matchQuality": "context_filtered_candidate_review_required",
+      "evidence": [
+        {
+          "url": "https://www.tenterfieldstar.com.au/story/9389380/pm-jets-off-for-cop-talks-amid-overseas-trip-criticism/",
+          "domain": "www.tenterfieldstar.com.au",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "COP31"
+          ],
+          "context": "Albanese is on his way to the COP31 summit in Turkey amid criticism of his",
+          "sampleHour": "2026-11-10T10:00:00.000Z"
+        },
+        {
+          "url": "https://www.gjsentinel.com/news/us/ap-news-summary-at-2-11-a-m-est/article_32839e57-63cd-5734-b86f-2cec40f7da0b.html",
+          "domain": "www.gjsentinel.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "COP31"
+          ],
+          "context": "renewable energies. This initiative, unveiled during the COP31 climate talks in Turkey, aims to guide",
+          "sampleHour": "2026-11-10T11:00:00.000Z"
+        },
+        {
+          "url": "https://toronto.citynews.ca/2026/11/10/dabrusin-defends-canadas-climate-record-in-advance-of-un-climate-conference/",
+          "domain": "toronto.citynews.ca",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "COP31"
+          ],
+          "context": "at COP31. Canada will host the 12th \"Our Ocean\" conference in May. Canada and the",
+          "sampleHour": "2026-11-10T12:00:00.000Z"
+        },
+        {
+          "url": "https://europeanleadershipnetwork.org/commentary/climate-action-needs-a-peace-dividend-why-cop31-must-address-the-environmental-costs-of-war/",
+          "domain": "europeanleadershipnetwork.org",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "COP31"
+          ],
+          "context": "COP31 taking place in Antalya, Turkey from 9 to 20 November, there is a significant",
+          "sampleHour": "2026-11-10T13:00:00.000Z"
+        },
+        {
+          "url": "http://www.asiabulletin.com/news/279423963/ciie-import-expo-offers-window-into-china-europe-climate-cooperation",
+          "domain": "www.asiabulletin.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "COP31"
+          ],
+          "context": "the 31st United Nations Climate Change Conference (COP31) opened in Trkiye on Monday to gather",
+          "sampleHour": "2026-11-10T14:00:00.000Z"
+        },
+        {
+          "url": "http://www.europesun.com/news/279423648/bangladesh-pm-tarique-rahman-departs-dhaka-for-turkey-to-attend-climate-summit",
+          "domain": "www.europesun.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "COP31"
+          ],
+          "context": "the conference, with Murat Kurum nominated as COP31 President, while Australia's Chris Bowen will serve",
+          "sampleHour": "2026-11-10T15:00:00.000Z"
+        },
+        {
+          "url": "https://www.webwire.com/ViewPressRel.asp?aId=363981",
+          "domain": "www.webwire.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "COP31"
+          ],
+          "context": "Energy & Transport Day at COP31 in Antalya, new testing operations inaugurated at the Global",
+          "sampleHour": "2026-11-10T16:00:00.000Z"
+        },
+        {
+          "url": "https://www.nydailynews.com/2026/11/10/un-cop31-rooftop-solar/",
+          "domain": "www.nydailynews.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "COP31"
+          ],
+          "context": "COP31 U.N. Climate Summit, Monday, Nov. 9, 2026, in Antalya, Turkey. (AP Photo/Khalil Hamra) People",
+          "sampleHour": "2026-11-10T17:00:00.000Z"
+        },
+        {
+          "url": "https://pina.com.fj/2026/11/10/climate-change-killing-more-than-three-million-people-annually-wellcome-warns/",
+          "domain": "pina.com.fj",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "COP31"
+          ],
+          "context": "says. Speaking at a World Meteorological Organisation (WMO) press conference at COP31 in Antalya, Türkiye,",
+          "sampleHour": "2026-11-10T19:00:00.000Z"
+        },
+        {
+          "url": "https://www.theguardian.com/australia-news/2026/nov/11/morning-mail-wednesday-ntwnfb",
+          "domain": "www.theguardian.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "COP31"
+          ],
+          "context": "Liberal-One Nation coalition. Cop31 | Turkey and Australia, the co-hosts of crucial climate talks, must",
+          "sampleHour": "2026-11-10T20:00:00.000Z"
+        },
+        {
+          "url": "https://www.koco.com/article/greta-thunberg-condemns-un-climate-talks/74391020",
+          "domain": "www.koco.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "COP31"
+          ],
+          "context": "change's big melt COP31 co-hosts Turkey and Australia are promoting renewable energy and rooftop solar",
+          "sampleHour": "2026-11-10T21:00:00.000Z"
+        },
+        {
+          "url": "https://www.novinite.com/view_news.php?id=241534",
+          "domain": "www.novinite.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "COP31"
+          ],
+          "context": "Change's Conference of the Parties, COP31, in Antalya, Turkey, and returning to Bulgaria following the",
+          "sampleHour": "2026-11-10T23:00:00.000Z"
+        },
+        {
+          "url": "https://sana.sy/en/international/2357761/",
+          "domain": "sana.sy",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "COP31"
+          ],
+          "context": "the UN Framework Convention on Climate Change (COP31) in Antalya, focused on enhancing global cooperation",
+          "sampleHour": "2026-11-11T00:00:00.000Z"
+        },
+        {
+          "url": "https://en.shafaqna.com/490382/un-climate-negotiator-high-global-fossil-fuel-prices-spread-inflation-around-planet/",
+          "domain": "en.shafaqna.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "COP31"
+          ],
+          "context": "Turkey. Stiell joined COP31 hosts Turkey and Australia, which is leading the negotiations, in promoting",
+          "sampleHour": "2026-11-11T01:00:00.000Z"
+        },
+        {
+          "url": "https://kdhnews.com/news/nation/world-leaders-begin-talks-at-un-climate-conference-amid-concerns-that-actions-are-inadequate-slow/article_982327b7-5cd2-5d3c-9dc9-969b570d2992.html",
+          "domain": "kdhnews.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "COP31"
+          ],
+          "context": "at the Conference of the Parties, called COP31, remains to be seen. Past talks have",
+          "sampleHour": "2026-11-11T02:00:00.000Z"
+        },
+        {
+          "url": "https://www.aljazeera.com/news/2026/11/11/everything-and-everyone-we-love-is-at-stake-thunberg-slams-cop31-talks",
+          "domain": "www.aljazeera.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "COP31"
+          ],
+          "context": "COP31 who are demanding more climate finance. \"I hope that Greta's presence here reminds us",
+          "sampleHour": "2026-11-11T03:00:00.000Z"
+        },
+        {
+          "url": "https://www.illawarramercury.com.au/story/9389722/activist-100-per-cent-backs-protest-amid-police-fears/",
+          "domain": "www.illawarramercury.com.au",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "COP31"
+          ],
+          "context": "demonstration is set to coincide with the COP31 climate negotiations in Turkey and call for",
+          "sampleHour": "2026-11-11T04:00:00.000Z"
+        },
+        {
+          "url": "https://www.dungogchronicle.com.au/story/9389722/activist-100-per-cent-backs-protest-amid-police-fears/",
+          "domain": "www.dungogchronicle.com.au",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "COP31"
+          ],
+          "context": "demonstration is set to coincide with the COP31 climate negotiations in Turkey and call for",
+          "sampleHour": "2026-11-11T05:00:00.000Z"
+        },
+        {
+          "url": "https://www.dw.com/en/germany-slips-in-climate-protection-rankings-as-other-countries-make-gains/a-79913635",
+          "domain": "www.dw.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "COP31"
+          ],
+          "context": "9 on the sidelines of the UN COP31 climate summit in Turkey said Germany was",
+          "sampleHour": "2026-11-11T06:00:00.000Z"
+        },
+        {
+          "url": "https://theconversation.com/global-carbon-emissions-may-have-peaked-in-2026-but-only-time-will-tell-296152",
+          "domain": "theconversation.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "COP31"
+          ],
+          "context": "Turkey, also known as Türkiye, for the COP31 climate conference. It's a momentous read if",
+          "sampleHour": "2026-11-11T07:00:00.000Z"
+        },
+        {
+          "url": "https://www.hexham-courant.co.uk/news/national/26718102.burnham-hails-gbp12bn-wind-farm-investment-prepares-cop31-climate-talks/",
+          "domain": "www.hexham-courant.co.uk",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "COP31"
+          ],
+          "context": "at the United Nations' Cop31 summit in Antalya, Turkey, where he will deliver a speech",
+          "sampleHour": "2026-11-11T08:00:00.000Z"
+        },
+        {
+          "url": "https://www.bristolpost.co.uk/news/uk-world-news/hundreds-homes-360-bill-told-11236685",
+          "domain": "www.bristolpost.co.uk",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "COP31"
+          ],
+          "context": "campaign launches as world leaders meet in Antalya, Turkey, for the COP31 UN climate summit.",
+          "sampleHour": "2026-11-11T09:00:00.000Z"
+        }
+      ],
+      "evidenceCount": 22,
+      "evidenceDomains": {
+        "www.tenterfieldstar.com.au": 1,
+        "www.gjsentinel.com": 1,
+        "toronto.citynews.ca": 1,
+        "europeanleadershipnetwork.org": 1,
+        "www.asiabulletin.com": 1,
+        "www.europesun.com": 1,
+        "www.webwire.com": 1,
+        "www.nydailynews.com": 1,
+        "pina.com.fj": 1,
+        "www.theguardian.com": 1,
+        "www.koco.com": 1,
+        "www.novinite.com": 1,
+        "sana.sy": 1,
+        "en.shafaqna.com": 1,
+        "kdhnews.com": 1,
+        "www.aljazeera.com": 1,
+        "www.illawarramercury.com.au": 1,
+        "www.dungogchronicle.com.au": 1,
+        "www.dw.com": 1,
+        "theconversation.com": 1,
+        "www.hexham-courant.co.uk": 1,
+        "www.bristolpost.co.uk": 1
+      },
+      "evidenceCoverage": 0.1189,
+      "reviewStatus": "manual_review_required",
+      "qualityFlags": [
+        "single_token_context_filtering_used",
+        "evidence_is_capped_sample_not_full_article_list"
+      ]
+    },
+    {
+      "id": "country-france",
+      "label": "France",
+      "category": "countries",
+      "locale": "global",
+      "matchedRecords": 322,
+      "uniqueArticles": 43,
+      "multiwordPhraseMatchedRecords": 0,
+      "contextFilteredMatchedRecords": 322,
+      "languageCounts": {
+        "en": 259,
+        "fr": 61,
+        "el": 2
+      },
+      "aliasCounts": {
+        "France": 322
+      },
+      "matchQuality": "context_filtered_candidate_review_required",
+      "evidence": [
+        {
+          "url": "https://www.newidea.com.au/entertainment/my-kitchen-rules-mary-hits-back-trolls/",
+          "domain": "www.newidea.com.au",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "France"
+          ],
+          "context": "overseas, when she went to live in Bordeaux in the South of France. When she's",
+          "sampleHour": "2026-11-10T10:00:00.000Z"
+        },
+        {
+          "url": "https://collider.com/low-fantasy-books-better-than-harry-potter/",
+          "domain": "collider.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "France"
+          ],
+          "context": "Hundred Years' War between England and France. A contingent of French knights is travelling across",
+          "sampleHour": "2026-11-10T12:00:00.000Z"
+        },
+        {
+          "url": "https://archinect.com/news/bustler/11183/lacaton-vassal-awarded-le-prix-charlotte-perriand-2027",
+          "domain": "archinect.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "France"
+          ],
+          "context": "Image credit: Philippe Ruault / Transformation de 530 logements, Cité du Grand Parc, Bordeaux, France.",
+          "sampleHour": "2026-11-10T13:00:00.000Z"
+        },
+        {
+          "url": "https://www.51.ca/foodie/restaurants/1852",
+          "domain": "www.51.ca",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "France"
+          ],
+          "context": "France, it IS fair to measure against a comparable meal enjoyed at another French restaurant",
+          "sampleHour": "2026-11-10T14:00:00.000Z"
+        },
+        {
+          "url": "https://www.connexionfrance.com/news/over-800-dogs-rescued-from-breeding-kennel-in-central-france/827422",
+          "domain": "www.connexionfrance.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "France"
+          ],
+          "context": "France in the largest dog rescue ever carried out by the French animal protection association",
+          "sampleHour": "2026-11-10T16:00:00.000Z"
+        },
+        {
+          "url": "https://www.prnewswire.com/news-releases/mouton-cadet-cuvee-heritage-rouge-a-bordeaux-wine-crafted-for-the-traditions-we-pass-on-302935229.html",
+          "domain": "www.prnewswire.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "France"
+          ],
+          "context": "sharing wine. BORDEAUX, France, Nov. 10, 2026 /PRNewswire/ -- As families across America gather to",
+          "sampleHour": "2026-11-10T17:00:00.000Z"
+        },
+        {
+          "url": "https://www.foxnews.com/category/world/world-regions/france",
+          "domain": "www.foxnews.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "France"
+          ],
+          "context": "countryside. French is the predominant language spoken. France attracts a significant number of tourists due",
+          "sampleHour": "2026-11-10T18:00:00.000Z"
+        },
+        {
+          "url": "https://www.eastlothiancourier.com/news/national/26717730.iran-shows-underground-missile-city-official-claims-war-wrecked-us/",
+          "domain": "www.eastlothiancourier.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "France"
+          ],
+          "context": "France last month. The country's Ministry of Foreign Affairs called the French government's accusations \"baseless",
+          "sampleHour": "2026-11-10T19:00:00.000Z"
+        },
+        {
+          "url": "https://www.gazette-news.co.uk/news/national/26717730.iran-shows-underground-missile-city-official-claims-war-wrecked-us/",
+          "domain": "www.gazette-news.co.uk",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "France"
+          ],
+          "context": "France last month. The country's Ministry of Foreign Affairs called the French government's accusations \"baseless",
+          "sampleHour": "2026-11-10T20:00:00.000Z"
+        },
+        {
+          "url": "https://www.cbsnews.com/news/france-iran-behind-refrigerator-freezer-hack-cyberattack/",
+          "domain": "www.cbsnews.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "France"
+          ],
+          "context": "at French supermarket chains, causing food losses and fires at several stores, France, Oct. 12,",
+          "sampleHour": "2026-11-10T21:00:00.000Z"
+        },
+        {
+          "url": "https://en.shafaqna.com/490320/g7-paris-talks-trump-policy-ukraine-iran/",
+          "domain": "en.shafaqna.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "France"
+          ],
+          "context": "from Marseille to Paris for safety reasons following weeks of demonstrations throughout France. US Secretary",
+          "sampleHour": "2026-11-10T23:00:00.000Z"
+        },
+        {
+          "url": "https://www.ledevoir.com/monde/europe/1024040/mobilisation-poursuit-france-elue-visee-bouteille-essence",
+          "domain": "www.ledevoir.com",
+          "lang": "fr",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "France"
+          ],
+          "context": "les syndicats lycéens. / Photo: Miguel Medina Agence France-Presse / Des manifestants défilent à Marseille,",
+          "sampleHour": "2026-11-11T00:00:00.000Z"
+        },
+        {
+          "url": "http://www.hngnews.com/nation_world/israeli-strikes-and-gunfire-in-gaza-kill-5-people-and-other-mideast-news/article_7a850031-71d3-5d69-bac7-32e10090ee0c.html",
+          "domain": "www.hngnews.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "France"
+          ],
+          "context": "France last month. The country's Ministry of Foreign Affairs called the French government's accusations \"baseless",
+          "sampleHour": "2026-11-11T01:00:00.000Z"
+        },
+        {
+          "url": "https://variety.com/2026/film/focus/where-to-eat-during-afm-2026-1236941615/",
+          "domain": "variety.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "France"
+          ],
+          "context": "Minuty, the house rosé wine from Provence, France, to embrace the French ambiance. The businessperson's",
+          "sampleHour": "2026-11-11T03:00:00.000Z"
+        },
+        {
+          "url": "http://www.iraqsun.com/news/279424748/unable-to-manage-fridges-iran-mocks-france-after-paris-blames-irgc-unit-for-supermarket-cyberattack",
+          "domain": "www.iraqsun.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "France"
+          ],
+          "context": "purely for physical sabotage on French soil. 'Following investigations, France is now in a position",
+          "sampleHour": "2026-11-11T06:00:00.000Z"
+        },
+        {
+          "url": "https://www.ici.fr/emissions/l-info-d-ici-ici-provence/marseille-capitale-du-rap-les-annees-2010-la-decennie-en-or-dans-un-livre-presente-ce-mercredi-7072793",
+          "domain": "www.ici.fr",
+          "lang": "fr",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "France"
+          ],
+          "context": "durant lesquelles Marseille a déferlé sur la France entière avec sa nouvelle scène de rap,",
+          "sampleHour": "2026-11-11T08:00:00.000Z"
+        },
+        {
+          "url": "https://www.businessworld.in/article/the-great-narrative-heist-how-an-affair-stole-an-election-s-thunder-633031",
+          "domain": "www.businessworld.in",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "France"
+          ],
+          "context": "middle of Partygate. Emmanuel Macron offered France 100 days of action when the French were",
+          "sampleHour": "2026-11-11T09:00:00.000Z"
+        }
+      ],
+      "evidenceCount": 17,
+      "evidenceDomains": {
+        "www.newidea.com.au": 1,
+        "collider.com": 1,
+        "archinect.com": 1,
+        "www.51.ca": 1,
+        "www.connexionfrance.com": 1,
+        "www.prnewswire.com": 1,
+        "www.foxnews.com": 1,
+        "www.eastlothiancourier.com": 1,
+        "www.gazette-news.co.uk": 1,
+        "www.cbsnews.com": 1,
+        "en.shafaqna.com": 1,
+        "www.ledevoir.com": 1,
+        "www.hngnews.com": 1,
+        "variety.com": 1,
+        "www.iraqsun.com": 1,
+        "www.ici.fr": 1,
+        "www.businessworld.in": 1
+      },
+      "evidenceCoverage": 0.3953,
+      "reviewStatus": "manual_review_required",
+      "qualityFlags": [
+        "single_token_context_filtering_used",
+        "evidence_is_capped_sample_not_full_article_list"
+      ]
+    },
+    {
+      "id": "country-japan",
+      "label": "Japan",
+      "category": "countries",
+      "locale": "global",
+      "matchedRecords": 272,
+      "uniqueArticles": 27,
+      "multiwordPhraseMatchedRecords": 0,
+      "contextFilteredMatchedRecords": 272,
+      "languageCounts": {
+        "en": 262,
+        "de": 10
+      },
+      "aliasCounts": {
+        "Japan": 272
+      },
+      "matchQuality": "context_filtered_candidate_review_required",
+      "evidence": [
+        {
+          "url": "https://www.winknews.com/news/international/new-york-composer-mikiko-miyakawa-to-present-mutated-romance-a-minimal-chamber-musical-on-december/article_a09e9715-a165-5575-a334-89afbea6abcf.html",
+          "domain": "www.winknews.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Japan"
+          ],
+          "context": "by New York-based Japanese composer and pianist Mikiko Miyakawa, whose recording career began in Japan",
+          "sampleHour": "2026-11-10T12:00:00.000Z"
+        },
+        {
+          "url": "http://www.japanherald.com/news/279423795/1st-ld-writethru-japanese-prosecutors-seek-18-month-prison-term-for-ex-sdf-member-over-chinese-embassy-intrusion",
+          "domain": "www.japanherald.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Japan"
+          ],
+          "context": "that Japan provide a responsible explanation. The Chinese Foreign Ministry has also urged the Japanese",
+          "sampleHour": "2026-11-10T16:00:00.000Z"
+        },
+        {
+          "url": "https://www.theverge.com/gadgets/1029603/pomeras-dm25us-distraction-free-writing-review",
+          "domain": "www.theverge.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Japan"
+          ],
+          "context": "Japan, leaving people to import them and stumble their way through software created for Japanese",
+          "sampleHour": "2026-11-10T17:00:00.000Z"
+        },
+        {
+          "url": "https://www.miragenews.com/experimental-cell-therapy-boosts-skin-1775075/",
+          "domain": "www.miragenews.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Japan"
+          ],
+          "context": "the Japanese Dermatology Association in Tokyo, Japan. /Public Release. This material from the originating organization/author(s)",
+          "sampleHour": "2026-11-10T19:00:00.000Z"
+        },
+        {
+          "url": "https://dailynews.co.tz/anzania-cherishes-jicas-60-year-cooperation-in-advancing-its-socio-economic-projects/",
+          "domain": "dailynews.co.tz",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Japan"
+          ],
+          "context": "concessional loans from Japan worth more than 147.30bn Japanese yen and grants exceeding 176.76bn yen.",
+          "sampleHour": "2026-11-10T20:00:00.000Z"
+        },
+        {
+          "url": "https://www.wbiw.com/2026/11/10/governor-braun-grows-manufacturing-jobs-with-multi-million-dollar-toyota-investment/",
+          "domain": "www.wbiw.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Japan"
+          ],
+          "context": "Goodrich's economic development trip to Japan in October. Toyota is one of nearly 300 Japanese",
+          "sampleHour": "2026-11-10T21:00:00.000Z"
+        },
+        {
+          "url": "https://www.bjpenn.com/mma-news/shimon-yoshinari/shimon-yoshinari-targets-quick-finish-of-ramadan-ondash/",
+          "domain": "www.bjpenn.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Japan"
+          ],
+          "context": "got selected as a Japanese representative, so I have to show the strength of Japan.",
+          "sampleHour": "2026-11-11T00:00:00.000Z"
+        },
+        {
+          "url": "https://www.militarytimes.com/news/2026/11/09/japan-us-officials-to-amend-american-military-orientation-after-marines-indictment/",
+          "domain": "www.militarytimes.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Japan"
+          ],
+          "context": "Friday press conference, Japanese Foreign Minister Toshimitsu Motegi revealed that the government of Japan will",
+          "sampleHour": "2026-11-11T01:00:00.000Z"
+        },
+        {
+          "url": "https://www.eurasiareview.com/11112026-multinational-keen-sword-drills-focus-on-japans-southwestern-archipelago/",
+          "domain": "www.eurasiareview.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Japan"
+          ],
+          "context": "Japan-U.S. exercise, involved about 45,000 Japanese and 11,000 U.S. personnel plus forces from nine participating",
+          "sampleHour": "2026-11-11T03:00:00.000Z"
+        },
+        {
+          "url": "https://www.stratfordbeaconherald.com/press-releases/business-wire/the-nippon-anime-awards-to-launch-in-2027/",
+          "domain": "www.stratfordbeaconherald.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Japan"
+          ],
+          "context": "appeal of Japanese anime with audiences in Japan and around the world. The aim is",
+          "sampleHour": "2026-11-11T04:00:00.000Z"
+        },
+        {
+          "url": "http://www.china.org.cn/2026-11/11/content_118770059.shtml",
+          "domain": "www.china.org.cn",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Japan"
+          ],
+          "context": "A spokesperson for the Chinese Embassy in Japan on Tuesday once again urged the Japanese",
+          "sampleHour": "2026-11-11T05:00:00.000Z"
+        },
+        {
+          "url": "http://www.malaysiasun.com/news/279425735/badminton-treesa-gayatri-stun-higher-ranked-japanese-pair-to-enter-kumamoto-masters-pre-quarters",
+          "domain": "www.malaysiasun.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Japan"
+          ],
+          "context": "doubles pre-quarterfinals at the Kumamoto Masters Japan 2026 after defeating higher-ranked Japanese pair Hinata Suzuki",
+          "sampleHour": "2026-11-11T06:00:00.000Z"
+        },
+        {
+          "url": "http://www.parisguardian.com/news/279425735/badminton-treesa-gayatri-stun-higher-ranked-japanese-pair-to-enter-kumamoto-masters-pre-quarters",
+          "domain": "www.parisguardian.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Japan"
+          ],
+          "context": "doubles pre-quarterfinals at the Kumamoto Masters Japan 2026 after defeating higher-ranked Japanese pair Hinata Suzuki",
+          "sampleHour": "2026-11-11T08:00:00.000Z"
+        },
+        {
+          "url": "https://www.wral.com/news/ap/6a735-japanese-automaker-nissan-reduces-red-ink-and-vows-to-return-to-profit-for-the-full-year/",
+          "domain": "www.wral.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Japan"
+          ],
+          "context": "France and Mitsubishi Motors Corp. of Japan. It also has a partnership with Japanese rival",
+          "sampleHour": "2026-11-11T09:00:00.000Z"
+        }
+      ],
+      "evidenceCount": 14,
+      "evidenceDomains": {
+        "www.winknews.com": 1,
+        "www.japanherald.com": 1,
+        "www.theverge.com": 1,
+        "www.miragenews.com": 1,
+        "dailynews.co.tz": 1,
+        "www.wbiw.com": 1,
+        "www.bjpenn.com": 1,
+        "www.militarytimes.com": 1,
+        "www.eurasiareview.com": 1,
+        "www.stratfordbeaconherald.com": 1,
+        "www.china.org.cn": 1,
+        "www.malaysiasun.com": 1,
+        "www.parisguardian.com": 1,
+        "www.wral.com": 1
+      },
+      "evidenceCoverage": 0.5185,
+      "reviewStatus": "manual_review_required",
+      "qualityFlags": [
+        "single_token_context_filtering_used",
+        "evidence_is_capped_sample_not_full_article_list"
+      ]
+    },
+    {
+      "id": "city-paris",
+      "label": "Paris, France",
+      "category": "global_cities",
+      "locale": "global",
+      "matchedRecords": 1078,
+      "uniqueArticles": 94,
+      "multiwordPhraseMatchedRecords": 0,
+      "contextFilteredMatchedRecords": 1078,
+      "languageCounts": {
+        "en": 770,
+        "fr": 274,
+        "de": 4,
+        "es": 17,
+        "ru": 13
+      },
+      "aliasCounts": {
+        "Paris": 1078
+      },
+      "matchQuality": "context_filtered_candidate_review_required",
+      "evidence": [
+        {
+          "url": "https://arynews.tv/france-vows-tough-response-freezer-cyberattack-blamed-iran",
+          "domain": "arynews.tv",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Paris"
+          ],
+          "context": "foreign ministers' meeting in Paris. Hundreds of French supermarkets were hit in the October 11",
+          "sampleHour": "2026-11-10T10:00:00.000Z"
+        },
+        {
+          "url": "http://www.laosnews.net/news/279423491/aurassure-receives-overall-performance-award-at-2025-airlab-microsensors-challenge",
+          "domain": "www.laosnews.net",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Paris"
+          ],
+          "context": "of air-quality monitoring solutions across Paris, France; Accra, Ghana; and Bengaluru, India. The challenge assessed",
+          "sampleHour": "2026-11-10T11:00:00.000Z"
+        },
+        {
+          "url": "http://www.parisguardian.com/news/279423470/france-threatens-actions-against-iran-over-supermarket-cyberattacks",
+          "domain": "www.parisguardian.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Paris"
+          ],
+          "context": "G7 foreign ministers' meetingin Paris. Hundreds of French supermarkets were hit in the October 11",
+          "sampleHour": "2026-11-10T12:00:00.000Z"
+        },
+        {
+          "url": "https://english.news.cn/20261110/d65b268d1b914e43b766695008e6fc35/c.html",
+          "domain": "english.news.cn",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Paris"
+          ],
+          "context": "10 (Xinhua) -- The ninth Paris Peace Forum opened in the French capital on Tuesday,",
+          "sampleHour": "2026-11-10T13:00:00.000Z"
+        },
+        {
+          "url": "https://www.timeslive.co.za/news/world/2026-11-10-rubio-tells-g7-us-will-keep-imposing-devastating-costs-on-iran-diplomats-say/",
+          "domain": "www.timeslive.co.za",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Paris"
+          ],
+          "context": "in Paris of foreign ministers from the Group of Seven, which comprises Britain, Canada, France,",
+          "sampleHour": "2026-11-10T14:00:00.000Z"
+        },
+        {
+          "url": "https://sana.sy/en/international/2357639/",
+          "domain": "sana.sy",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Paris"
+          ],
+          "context": "and Microsoft. T.S /ABD Paris, Nov. 10 (SANA) French President Emmanuel Macron has called for",
+          "sampleHour": "2026-11-10T15:00:00.000Z"
+        },
+        {
+          "url": "https://bdnews24.com/world/95v546fcb0",
+          "domain": "bdnews24.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Paris"
+          ],
+          "context": "in Paris of foreign ministers from the Group of Seven, which comprises Britain, Canada, France,",
+          "sampleHour": "2026-11-10T16:00:00.000Z"
+        },
+        {
+          "url": "https://www.wallpaper.com/art/photography/paris-photo-2026-what-to-see",
+          "domain": "www.wallpaper.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Paris"
+          ],
+          "context": "France marks the bicentenary of the invention of photography, and the 29th edition of Paris",
+          "sampleHour": "2026-11-10T17:00:00.000Z"
+        },
+        {
+          "url": "https://www.foxnews.com/category/world/world-regions/france",
+          "domain": "www.foxnews.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Paris"
+          ],
+          "context": "Paris hosted the Summer Olympics in 2024. Emmanuel Macron serves as the President of France",
+          "sampleHour": "2026-11-10T18:00:00.000Z"
+        },
+        {
+          "url": "https://www.eastlothiancourier.com/news/national/26717730.iran-shows-underground-missile-city-official-claims-war-wrecked-us/",
+          "domain": "www.eastlothiancourier.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Paris"
+          ],
+          "context": "needed for now because Iran is struggling. \"It's sad,\" he said in Paris. France G7",
+          "sampleHour": "2026-11-10T19:00:00.000Z"
+        },
+        {
+          "url": "https://www.gazette-news.co.uk/news/national/26717730.iran-shows-underground-missile-city-official-claims-war-wrecked-us/",
+          "domain": "www.gazette-news.co.uk",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Paris"
+          ],
+          "context": "needed for now because Iran is struggling. \"It's sad,\" he said in Paris. France G7",
+          "sampleHour": "2026-11-10T20:00:00.000Z"
+        },
+        {
+          "url": "https://www.lolwot.com/paris-jackson-net-worth/",
+          "domain": "www.lolwot.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Paris"
+          ],
+          "context": "after the French city where her parents first met. What is to Come For Paris",
+          "sampleHour": "2026-11-10T21:00:00.000Z"
+        },
+        {
+          "url": "https://www.arabnews.com/world/controversial-french-writer-houellebecq-probed-over-comments-on-muslims-3011084",
+          "domain": "www.arabnews.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Paris"
+          ],
+          "context": "in Paris on November 13, 2015. In 2023, the Union of Mosques of France (UMF)",
+          "sampleHour": "2026-11-10T23:00:00.000Z"
+        },
+        {
+          "url": "https://www.parkrecord.com/2026/11/10/summit-county-global-warming-risks-opportunities-are-unique-according-to-researchers/",
+          "domain": "www.parkrecord.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Paris"
+          ],
+          "context": "Olympics in Paris gained attention for the action in cleaning up the River Seine. Gov.",
+          "sampleHour": "2026-11-11T00:00:00.000Z"
+        },
+        {
+          "url": "https://www.funkytaurusmedia.com/index.php?XTCsid=n765p88dnf4bl6k8kkcoqlngo5",
+          "domain": "www.funkytaurusmedia.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Paris"
+          ],
+          "context": "CHIEN / QUEBEC - CANADA 23rd-25th Oct 2026 ART EXPO PARIS Carrousel du Louvre /",
+          "sampleHour": "2026-11-11T01:00:00.000Z"
+        },
+        {
+          "url": "https://www.al-monitor.com/originals/2026/11/world-leaders-address-cop31-turkey-pushes-new-climate-deal",
+          "domain": "www.al-monitor.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Paris"
+          ],
+          "context": "climate change. Former French Prime Minister Laurent Fabius, who presided over the 2015 Paris climate",
+          "sampleHour": "2026-11-11T04:00:00.000Z"
+        },
+        {
+          "url": "http://www.hawaiitelegraph.com/news/279424680/pacific-avenue-capital-partners-announces-key-addition-to-business-development-team-shalini-bala-subramaniam",
+          "domain": "www.hawaiitelegraph.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Paris"
+          ],
+          "context": "global private equity firm, headquartered in Los Angeles with an office in Paris, France. The",
+          "sampleHour": "2026-11-11T05:00:00.000Z"
+        },
+        {
+          "url": "http://www.iraqsun.com/news/279424748/unable-to-manage-fridges-iran-mocks-france-after-paris-blames-irgc-unit-for-supermarket-cyberattack",
+          "domain": "www.iraqsun.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Paris"
+          ],
+          "context": "non-public' countermeasures. (ANI) Paris [France], November 11 (ANI): A sharp diplomatic confrontation has erupted between",
+          "sampleHour": "2026-11-11T06:00:00.000Z"
+        },
+        {
+          "url": "http://www.parisguardian.com/news/279425741/aurassure-receives-overall-performance-award-at-2025-airlab-microsensors-challenge",
+          "domain": "www.parisguardian.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Paris"
+          ],
+          "context": "of air-quality monitoring solutions across Paris, France; Accra, Ghana; and Bengaluru, India. The challenge assessed",
+          "sampleHour": "2026-11-11T08:00:00.000Z"
+        },
+        {
+          "url": "https://www.freepressjournal.in/india/a-pleasure-and-an-honour-sadhguru-meets-french-president-emmanuel-macron-expresses-gratitude-for-his-warmth-and-hospitality",
+          "domain": "www.freepressjournal.in",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Paris"
+          ],
+          "context": "Millionaire' as the background music.Â Paris:Â Renowned Indian spiritual leader Sadhguru recently met French President",
+          "sampleHour": "2026-11-11T09:00:00.000Z"
+        }
+      ],
+      "evidenceCount": 20,
+      "evidenceDomains": {
+        "arynews.tv": 1,
+        "www.laosnews.net": 1,
+        "www.parisguardian.com": 2,
+        "english.news.cn": 1,
+        "www.timeslive.co.za": 1,
+        "sana.sy": 1,
+        "bdnews24.com": 1,
+        "www.wallpaper.com": 1,
+        "www.foxnews.com": 1,
+        "www.eastlothiancourier.com": 1,
+        "www.gazette-news.co.uk": 1,
+        "www.lolwot.com": 1,
+        "www.arabnews.com": 1,
+        "www.parkrecord.com": 1,
+        "www.funkytaurusmedia.com": 1,
+        "www.al-monitor.com": 1,
+        "www.hawaiitelegraph.com": 1,
+        "www.iraqsun.com": 1,
+        "www.freepressjournal.in": 1
+      },
+      "evidenceCoverage": 0.2128,
+      "reviewStatus": "manual_review_required",
+      "qualityFlags": [
+        "single_token_context_filtering_used",
+        "evidence_is_capped_sample_not_full_article_list"
+      ]
+    },
+    {
+      "id": "city-tokyo",
+      "label": "Tokyo, Japan",
+      "category": "global_cities",
+      "locale": "global",
+      "matchedRecords": 348,
+      "uniqueArticles": 23,
+      "multiwordPhraseMatchedRecords": 0,
+      "contextFilteredMatchedRecords": 348,
+      "languageCounts": {
+        "en": 272,
+        "de": 61,
+        "ja": 15
+      },
+      "aliasCounts": {
+        "Tokyo": 348
+      },
+      "matchQuality": "context_filtered_candidate_review_required",
+      "evidence": [
+        {
+          "url": "https://www.news4jax.com/business/2026/11/10/honda-reports-robust-results-on-the-back-of-healthy-motorcycle-sales/",
+          "domain": "www.news4jax.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Tokyo"
+          ],
+          "context": "its fiscal year, the Japanese automaker reported Tuesday, driven by strong motorcycle sales. Tokyo-based Honda",
+          "sampleHour": "2026-11-10T12:00:00.000Z"
+        },
+        {
+          "url": "https://www.clickorlando.com/business/2026/11/10/honda-reports-robust-results-on-the-back-of-healthy-motorcycle-sales/",
+          "domain": "www.clickorlando.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Tokyo"
+          ],
+          "context": "its fiscal year, the Japanese automaker reported Tuesday, driven by strong motorcycle sales. Tokyo-based Honda",
+          "sampleHour": "2026-11-10T13:00:00.000Z"
+        },
+        {
+          "url": "https://www.wptf.com/2026/11/10/before-the-bell-wall-street-mixed-in-early-trading/",
+          "domain": "www.wptf.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Tokyo"
+          ],
+          "context": "in artificial intelligence hurt the Japanese technology company's bottom line. Computer chip equipment maker Tokyo",
+          "sampleHour": "2026-11-10T17:00:00.000Z"
+        },
+        {
+          "url": "https://www.miragenews.com/experimental-cell-therapy-boosts-skin-1775075/",
+          "domain": "www.miragenews.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Tokyo"
+          ],
+          "context": "the Japanese Dermatology Association in Tokyo, Japan. /Public Release. This material from the originating organization/author(s)",
+          "sampleHour": "2026-11-10T19:00:00.000Z"
+        },
+        {
+          "url": "https://www.luxurytravelmagazine.com/news-articles/kokorozuke-where-cash-still-matters-on-a-luxury-trip-to-japan",
+          "domain": "www.luxurytravelmagazine.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Tokyo"
+          ],
+          "context": "the Tokyo Metropolitan Government puts it at 62%+. In most cases, your cards will work",
+          "sampleHour": "2026-11-10T20:00:00.000Z"
+        },
+        {
+          "url": "https://www.eurekalert.org/news-releases/1150744",
+          "domain": "www.eurekalert.org",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Tokyo"
+          ],
+          "context": "carbon nitride Article Publication Date 30-Sep-2026 Tokyo, Japan – Many modern electronic circuits depend on",
+          "sampleHour": "2026-11-10T21:00:00.000Z"
+        },
+        {
+          "url": "https://www.stratfordbeaconherald.com/press-releases/business-wire/the-nippon-anime-awards-to-launch-in-2027/",
+          "domain": "www.stratfordbeaconherald.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Tokyo"
+          ],
+          "context": "TOKYO — The Association of Japanese Animations (AJA) announced on November 2 (Monday) at the",
+          "sampleHour": "2026-11-11T04:00:00.000Z"
+        },
+        {
+          "url": "https://metropolisjapan.com/events/tank-and-the-bangas-blue-note-tokyo-2026/",
+          "domain": "metropolisjapan.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Tokyo"
+          ],
+          "context": "Japan for more overseas acts What to Expect at Tank and the Bangas' Tokyo Shows",
+          "sampleHour": "2026-11-11T05:00:00.000Z"
+        },
+        {
+          "url": "https://www.aol.co.uk/articles/markets-fluctuate-us-rate-worries-061502000.html",
+          "domain": "www.aol.co.uk",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Tokyo"
+          ],
+          "context": "In company news, Japanese tech investment giant SoftBank tumbled as much as 8% in Tokyo",
+          "sampleHour": "2026-11-11T06:00:00.000Z"
+        },
+        {
+          "url": "https://economictimes.indiatimes.com/news/india/indian-iit-students-flourish-in-japans-mirai-setu-programme-ahead-of-75th-anniversary-of-india-japan-relations/articleshow/135729211.cms",
+          "domain": "economictimes.indiatimes.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Tokyo"
+          ],
+          "context": "Trusted News Source Google Logo Tokyo [Japan]: 2027 is the 75th anniversary year of diplomatic",
+          "sampleHour": "2026-11-11T08:00:00.000Z"
+        },
+        {
+          "url": "https://www.wral.com/news/ap/6a735-japanese-automaker-nissan-reduces-red-ink-and-vows-to-return-to-profit-for-the-full-year/",
+          "domain": "www.wral.com",
+          "lang": "en",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Tokyo"
+          ],
+          "context": "Yuri Kageyama is on Threads: https://www.threads.com/@yurikageyama TOKYO (AP) — Japanese automaker Nissan trimmed its losses",
+          "sampleHour": "2026-11-11T09:00:00.000Z"
+        }
+      ],
+      "evidenceCount": 11,
+      "evidenceDomains": {
+        "www.news4jax.com": 1,
+        "www.clickorlando.com": 1,
+        "www.wptf.com": 1,
+        "www.miragenews.com": 1,
+        "www.luxurytravelmagazine.com": 1,
+        "www.eurekalert.org": 1,
+        "www.stratfordbeaconherald.com": 1,
+        "metropolisjapan.com": 1,
+        "www.aol.co.uk": 1,
+        "economictimes.indiatimes.com": 1,
+        "www.wral.com": 1
+      },
+      "evidenceCoverage": 0.4783,
+      "reviewStatus": "manual_review_required",
+      "qualityFlags": [
+        "single_token_context_filtering_used",
+        "evidence_is_capped_sample_not_full_article_list"
+      ]
+    },
+    {
+      "id": "city-gdansk",
+      "label": "Gdańsk, Poland",
+      "category": "polish_cities",
+      "locale": "polish_language_media",
+      "matchedRecords": 17,
+      "uniqueArticles": 2,
+      "multiwordPhraseMatchedRecords": 0,
+      "contextFilteredMatchedRecords": 17,
+      "languageCounts": {
+        "pl": 17
+      },
+      "aliasCounts": {
+        "Gdańska": 7,
+        "Gdańską": 7,
+        "Gdańskowi": 10
+      },
+      "matchQuality": "context_filtered_candidate_review_required",
+      "evidence": [
+        {
+          "url": "https://www.topagrar.pl/articles/zboza/zloto-sandomierza-wraca-na-pola-wszystko-zaczelo-sie-od-132-nasion-2694572",
+          "domain": "www.topagrar.pl",
+          "lang": "pl",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Gdańska",
+            "Gdańską"
+          ],
+          "context": "Gdańska sprzedawano je już pod nazwami „Danzig Wheat\", „Polish Wheat\" czy „Baltic Wheat\". – Gdy",
+          "sampleHour": "2026-11-10T18:00:00.000Z"
+        },
+        {
+          "url": "https://forsal.pl/gospodarka/demografia/artykuly/11343207,gdansk-na-minusie-ale-ponad-500-tys-osob-cudzoziemcy-w-natarciu-odpowiadaja-za-84-proc-wzrostu.html",
+          "domain": "forsal.pl",
+          "lang": "pl",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Gdańskowi"
+          ],
+          "context": "całej Polski nie można automatycznie przypisać Gdańskowi. Czy mniej mieszkańców oznacza mniej gospodarstw domowych? Nie",
+          "sampleHour": "2026-11-10T21:00:00.000Z"
+        }
+      ],
+      "evidenceCount": 2,
+      "evidenceDomains": {
+        "www.topagrar.pl": 1,
+        "forsal.pl": 1
+      },
+      "evidenceCoverage": 1,
+      "reviewStatus": "manual_review_required",
+      "qualityFlags": [
+        "low_unique_article_volume",
+        "single_token_context_filtering_used"
+      ]
+    },
+    {
+      "id": "city-krakow",
+      "label": "Kraków, Poland",
+      "category": "polish_cities",
+      "locale": "polish_language_media",
+      "matchedRecords": 75,
+      "uniqueArticles": 6,
+      "multiwordPhraseMatchedRecords": 0,
+      "contextFilteredMatchedRecords": 75,
+      "languageCounts": {
+        "pl": 75
+      },
+      "aliasCounts": {
+        "Krakowie": 40,
+        "Krakowa": 30,
+        "Krakowskie": 5
+      },
+      "matchQuality": "context_filtered_candidate_review_required",
+      "evidence": [
+        {
+          "url": "https://cyfrowa.rp.pl/bezpieczenstwo/art45469641-polacy-maja-dosc-dezinformacji-prawie-40-proc-zgadza-sie-na-kontrole-sieci",
+          "domain": "cyfrowa.rp.pl",
+          "lang": "pl",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Krakowie"
+          ],
+          "context": "doświadczyć już chwilę po ataku zamachowca w Krakowie, gdy polską infosferę zalała skoordynowana fala fałszywych",
+          "sampleHour": "2026-11-10T10:00:00.000Z"
+        },
+        {
+          "url": "https://kurierwilenski.lt/2026/11/10/litwa-solidaryzuje-sie-z-ofiarami-zamachu-w-krakowie-sluzby-radza-jak-sie-zachowac/",
+          "domain": "kurierwilenski.lt",
+          "lang": "pl",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Krakowa"
+          ],
+          "context": "Zjednoczone wyrażają solidarność z Polską i mieszkańcami Krakowa\" — napisano w oświadczeniu. Na tragedię zareagował",
+          "sampleHour": "2026-11-10T17:00:00.000Z"
+        },
+        {
+          "url": "https://www.pudelek.pl/lekarz-opisal-kulisy-10-godzinnej-operacji-artura-moranskiego-przy-korzystnym-przebiegu-moze-wrocic-do-prawie-pelnej-sprawnosci-7349594481793472a",
+          "domain": "www.pudelek.pl",
+          "lang": "pl",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Krakowa"
+          ],
+          "context": "Polska nie przestaje trzymać kciuków za powrót bohaterów do pełni sił. Nagranie z Krakowa z",
+          "sampleHour": "2026-11-11T00:00:00.000Z"
+        },
+        {
+          "url": "https://www.fakt.pl/wydarzenia/zamach-w-krakowie-jak-poradzic-sobie-ze-strachem-psycholog-radzi/l63cssj",
+          "domain": "www.fakt.pl",
+          "lang": "pl",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Krakowie"
+          ],
+          "context": "i odzyskać poczucie bezpieczeństwa. Zamach na Rynku Głównym w Krakowie wstrząsnął całą Polską. W miejscu,",
+          "sampleHour": "2026-11-11T06:00:00.000Z"
+        },
+        {
+          "url": "https://www.dziennikwschodni.pl/artykul/393956,gdzie-rodzila-sie-niepodleglosc-osiem-niezwyklych-miejsc-w-lublinie",
+          "domain": "www.dziennikwschodni.pl",
+          "lang": "pl",
+          "matchType": "context_filtered_single_token",
+          "aliasMatches": [
+            "Krakowskie"
+          ],
+          "context": "Polski, później funkcjonowały kolejne instytucje bankowe. Dawny Bank Państwowy Rosji, Krakowskie Przedmieście 37/Wikipedia Plac Katedralny.",
+          "sampleHour": "2026-11-11T09:00:00.000Z"
+        }
+      ],
+      "evidenceCount": 5,
+      "evidenceDomains": {
+        "cyfrowa.rp.pl": 1,
+        "kurierwilenski.lt": 1,
+        "www.pudelek.pl": 1,
+        "www.fakt.pl": 1,
+        "www.dziennikwschodni.pl": 1
+      },
+      "evidenceCoverage": 0.8333,
+      "reviewStatus": "manual_review_required",
+      "qualityFlags": [
+        "low_unique_article_volume",
+        "single_token_context_filtering_used",
+        "evidence_is_capped_sample_not_full_article_list"
+      ]
+    },
+    {
+      "id": "person-donald-tusk",
+      "label": "Donald Tusk",
+      "category": "people_in_polish_media",
+      "locale": "polish_language_media",
+      "matchedRecords": 82,
+      "uniqueArticles": 6,
+      "multiwordPhraseMatchedRecords": 82,
+      "contextFilteredMatchedRecords": 0,
+      "languageCounts": {
+        "pl": 82
+      },
+      "aliasCounts": {
+        "Donald Tusk": 82
+      },
+      "matchQuality": "multiword_phrase_candidate_review_required",
+      "evidence": [
+        {
+          "url": "https://www.rp.pl/ekonomia/gospodarka/budzet-i-podatki",
+          "domain": "www.rp.pl",
+          "lang": "pl",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Donald Tusk"
+          ],
+          "context": "Fundusz Rezerwy Demograficznej. Minister finansów i gospodarki Andrzej Domański Premier Donald Tusk zapowiedział złożenie wniosku",
+          "sampleHour": "2026-11-10T10:00:00.000Z"
+        },
+        {
+          "url": "https://www.rp.pl/polityka/art45466421-prezent-za-1200-zl-juz-nie-trafi-do-poselskiego-rejestru-korzysci-to-pozorny-ruch",
+          "domain": "www.rp.pl",
+          "lang": "pl",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Donald Tusk"
+          ],
+          "context": "prezentami. Żadnego wpisu nie dokonał jeszcze premier Donald Tusk, choć szefowie rządów regularnie wymieniają podarki.",
+          "sampleHour": "2026-11-10T14:00:00.000Z"
+        },
+        {
+          "url": "https://wiadomosci.onet.pl/krakow/wzruszajacy-moment-na-rynku-glownym-w-krakowie-rozlegly-sie-brawa/84d80hl",
+          "domain": "wiadomosci.onet.pl",
+          "lang": "pl",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Donald Tusk"
+          ],
+          "context": "w wydarzeniu wezmą prezydent Karol Nawrocki, premier Donald Tusk, prezydent Krakowa Łukasz Gibała. Kilka godzin",
+          "sampleHour": "2026-11-10T17:00:00.000Z"
+        },
+        {
+          "url": "https://wiadomosci.wp.pl/wpadka-na-antenie-tvn24-pomylil-politykow-pis-i-wbil-szpile-7349783163042240a",
+          "domain": "wiadomosci.wp.pl",
+          "lang": "pl",
+          "matchType": "multiword_phrase",
+          "aliasMatches": [
+            "Donald Tusk"
+          ],
+          "context": "czele wydarzenia stanęli prezydent Karol Nawrocki, premier Donald Tusk oraz prezydent Krakowa Łukasz Gibała. Uczestnicy",
+          "sampleHour": "2026-11-11T09:00:00.000Z"
+        }
+      ],
+      "evidenceCount": 4,
+      "evidenceDomains": {
+        "www.rp.pl": 2,
+        "wiadomosci.onet.pl": 1,
+        "wiadomosci.wp.pl": 1
+      },
+      "evidenceCoverage": 0.6667,
+      "reviewStatus": "manual_review_required",
+      "qualityFlags": [
+        "low_unique_article_volume",
+        "evidence_is_capped_sample_not_full_article_list"
+      ]
+    },
+    {
+      "id": "person-robert-lewandowski",
+      "label": "Robert Lewandowski",
+      "category": "people_in_polish_media",
+      "locale": "polish_language_media",
+      "matchedRecords": 0,
+      "uniqueArticles": 0,
+      "multiwordPhraseMatchedRecords": 0,
+      "contextFilteredMatchedRecords": 0,
+      "languageCounts": {},
+      "aliasCounts": {},
+      "matchQuality": "multiword_phrase_candidate_review_required",
+      "evidence": [],
+      "evidenceCount": 0,
+      "evidenceDomains": {},
+      "evidenceCoverage": 0,
+      "reviewStatus": "manual_review_required",
+      "qualityFlags": [
+        "no_unique_articles_in_sample"
+      ]
+    }
+  ]
+}
