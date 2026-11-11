@@ -9,7 +9,7 @@ import { addGkgDocument, createCandidateAccumulator, summarizeCandidateDiscovery
 
 const LAST_UPDATE_URL = "https://data.gdeltproject.org/gdeltv2/lastupdate.txt";
 const GKG_BASE = "https://data.gdeltproject.org/gdeltv2";
-const USER_AGENT = "Trendsy-GKG-Candidate-Discovery-Audit/1.0 (research prototype)";
+const USER_AGENT = "Trendsy-GKG-Candidate-Discovery-Audit/1.1 (research prototype)";
 const SAMPLE_COUNT = Number(process.env.GKG_DISCOVERY_SAMPLE_COUNT ?? 10);
 const SPACING_MINUTES = Number(process.env.GKG_DISCOVERY_SPACING_MINUTES ?? 150);
 const CANDIDATE_LIMIT = Number(process.env.GKG_DISCOVERY_CANDIDATE_LIMIT ?? 200);
@@ -32,6 +32,7 @@ async function scanGkg(zipPath, filename, accumulator) {
   });
   const lines = createInterface({ input: child.stdout, crlfDelay: Infinity });
   let records = 0, validRecords = 0, validWebDocuments = 0, documentsWithAllNames = 0;
+  let documentsWithSourceLanguage = 0, documentsWithoutSourceLanguage = 0;
   for await (const line of lines) {
     if (!line.trim()) continue;
     records++;
@@ -41,17 +42,22 @@ async function scanGkg(zipPath, filename, accumulator) {
     if (row.sourceCollectionId !== "1" || !row.url) continue;
     validWebDocuments++;
     if (row.allNames.length) documentsWithAllNames++;
+    if (row.sourceLanguage) documentsWithSourceLanguage++;
+    else documentsWithoutSourceLanguage++;
     addGkgDocument(accumulator, row, filename);
   }
   const code = await closed;
   if (code !== 0) throw new Error(`unzip exited ${code}: ${stderr}`);
-  return { records, validRecords, validWebDocuments, documentsWithAllNames };
+  return {
+    records, validRecords, validWebDocuments, documentsWithAllNames,
+    documentsWithSourceLanguage, documentsWithoutSourceLanguage
+  };
 }
 
 function renderMarkdown(report) {
   const s = report.summary;
   const rows = report.candidates.slice(0, 50).map((item, index) =>
-    `| ${index + 1} | ${item.name.replaceAll("|", "\\|")} | ${item.uniqueArticles} | ${item.uniqueDomains} | ${item.sampledBatches} | ${item.singleTokenName ? "yes" : "no"} | ${item.personSignalArticles} | ${item.organizationSignalArticles} |`
+    `| ${index + 1} | ${item.name.replaceAll("|", "\\|")} | ${item.uniqueArticles} | ${item.uniqueDomains} | ${item.sampledBatches} | ${item.singleTokenName ? "yes" : "no"} | ${item.personSignalArticles} | ${item.organizationSignalArticles} | ${(item.quality.topDomainShare * 100).toFixed(0)}% | ${item.quality.reviewFlags.join(", ") || "—"} |`
   );
   return [
     "# GKG ALLNAMES candidate discovery — research audit", "",
@@ -61,22 +67,28 @@ function renderMarkdown(report) {
     `- Complete GKG batches: ${s.completeSamples}/${s.requestedSamples}`,
     `- Valid WEB documents: ${s.validWebDocuments}`,
     `- Documents with ALLNAMES: ${s.documentsWithAllNames}`,
+    `- Source-language metadata coverage: ${s.languageMetadata.documentsWithLanguage}/${s.languageMetadata.documentsWithLanguage + s.languageMetadata.documentsWithoutLanguage} WEB documents (${(s.languageMetadata.coverage * 100).toFixed(1)}%)`,
+    `- Language metadata status: ${s.languageMetadata.status} — ${s.languageMetadata.note}`,
     `- Unique normalized names: ${s.uniqueCandidateNames}`,
     `- Names with at least 2 unique articles: ${s.candidatesWithAtLeastTwoArticles}`,
     "", "## Candidate frequency distribution", "",
     "| Unique articles per name | Number of names |", "|---|---:|",
     ...Object.entries(s.frequencyBuckets).map(([bucket, count]) => `| ${bucket.replaceAll("_", " ")} | ${count} |`),
     "", "## Top 50 name candidates", "",
-    "| # | Name | Unique articles | Domains | Batches | Single token? | Person signal | Organization signal |",
-    "|---:|---|---:|---:|---:|:---:|---:|---:|", ...rows, "",
-    "## Interpretation limits", "",
+    "| # | Name | Unique articles | Domains | Batches | Single token? | Person signal | Organization signal | Top-domain share | Review flags |",
+    "|---:|---|---:|---:|---:|:---:|---:|---:|---:|---|", ...rows, "",
+    "## Quality diagnostics (review flags, not automatic exclusions)", "",
+    "Flags identify evidence that deserves inspection; they do not reject candidates. Domain concentration, low domain count, sparse batch coverage, missing person/organization cross-signals, multiple name variants, source-domain overlap, and a small explicit boilerplate phrase list are reported.",
+    "A deterministic stratified manual-review sample with blank human-assessment fields is included in the JSON artifact.",
+    "", "## Interpretation limits", "",
     "- ALLNAMES is intentionally inclusive: a detected name can be a passing mention, ambiguous string, or extraction false positive.",
     "- This report counts unique WEB article URLs, not raw name mentions or independently verified topic relevance.",
     "- Person/organization signals are cross-checks against GKG PERSONS and ORGANIZATIONS fields, not a definitive entity type.",
     "- Domain count is not publisher-country coverage and does not prove editorial independence.",
     "- The sample is sparse (150-minute spacing), not a continuous scan of all GKG batches.",
+    "- Source-language codes are read from GKG TranslationInfo srclc; coverage is explicit and missing values are not language classifications.",
     "- This is a candidate-discovery audit only. It does not calculate popularity scores, change league membership, or alter game data.",
-    "", "Full candidate evidence, language/theme distributions, and up to three URLs per candidate are in the JSON artifact.", ""
+    "", "Full candidate evidence, quality diagnostics, stratified manual-review sample, and language/theme distributions are in the JSON artifact.", ""
   ].join("\n");
 }
 
@@ -121,9 +133,9 @@ async function main() {
 
     const discovery = summarizeCandidateDiscovery(accumulator, sampleStats, CANDIDATE_LIMIT);
     const report = {
-      schemaVersion: 1,
+      schemaVersion: 2,
       status: discovery.summary.completeSamples === SAMPLE_COUNT ? "COMPLETE" : "PARTIAL",
-      source: "GDELT GKG 2.1 V2.1ALLNAMES + V1PERSONS + V1ORGANIZATIONS + V1THEMES",
+      source: "GDELT GKG 2.1 V2.1ALLNAMES + V1PERSONS + V1ORGANIZATIONS + V1THEMES + TranslationInfo.srclc",
       startedAt,
       completedAt: new Date().toISOString(),
       latestGkgFilename: latestFilename,
@@ -138,6 +150,7 @@ async function main() {
     console.log(JSON.stringify({
       status: report.status,
       summary: report.summary,
+      manualReviewSampleSize: report.manualReviewSample.length,
       json: "output/gkg-candidate-discovery.json",
       markdown: "output/gkg-candidate-discovery.md"
     }, null, 2));
