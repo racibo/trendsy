@@ -1,5 +1,5 @@
 export function gkgSampleFilenames(latestFilename, sampleCount = 10, spacingMinutes = 150) {
-  const match = String(latestFilename ?? "").match(/^(\\d{14})\\.gkg\\.csv\\.zip$/);
+  const match = String(latestFilename ?? "").match(/^(\d{14})\.gkg\.csv\.zip$/);
   if (!match) throw new Error("Unrecognized GKG filename timestamp.");
   if (!Number.isInteger(sampleCount) || sampleCount < 1 || sampleCount > 48) {
     throw new Error("sampleCount must be an integer between 1 and 48.");
