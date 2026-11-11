@@ -15,7 +15,9 @@
     "gkg:multisample": "node scripts/gkg-multisample-audit.mjs",
     "check:gkg-multisample": "node --check scripts/gkg-multisample-utils.mjs && node --check scripts/gkg-multisample-audit.mjs && node --test tests/gkg-multisample-audit.test.mjs",
     "gkg:discover": "node scripts/gkg-candidate-discovery-audit.mjs",
-    "check:gkg-discovery": "node --check scripts/gkg-candidate-discovery-utils.mjs && node --check scripts/gkg-candidate-discovery-audit.mjs && node --test tests/gkg-candidate-discovery.test.mjs"
+    "check:gkg-discovery": "node --check scripts/gkg-candidate-discovery-utils.mjs && node --check scripts/gkg-candidate-discovery-audit.mjs && node --test tests/gkg-candidate-discovery.test.mjs",
+    "gkg:relevance": "node scripts/gkg-article-relevance-audit.mjs",
+    "check:gkg-relevance": "node --check scripts/gkg-article-relevance-utils.mjs && node --check scripts/gkg-article-relevance-audit.mjs && node --test tests/gkg-article-relevance.test.mjs"
   },
   "engines": {
     "node": ">=20"

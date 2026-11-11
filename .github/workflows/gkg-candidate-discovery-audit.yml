@@ -8,18 +8,24 @@ on:
     paths:
       - "scripts/gkg-candidate-discovery-audit.mjs"
       - "scripts/gkg-candidate-discovery-utils.mjs"
+      - "scripts/gkg-article-relevance-audit.mjs"
+      - "scripts/gkg-article-relevance-utils.mjs"
       - "scripts/gkg-audit-utils.mjs"
       - "scripts/gkg-multisample-utils.mjs"
       - "tests/gkg-candidate-discovery.test.mjs"
+      - "tests/gkg-article-relevance.test.mjs"
       - "package.json"
       - ".github/workflows/gkg-candidate-discovery-audit.yml"
   pull_request:
     paths:
       - "scripts/gkg-candidate-discovery-audit.mjs"
       - "scripts/gkg-candidate-discovery-utils.mjs"
+      - "scripts/gkg-article-relevance-audit.mjs"
+      - "scripts/gkg-article-relevance-utils.mjs"
       - "scripts/gkg-audit-utils.mjs"
       - "scripts/gkg-multisample-utils.mjs"
       - "tests/gkg-candidate-discovery.test.mjs"
+      - "tests/gkg-article-relevance.test.mjs"
       - "package.json"
       - ".github/workflows/gkg-candidate-discovery-audit.yml"
 
@@ -35,6 +41,7 @@ jobs:
         with:
           node-version: 24
       - run: npm run check:gkg-discovery
+      - run: npm run check:gkg-relevance
 
   live-audit:
     if: github.event_name == 'workflow_dispatch' || github.event_name == 'push'
@@ -47,20 +54,31 @@ jobs:
         with:
           node-version: 24
       - run: npm run check:gkg-discovery
+      - run: npm run check:gkg-relevance
       - name: Discover names from sampled GKG batches
         run: npm run gkg:discover
         env:
           GKG_DISCOVERY_SAMPLE_COUNT: 10
           GKG_DISCOVERY_SPACING_MINUTES: 150
           GKG_DISCOVERY_CANDIDATE_LIMIT: 200
+      - name: Audit article relevance using GDELT DOC headlines
+        run: npm run gkg:relevance
+        env:
+          GKG_RELEVANCE_TIMESPAN: 3days
+          GKG_RELEVANCE_MAX_RECORDS: 20
       - uses: actions/upload-artifact@v4
         with:
-          name: gkg-candidate-discovery
+          name: gkg-candidate-and-relevance-audit
           path: |
             output/gkg-candidate-discovery.json
             output/gkg-candidate-discovery.md
+            output/gkg-article-relevance.json
+            output/gkg-article-relevance.md
           if-no-files-found: error
           retention-days: 30
       - name: Publish discovery summary
         if: always() && hashFiles('output/gkg-candidate-discovery.md') != ''
         run: cat output/gkg-candidate-discovery.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Publish relevance summary
+        if: always() && hashFiles('output/gkg-article-relevance.md') != ''
+        run: cat output/gkg-article-relevance.md >> "$GITHUB_STEP_SUMMARY"
