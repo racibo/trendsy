@@ -16,7 +16,9 @@ export function parseAllNameMention(value) {
   const name = entry.slice(0, separator).trim();
   const rawOffset = entry.slice(separator + 1).trim();
   if (!name) return null;
-  return { name, offset: /^\d+$/.test(rawOffset) ? Number(rawOffset) : null };
+  return /^\d+$/.test(rawOffset)
+    ? { name, offset: Number(rawOffset) }
+    : { name: entry, offset: null };
 }
 
 export function createCandidateAccumulator() {
