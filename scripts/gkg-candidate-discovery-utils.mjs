@@ -117,6 +117,51 @@ function buildReviewSample(candidates, limitPerStratum = 5) {
   );
 }
 
+function buildPossibleAliasPairs(candidates, limit = 100) {
+  const rows = candidates
+    .filter(item => item.uniqueArticles >= 3)
+    .slice(0, 200);
+  const pairs = [];
+  for (let leftIndex = 0; leftIndex < rows.length; leftIndex++) {
+    const left = rows[leftIndex];
+    const leftTokens = new Set(left.normalizedName.split(" ").filter(Boolean));
+    for (let rightIndex = leftIndex + 1; rightIndex < rows.length; rightIndex++) {
+      const right = rows[rightIndex];
+      const rightTokens = new Set(right.normalizedName.split(" ").filter(Boolean));
+      const sharedTokens = [...leftTokens].filter(token => rightTokens.has(token));
+      const denominator = Math.min(leftTokens.size, rightTokens.size);
+      const tokenOverlap = denominator ? sharedTokens.length / denominator : 0;
+      if (!sharedTokens.length || tokenOverlap < 0.5) continue;
+      const leftDocs = left._documents;
+      const rightDocs = right._documents;
+      let sharedArticleCount = 0;
+      const sharedUrls = [];
+      for (const url of leftDocs) {
+        if (rightDocs.has(url)) {
+          sharedArticleCount++;
+          if (sharedUrls.length < 3) sharedUrls.push(url);
+        }
+      }
+      if (sharedArticleCount < 3) continue;
+      const unionCount = leftDocs.size + rightDocs.size - sharedArticleCount;
+      pairs.push({
+        first: left.name,
+        second: right.name,
+        sharedTokens,
+        sharedArticleCount,
+        tokenOverlap: Number(tokenOverlap.toFixed(4)),
+        articleJaccard: Number((sharedArticleCount / unionCount).toFixed(4)),
+        sharedEvidenceUrls: sharedUrls,
+        assessment: null
+      });
+    }
+  }
+  return pairs
+    .sort((a, b) => b.sharedArticleCount - a.sharedArticleCount ||
+      b.tokenOverlap - a.tokenOverlap || a.first.localeCompare(b.first) || a.second.localeCompare(b.second))
+    .slice(0, limit);
+}
+
 function topEntries(counts, limit = 8) {
   return Object.entries(counts)
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
@@ -222,7 +267,7 @@ export function summarizeCandidateDiscovery(accumulator, sampleStats, limit = 20
         evidence: item.evidence
       };
     });
-  const candidates = allCandidates.slice(0, limit);
+  const candidates = allCandidates.slice(0, limit);\n  const possibleAliasPairs = buildPossibleAliasPairs(candidates);\n  for (const candidate of candidates) delete candidate._documents;
 
   const buckets = {
     "1_article": 0,
