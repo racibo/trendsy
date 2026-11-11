@@ -11,7 +11,8 @@ import {
 test("parses ALLNAMES name and trailing character offset", () => {
   assert.deepEqual(parseAllNameMention("Donald Trump,1234"), { name: "Donald Trump", offset: 1234 });
   assert.deepEqual(parseAllNameMention("ACME, Inc.,42"), { name: "ACME, Inc.", offset: 42 });
-  assert.deepEqual(parseAllNameMention("World Cup"), { name: "World Cup", offset: null });\n  assert.deepEqual(parseAllNameMention("Miller, John"), { name: "Miller, John", offset: null });
+  assert.deepEqual(parseAllNameMention("World Cup"), { name: "World Cup", offset: null });
+  assert.deepEqual(parseAllNameMention("Miller, John"), { name: "Miller, John", offset: null });
   assert.equal(parseAllNameMention(""), null);
 });
 
