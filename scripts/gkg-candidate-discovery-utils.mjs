@@ -266,10 +266,13 @@ export function summarizeCandidateDiscovery(accumulator, sampleStats, limit = 20
         languages: topEntries(item.languages, 12),
         themes: topEntries(item.themes, 12),
         quality,
-        evidence: item.evidence
+        evidence: item.evidence,
+        _documents: item.documents
       };
     });
-  const candidates = allCandidates.slice(0, limit);\n  const possibleAliasPairs = buildPossibleAliasPairs(candidates);\n  for (const candidate of candidates) delete candidate._documents;
+  const candidates = allCandidates.slice(0, limit);
+  const possibleAliasPairs = buildPossibleAliasPairs(candidates);
+  for (const candidate of candidates) delete candidate._documents;
 
   const buckets = {
     "1_article": 0,
