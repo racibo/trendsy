@@ -57,7 +57,7 @@ export function summarizeMultiSample(samples) {
 export function summarizeDailyHistory(history) {
   const byDate = new Map();
   for (const entry of history ?? []) {
-    if (entry?.date && /^\\d{4}-\\d{2}-\\d{2}$/.test(entry.date)) byDate.set(entry.date, entry);
+    if (entry?.date && /^\d{4}-\d{2}-\d{2}$/.test(entry.date)) byDate.set(entry.date, entry);
   }
   const entries = [...byDate.values()].sort((a,b)=>a.date.localeCompare(b.date));
   const complete = entries.filter(x=>x.status==="COMPLETE");
@@ -76,5 +76,5 @@ export function summarizeDailyHistory(history) {
 export function renderDailyHistoryMarkdown(report) {
  const s=report.summary;
  const line=(name,w,required)=>w.ready?`- ${name}: gotowe (${w.dates.join(", ")}); średnia ${(w.meanWeightedMatchRate*100).toFixed(2)}%, zakres ${(w.minWeightedMatchRate*100).toFixed(2)}–${(w.maxWeightedMatchRate*100).toFixed(2)}%.`:`- ${name}: oczekiwanie na ${required} pełnych kolejnych dni; obecnie ${w.dates.length}.`;
- return ["# GKG daily history: multi-day coverage comparison","",`- Wygenerowano: ${report.generatedAt}`,`- Pełne dni: ${s.completeDays}; kolejne pełne dni: ${s.consecutiveCompleteDays}`,line("3 dni",s.threeDay,3),line("7 dni",s.sevenDay,7),"","| Dzień UTC | Status | Próbki | Ważony URL join | Średni URL join | GKG URL |","|---|---|---:|---:|---:|---:|",...s.entries.map(x=>`| ${x.date} | ${x.status} | ${x.completeSamples}/${x.requestedSamples} | ${(x.weightedMatchRate*100).toFixed(2)}% | ${(x.meanMatchRate*100).toFixed(2)}% | ${x.totalGkgUniqueUrls} |`),"","## Interpretacja","- To techniczne pokrycie URL między GKG i Web NGrams, nie ranking popularności tematów.","- Każdy dzienny pomiar obejmuje 10 partii GKG z około 22,5 godziny.","- Okna wymagają kolejnych pełnych dni UTC; niepełne dni nie są wliczane.","- Historia przechowuje maksymalnie 30 dni.","- Wyniki nie zmieniają automatycznie kandydatów, ligi ani cen.",""].join("\\n");
+ return ["# GKG daily history: multi-day coverage comparison","",`- Wygenerowano: ${report.generatedAt}`,`- Pełne dni: ${s.completeDays}; kolejne pełne dni: ${s.consecutiveCompleteDays}`,line("3 dni",s.threeDay,3),line("7 dni",s.sevenDay,7),"","| Dzień UTC | Status | Próbki | Ważony URL join | Średni URL join | GKG URL |","|---|---|---:|---:|---:|---:|",...s.entries.map(x=>`| ${x.date} | ${x.status} | ${x.completeSamples}/${x.requestedSamples} | ${(x.weightedMatchRate*100).toFixed(2)}% | ${(x.meanMatchRate*100).toFixed(2)}% | ${x.totalGkgUniqueUrls} |`),"","## Interpretacja","- To techniczne pokrycie URL między GKG i Web NGrams, nie ranking popularności tematów.","- Każdy dzienny pomiar obejmuje 10 partii GKG z około 22,5 godziny.","- Okna wymagają kolejnych pełnych dni UTC; niepełne dni nie są wliczane.","- Historia przechowuje maksymalnie 30 dni.","- Wyniki nie zmieniają automatycznie kandydatów, ligi ani cen.",""].join("\n");
 }
