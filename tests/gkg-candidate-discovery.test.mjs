@@ -58,3 +58,56 @@ test("counts unique articles and domains rather than repeated mentions", () => {
   assert.equal(report.summary.uniqueCandidateNames, 2);
   assert.equal(report.summary.candidatesWithAtLeastTwoArticles, 1);
 });
+
+
+test("reports source-language coverage honestly instead of counting unknown as a language", () => {
+  const accumulator = createCandidateAccumulator();
+  const base = {
+    valid: true, sourceCollectionId: "1", url: "https://news.example/a",
+    allNames: ["Climate Change,1"], persons: [], organizations: [], themes: []
+  };
+  addGkgDocument(accumulator, { ...base, sourceLanguage: null }, "batch-1");
+  addGkgDocument(accumulator, {
+    ...base, url: "https://other.example/b", sourceLanguage: "eng"
+  }, "batch-2");
+  const report = summarizeCandidateDiscovery(accumulator, [
+    { status: "COMPLETE", validWebDocuments: 1, documentsWithSourceLanguage: 0, documentsWithoutSourceLanguage: 1 },
+    { status: "COMPLETE", validWebDocuments: 1, documentsWithSourceLanguage: 1, documentsWithoutSourceLanguage: 0 }
+  ]);
+  assert.deepEqual(report.summary.languageMetadata, {
+    status: "PARTIAL_OR_AVAILABLE",
+    documentsWithLanguage: 1,
+    documentsWithoutLanguage: 1,
+    coverage: 0.5,
+    note: "GKG TranslationInfo source-language metadata was present for some WEB documents; this is not a complete language classification."
+  });
+  const candidate = report.candidates[0];
+  assert.deepEqual(candidate.languages, [{ label: "eng", count: 1 }]);
+  assert.deepEqual(candidate.languageCoverage, {
+    knownLanguageArticles: 1, unknownLanguageArticles: 1, coverage: 0.5
+  });
+});
+
+test("adds transparent quality flags and a stratified manual review sample", () => {
+  const accumulator = createCandidateAccumulator();
+  for (let index = 0; index < 10; index++) {
+    addGkgDocument(accumulator, {
+      valid: true, sourceCollectionId: "1",
+      url: `https://same-publisher.example/story-${index}`,
+      allNames: ["Chief Executive Officer,1", "CEO Name Variant,2"],
+      persons: [], organizations: [], themes: ["BUSINESS"]
+    }, `batch-${index < 2 ? 1 : 2}`);
+  }
+  const report = summarizeCandidateDiscovery(accumulator, [
+    { status: "COMPLETE" }, { status: "COMPLETE" }, { status: "COMPLETE" }, { status: "COMPLETE" }
+  ]);
+  const candidate = report.candidates.find(item => item.normalizedName === "chief executive officer");
+  assert.ok(candidate.quality.reviewFlags.includes("domain_concentration_50pct_or_more"));
+  assert.ok(candidate.quality.reviewFlags.includes("low_domain_count_3_or_less"));
+  assert.ok(candidate.quality.reviewFlags.includes("no_person_or_organization_cross_signal"));
+  assert.ok(candidate.quality.reviewFlags.includes("possible_generic_or_boilerplate_phrase"));
+  assert.ok(report.manualReviewSample.some(item =>
+    item.normalizedName === "chief executive officer" && item.strata.includes("domain_concentrated")
+  ));
+  assert.equal(report.manualReviewSample[0].manualAssessment.relevance, null);
+});
