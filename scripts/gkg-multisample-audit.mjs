@@ -6,7 +6,7 @@ import { createGunzip } from "node:zlib";
 import { Readable } from "node:stream";
 import { createInterface } from "node:readline";
 import { parseGkgLine, summarizeUrlJoin, webNgramsWindowFilenames } from "./gkg-audit-utils.mjs";
-import { gkgSampleFilenames, summarizeMultiSample, summarizeDailyHistory, renderDailyHistoryMarkdown } from "./gkg-multisample-utils.mjs";
+import { gkgSampleFilenames, summarizeMultiSample, summarizeDailyHistory, renderDailyHistoryMarkdown, parseDailyHistoryJson, serializeDailyHistoryJson } from "./gkg-multisample-utils.mjs";
 
 const LAST_UPDATE_URL = "https://data.gdeltproject.org/gdeltv2/lastupdate.txt";
 const GKG_BASE = "https://data.gdeltproject.org/gdeltv2";
@@ -220,11 +220,11 @@ async function main() {
     await fs.writeFile("output/gkg-multisample-audit.md", renderMarkdown(report));
     const historyPath = "data/gkg-multisample-history.json";
     let history = [];
-    try { history = JSON.parse(await fs.readFile(historyPath, "utf8")); if (!Array.isArray(history)) throw new Error("Invalid history array."); }
+    try { history = parseDailyHistoryJson(await fs.readFile(historyPath, "utf8")); }
     catch (error) { if (error.code !== "ENOENT") throw error; }
     const entry = { date: report.completedAt.slice(0,10), startedAt: report.startedAt, completedAt: report.completedAt, status: report.status, requestedSamples: summary.requestedSamples, completeSamples: summary.completeSamples, weightedMatchRate: summary.weightedMatchRate, meanMatchRate: summary.meanMatchRate, totalGkgUniqueUrls: summary.totalGkgUniqueUrlsAcrossSamples, totalMatchedUrls: summary.totalMatchedUrlsAcrossSamples };
     history = history.filter(x=>x.date!==entry.date); history.push(entry); history.sort((a,b)=>a.date.localeCompare(b.date)); history=history.slice(-30);
-    await fs.mkdir(path.dirname(historyPath),{recursive:true}); await fs.writeFile(historyPath,JSON.stringify(history,null,2)+"\\n");
+    await fs.mkdir(path.dirname(historyPath),{recursive:true}); await fs.writeFile(historyPath,serializeDailyHistoryJson(history));
     const historyReport={generatedAt:new Date().toISOString(),summary:summarizeDailyHistory(history)};
     await fs.writeFile("output/gkg-multiday-comparison.json",JSON.stringify(historyReport,null,2)+"\\n");
     await fs.writeFile("output/gkg-multiday-comparison.md",renderDailyHistoryMarkdown(historyReport));

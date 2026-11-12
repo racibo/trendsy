@@ -54,6 +54,20 @@ export function summarizeMultiSample(samples) {
 }
 
 
+export function parseDailyHistoryJson(content) {
+  let source = String(content ?? "").trimEnd();
+  // Repair the literal backslash+n suffix written by earlier versions of the audit.
+  if (source.endsWith("\\n")) source = source.slice(0, -2).trimEnd();
+  const history = JSON.parse(source);
+  if (!Array.isArray(history)) throw new Error("Invalid history array.");
+  return history;
+}
+
+export function serializeDailyHistoryJson(history) {
+  if (!Array.isArray(history)) throw new Error("History must be an array.");
+  return JSON.stringify(history, null, 2) + "\n";
+}
+
 export function summarizeDailyHistory(history) {
   const byDate = new Map();
   for (const entry of history ?? []) {
