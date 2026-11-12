@@ -46,3 +46,22 @@ test("partial or missing UTC days do not count toward consecutive windows",()=>{
  const h=[{date:"2026-11-08",status:"COMPLETE",weightedMatchRate:.9},{date:"2026-11-09",status:"PARTIAL",weightedMatchRate:.5},{date:"2026-11-10",status:"COMPLETE",weightedMatchRate:.92},{date:"2026-11-11",status:"COMPLETE",weightedMatchRate:.94}];
  const s=summarizeDailyHistory(h); assert.equal(s.completeDays,3); assert.equal(s.consecutiveCompleteDays,2); assert.equal(s.threeDay.ready,false);
 });
+
+
+test("repairs the legacy literal escaped newline and preserves existing history", () => {
+  const legacy = '[{"date":"2026-11-11","status":"PARTIAL"}]\\n';
+  assert.deepEqual(parseDailyHistoryJson(legacy), [{ date: "2026-11-11", status: "PARTIAL" }]);
+});
+
+test("writes valid JSON with a real trailing newline and round-trips", () => {
+  const history = [{ date: "2026-11-11", status: "PARTIAL" }];
+  const serialized = serializeDailyHistoryJson(history);
+  assert.ok(serialized.endsWith("\n"));
+  assert.ok(!serialized.endsWith("\\n"));
+  assert.deepEqual(parseDailyHistoryJson(serialized), history);
+});
+
+test("rejects malformed or non-array history instead of silently resetting it", () => {
+  assert.throws(() => parseDailyHistoryJson("{broken"));
+  assert.throws(() => parseDailyHistoryJson('{"date":"2026-11-11"}'), /Invalid history array/);
+});
