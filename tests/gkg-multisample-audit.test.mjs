@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { gkgSampleFilenames, summarizeMultiSample, summarizeDailyHistory, renderDailyHistoryMarkdown } from "../scripts/gkg-multisample-utils.mjs";
+import { gkgSampleFilenames, summarizeMultiSample, summarizeDailyHistory, renderDailyHistoryMarkdown, parseDailyHistoryJson, serializeDailyHistoryJson } from "../scripts/gkg-multisample-utils.mjs";
 
 test("selects evenly spaced quarter-hour GKG batches backwards from latest", () => {
   const samples = gkgSampleFilenames("20261111200000.gkg.csv.zip", 10, 150);
