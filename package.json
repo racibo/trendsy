@@ -19,7 +19,9 @@
     "gkg:relevance": "node scripts/gkg-article-relevance-audit.mjs",
     "check:gkg-relevance": "node --check scripts/gkg-article-relevance-utils.mjs && node --check scripts/gkg-article-relevance-audit.mjs && node --test tests/gkg-article-relevance.test.mjs",
     "webngrams:review-audit": "node scripts/webngrams-review-audit.mjs",
-    "check:supabase": "node --test tests/supabase-game-rules.test.mjs"
+    "check:supabase": "node --test tests/supabase-game-rules.test.mjs",
+    "market:shadow:push": "node scripts/publish-market-observations.mjs",
+    "check:market": "node --check scripts/market-observations.mjs && node --check scripts/publish-market-observations.mjs && node --test tests/market-observations.test.mjs"
   },
   "engines": {
     "node": ">=20"
