@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#10151d">
-  <meta name="description" content="Trendsy — giełda popularności wydarzeń, osób i miejsc.">
-  <title>Trendsy — graj na trendach</title>
+  <meta name="description" content="Trendsy — giełda popularności wydarzeń, osób i miejsc. Projekt w fazie przygotowania i zbierania danych.">
+  <title>Trendsy — giełda w przygotowaniu</title>
   <link rel="stylesheet" href="./styles.css">
   <script src="./config.js"></script>
 </head>
@@ -16,6 +16,12 @@
       <div class="topbar-right"><span class="mode-pill"><i></i> <span id="account-label">ŁADOWANIE</span></span><button class="avatar" id="logout-button" hidden title="Wyloguj" aria-label="Wyloguj">↪</button></div>
     </header>
     <main>
+      <section class="service-notice" role="status" aria-live="polite">
+        <div class="notice-status"><span class="notice-indicator"></span> PROJEKT W FAZIE PRZYGOTOWANIA</div>
+        <h1>Trendsy jeszcze nie działa jako prawdziwa giełda.</h1>
+        <p>Zbieramy i weryfikujemy dane o trendach. Aktualne notowania i przykładowe portfele mają charakter demonstracyjny — nie są oparte na kompletnych, aktualnych danych rynkowych.</p>
+        <p class="notice-next">Wróć wkrótce. Gdy dane będą gotowe, uruchomimy rzeczywisty rynek i wyraźnie poinformujemy o jego starcie.</p>
+      </section>
       <section class="auth-panel" id="auth-panel">
         <p class="eyebrow">TRENDSY · TWOJE KONTO</p>
         <h1>Zaloguj się i zacznij<br><span>grać na trendach.</span></h1>
@@ -40,7 +46,7 @@
         </section>
         <section class="workspace">
           <div class="main-column">
-            <div class="section-heading"><div><p class="eyebrow">MOŻLIWOŚCI</p><h2>Tablica instrumentów</h2></div><span class="live-label"><i></i> CENY DEMO</span></div>
+            <div class="section-heading"><div><p class="eyebrow">MOŻLIWOŚCI</p><h2>Tablica instrumentów</h2></div><span class="live-label demo-label"><i></i> NOTOWANIA TESTOWE</span></div>
 
             <div class="instrument-list" id="instrument-list"></div>
             <div class="section-heading portfolio-heading"><div><p class="eyebrow">TWOJE DECYZJE</p><h2>Twój portfel</h2></div><span class="muted" id="exchange-status">Możesz rozpocząć inwestowanie</span></div>
@@ -53,7 +59,7 @@
           </aside>
         </section>
       </div>
-      <footer><span>TRENDSY <b>·</b> WERSJA TESTOWA</span><span>Ceny są demonstracyjne; notowania GDELT nie są jeszcze podłączone.</span></footer>
+      <footer><span>TRENDSY <b>·</b> WERSJA TESTOWA</span><span>Rynek nie jest uruchomiony. Notowania są demonstracyjne; dane GDELT są w trakcie zbierania i weryfikacji.</span></footer>
     </main>
   </div>
   <dialog class="exchange-dialog" id="exchange-dialog">
