@@ -53,3 +53,20 @@ test("frontend uses unrestricted topic selection and has unique DOM IDs", () => 
   assert.equal((html.match(/<!doctype html>/gi) || []).length, 1);
   assert.equal((html.match(/<html lang=/g) || []).length, 1);
 });
+
+test("leaderboard identifies the current player without exposing profile UUIDs", () => {
+  const leaderboard = functionBody("get_leaderboard");
+  assert.ok(leaderboard.includes("is_current_user boolean"));
+  assert.ok(leaderboard.includes("(p.user_id = auth.uid())"));
+  assert.ok(sql.includes("grant select (display_name) on public.profiles to authenticated"));
+  const app = readFileSync(new URL("../web/app.js", import.meta.url), "utf8");
+  assert.ok(!app.includes('from("profiles")'));
+  assert.ok(app.includes("row.is_current_user"));
+});
+
+test("exchange button unlocks automatically when the 24-hour cooldown expires", () => {
+  const app = readFileSync(new URL("../web/app.js", import.meta.url), "utf8");
+  assert.ok(app.includes("clearTimeout(exchangeUnlockTimer)"));
+  assert.ok(app.includes("exchangeUnlockTimer=setTimeout"));
+  assert.ok(app.includes("renderPortfolio();"));
+});
