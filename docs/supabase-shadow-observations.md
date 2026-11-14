@@ -14,7 +14,7 @@ This is deliberately a **shadow data path**:
 1. Apply `supabase/migrations/20261114210000_market_observations_shadow.sql` in the Supabase SQL Editor.
 2. In GitHub repository Settings → Secrets and variables → Actions, add:
    - `SUPABASE_URL`: the project URL, e.g. `https://YOUR_PROJECT.supabase.co`;
-   - `SUPABASE_SERVICE_ROLE_KEY`: the service-role secret from Supabase API settings. Never put this key in `web/config.js`, commit it, or share it in chat.
+   - `SUPABASE_SECRET_KEY`: the secret API key (`sb_secret_...`) from Supabase API Keys. Never put this key in `web/config.js`, commit it, or share it in chat.
 3. The scheduled Web NGrams workflow will then upsert each complete daily archive into `market_observations`. If the secrets are absent, publishing is skipped without breaking the archive.
 
 ## Why prices remain unchanged
