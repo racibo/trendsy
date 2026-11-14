@@ -4,7 +4,7 @@
 
 Migracja `supabase/migrations/20261109190000_initial_game_backend.sql` przygotowuje wspólny backend gry:
 
-- logowanie obsługiwane przez Supabase Auth (Google będzie jedynym włączonym dostawcą w konfiguracji projektu);
+- logowanie obsługiwane przez Supabase Auth (Magic Link e-mail; bez Google OAuth);
 - automatyczne utworzenie profilu i portfela z kapitałem 100 TR po pierwszym logowaniu;
 - wspólny katalog instrumentów z przykładowymi cenami;
 - portfele, pozycje i historia transakcji w PostgreSQL;
@@ -18,7 +18,7 @@ Migracja `supabase/migrations/20261109190000_initial_game_backend.sql` przygotow
 
 1. Wejdź na https://supabase.com/dashboard i utwórz projekt o nazwie `trendsy` (region Frankfurt, jeśli jest dostępny).
 2. Wybierz silne hasło bazy i zachowaj je poza repozytorium.
-3. W **Authentication → Providers → Google** włącz Google. Konfiguracja OAuth wymaga Client ID i Client Secret z Google Cloud; wpisz je wyłącznie w panelu Supabase.
+3. W **Authentication → Sign In / Providers → Email** włącz dostawcę Email. Google OAuth nie jest potrzebne.
 4. W **Authentication → URL Configuration** dodaj:
    - Site URL: `https://trends.racibo.pl` (po uruchomieniu domeny produkcyjnej);
    - Redirect URL: `https://trends.racibo.pl/**`;
