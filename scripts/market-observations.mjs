@@ -3,7 +3,7 @@ export function validateDailySnapshot(snapshot) {
   if (sampling.status !== "COMPLETE" || sampling.sampleHours !== 24 || sampling.successfulSampleHours !== 24) {
     throw new Error("Refusing to publish anything except a COMPLETE 24/24-hour daily sample.");
   }
-  if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(String(snapshot?.date ?? ""))) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(snapshot?.date ?? ""))) {
     throw new Error("Snapshot date is missing or invalid.");
   }
   if (!Array.isArray(snapshot.results) || snapshot.results.length === 0) {
