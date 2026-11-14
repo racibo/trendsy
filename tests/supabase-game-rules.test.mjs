@@ -42,3 +42,14 @@ test("private game tables use RLS and clients cannot write directly", () => {
   }
   assert.match(sql, /revoke insert, update, delete on public\.profiles, public\.instruments, public\.portfolios,[\s\S]*public\.holdings, public\.transactions from anon, authenticated/);
 });
+
+test("frontend uses unrestricted topic selection and has unique DOM IDs", () => {
+  const app = readFileSync(new URL("../web/app.js", import.meta.url), "utf8");
+  const html = readFileSync(new URL("../web/index.html", import.meta.url), "utf8");
+  assert.doesNotMatch(app, /activeFilter|hasNational|nationalLimit|needsNational|sameCategory/);
+  assert.doesNotMatch(html, /data-filter|1 krajowy|różne kategorie|Edycja krajowa|Edycja światowa/);
+  const ids = [...html.matchAll(/\\bid="([^"]+)"/g)].map(match => match[1]);
+  assert.equal(new Set(ids).size, ids.length, "HTML IDs must be unique");
+  assert.equal((html.match(/<!doctype html>/gi) || []).length, 1);
+  assert.equal((html.match(/<html lang=/g) || []).length, 1);
+});
