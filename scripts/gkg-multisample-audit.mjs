@@ -6,7 +6,7 @@ import { createGunzip } from "node:zlib";
 import { Readable } from "node:stream";
 import { createInterface } from "node:readline";
 import { parseGkgLine, summarizeUrlJoin, webNgramsWindowFilenames } from "./gkg-audit-utils.mjs";
-import { gkgSampleFilenames, summarizeMultiSample, summarizeDailyHistory, renderDailyHistoryMarkdown, parseDailyHistoryJson, serializeDailyHistoryJson } from "./gkg-multisample-utils.mjs";
+import { gkgSampleFilenames, summarizeMultiSample, summarizeDailyHistory, renderDailyHistoryMarkdown, parseDailyHistoryJson, serializeDailyHistoryJson, serializeJsonWithNewline } from "./gkg-multisample-utils.mjs";
 
 const LAST_UPDATE_URL = "https://data.gdeltproject.org/gdeltv2/lastupdate.txt";
 const GKG_BASE = "https://data.gdeltproject.org/gdeltv2";
@@ -216,7 +216,7 @@ async function main() {
       samples
     };
     await fs.mkdir("output", { recursive: true });
-    await fs.writeFile("output/gkg-multisample-audit.json", JSON.stringify(report, null, 2) + "\n");
+    await fs.writeFile("output/gkg-multisample-audit.json", serializeJsonWithNewline(report));
     await fs.writeFile("output/gkg-multisample-audit.md", renderMarkdown(report));
     const historyPath = "data/gkg-multisample-history.json";
     let history = [];
@@ -226,7 +226,7 @@ async function main() {
     history = history.filter(x=>x.date!==entry.date); history.push(entry); history.sort((a,b)=>a.date.localeCompare(b.date)); history=history.slice(-30);
     await fs.mkdir(path.dirname(historyPath),{recursive:true}); await fs.writeFile(historyPath,serializeDailyHistoryJson(history));
     const historyReport={generatedAt:new Date().toISOString(),summary:summarizeDailyHistory(history)};
-    await fs.writeFile("output/gkg-multiday-comparison.json",JSON.stringify(historyReport,null,2)+"\\n");
+    await fs.writeFile("output/gkg-multiday-comparison.json",serializeJsonWithNewline(historyReport));
     await fs.writeFile("output/gkg-multiday-comparison.md",renderDailyHistoryMarkdown(historyReport));
     console.log(JSON.stringify({status:report.status,summary,history:{completeDays:historyReport.summary.completeDays,consecutiveCompleteDays:historyReport.summary.consecutiveCompleteDays,threeDayReady:historyReport.summary.threeDay.ready,sevenDayReady:historyReport.summary.sevenDay.ready}},null,2));
   } finally {
