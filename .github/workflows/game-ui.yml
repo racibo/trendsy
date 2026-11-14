@@ -14,6 +14,9 @@ on:
     paths:
       - "web/**"
       - "netlify.toml"
+      - "supabase/**"
+      - "tests/supabase-game-rules.test.mjs"
+      - "package.json"
       - ".github/workflows/game-ui.yml"
 
 permissions:
