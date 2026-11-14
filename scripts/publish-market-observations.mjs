@@ -5,9 +5,9 @@ import { validateDailySnapshot } from "./market-observations.mjs";
 
 async function main() {
   const baseUrl = String(process.env.SUPABASE_URL ?? "").replace(/\/$/, "");
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY ?? "";
+  const serviceKey = process.env.SUPABASE_SECRET_KEY ?? "";
   if (!/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(baseUrl) || !serviceKey) {
-    throw new Error("SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required.");
+    throw new Error("SUPABASE_URL and SUPABASE_SECRET_KEY are required.");
   }
   const date = process.argv[2] ?? new Date().toISOString().slice(0, 10);
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new Error("Pass date as YYYY-MM-DD.");
