@@ -153,8 +153,6 @@ declare
   portfolio_row public.portfolios%rowtype;
   target public.instruments%rowtype;
   holding_count integer;
-  national_count integer;
-  category_taken boolean;
 begin
   if player_id is null then
     raise exception 'Musisz się zalogować.' using errcode = '28000';
@@ -170,24 +168,10 @@ begin
   where id = p_instrument_id and is_active = true;
   if not found then raise exception 'Instrument jest niedostępny.'; end if;
 
-  select count(*), count(*) filter (where i.edition = 'national')
-  into holding_count, national_count
-  from public.holdings h join public.instruments i on i.id = h.instrument_id
-  where h.user_id = player_id;
+  select count(*) into holding_count
+  from public.holdings where user_id = player_id;
 
   if holding_count >= 3 then raise exception 'Portfel jest pełny.'; end if;
-  select exists (
-    select 1 from public.holdings h
-    join public.instruments i on i.id = h.instrument_id
-    where h.user_id = player_id and i.category = target.category
-  ) into category_taken;
-  if category_taken then raise exception 'Możesz mieć tylko jeden instrument z danej kategorii.'; end if;
-  if target.edition = 'national' and national_count >= 1 then
-    raise exception 'Możesz mieć maksymalnie jeden instrument edycji krajowej.';
-  end if;
-  if holding_count = 2 and national_count = 0 and target.edition <> 'national' then
-    raise exception 'Ostatnie miejsce musi zająć instrument edycji krajowej.';
-  end if;
   if portfolio_row.cash < target.price then raise exception 'Masz za mało wolnych środków.'; end if;
 
   update public.portfolios
@@ -214,8 +198,6 @@ declare
   sold public.instruments%rowtype;
   bought public.instruments%rowtype;
   holding_count integer;
-  other_national_count integer;
-  category_taken boolean;
   new_cash numeric(12,2);
 begin
   if player_id is null then
@@ -246,25 +228,13 @@ begin
   where id = p_buy_instrument_id and is_active = true;
   if not found then raise exception 'Nowy instrument jest niedostępny.'; end if;
 
-  select exists (
-    select 1 from public.holdings h
-    join public.instruments i on i.id = h.instrument_id
-    where h.user_id = player_id
-      and h.instrument_id <> p_sell_instrument_id
-      and i.category = bought.category
-  ) into category_taken;
-  if category_taken then raise exception 'Ta kategoria jest już w Twoim portfelu.'; end if;
-
-  select count(*) into other_national_count
-  from public.holdings h
-  join public.instruments i on i.id = h.instrument_id
-  where h.user_id = player_id
-    and h.instrument_id <> p_sell_instrument_id
-    and i.edition = 'national';
-
-  if (bought.edition = 'national' and other_national_count <> 0)
-     or (bought.edition <> 'national' and other_national_count <> 1) then
-    raise exception 'Pełny portfel musi zawierać dokładnie jeden instrument edycji krajowej.';
+  if exists (
+    select 1 from public.holdings
+    where user_id = player_id
+      and instrument_id = p_buy_instrument_id
+      and instrument_id <> p_sell_instrument_id
+  ) then
+    raise exception 'Ten temat masz już w portfelu.';
   end if;
 
   new_cash := portfolio_row.cash + sold.price - bought.price;
