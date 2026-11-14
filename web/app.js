@@ -4,22 +4,21 @@ const COOLDOWN_MS = 24 * 60 * 60 * 1000;
 const STORAGE_KEY = "trendsy-demo-v1";
 
 const instruments = [
-  {id:"poland",name:"Polska",category:"Kraj",edition:"national",icon:"🇵🇱",price:12.4,change:8.2,owners:38,description:"Zainteresowanie Polską"},
-  {id:"tusk",name:"Donald Tusk",category:"Osoba",edition:"national",icon:"👤",price:9.8,change:4.6,owners:24,description:"Polityka i życie publiczne"},
-  {id:"gdansk",name:"Gdańsk",category:"Miejsce",edition:"national",icon:"🏙️",price:7.2,change:2.1,owners:9,description:"Miasto i region"},
-  {id:"cop31",name:"COP31",category:"Wydarzenie",edition:"world",icon:"🌍",price:14.6,change:12.8,owners:31,description:"Szczyt klimatyczny"},
-  {id:"taylor",name:"Taylor Swift",category:"Osoba",edition:"world",icon:"🎤",price:18.3,change:-1.4,owners:17,description:"Muzyka i popkultura"},
-  {id:"japan",name:"Japonia",category:"Kraj",edition:"world",icon:"🇯🇵",price:11.1,change:3.7,owners:27,description:"Kraj i wydarzenia"},
-  {id:"youth-olympics",name:"Młodzieżowe Igrzyska",category:"Wydarzenie",edition:"world",icon:"🏅",price:8.9,change:5.3,owners:14,description:"Sport międzynarodowy"},
-  {id:"paris",name:"Paryż",category:"Miejsce",edition:"world",icon:"🗼",price:10.5,change:-2.2,owners:5,description:"Miasto i kultura"},
-  {id:"lewandowski",name:"Robert Lewandowski",category:"Osoba",edition:"national",icon:"⚽",price:13.7,change:6.1,owners:21,description:"Sport i piłka nożna"}
+  {id:"poland",name:"Polska",category:"Kraj",icon:"🇵🇱",price:12.4,change:8.2,owners:38,description:"Zainteresowanie Polską"},
+  {id:"tusk",name:"Donald Tusk",category:"Osoba",icon:"👤",price:9.8,change:4.6,owners:24,description:"Polityka i życie publiczne"},
+  {id:"gdansk",name:"Gdańsk",category:"Miejsce",icon:"🏙️",price:7.2,change:2.1,owners:9,description:"Miasto i region"},
+  {id:"cop31",name:"COP31",category:"Wydarzenie",icon:"🌍",price:14.6,change:12.8,owners:31,description:"Szczyt klimatyczny"},
+  {id:"taylor",name:"Taylor Swift",category:"Osoba",icon:"🎤",price:18.3,change:-1.4,owners:17,description:"Muzyka i popkultura"},
+  {id:"japan",name:"Japonia",category:"Kraj",icon:"🇯🇵",price:11.1,change:3.7,owners:27,description:"Kraj i wydarzenia"},
+  {id:"youth-olympics",name:"Młodzieżowe Igrzyska",category:"Wydarzenie",icon:"🏅",price:8.9,change:5.3,owners:14,description:"Sport międzynarodowy"},
+  {id:"paris",name:"Paryż",category:"Miejsce",icon:"🗼",price:10.5,change:-2.2,owners:5,description:"Miasto i kultura"},
+  {id:"lewandowski",name:"Robert Lewandowski",category:"Osoba",icon:"⚽",price:13.7,change:6.1,owners:21,description:"Sport i piłka nożna"}
 ];
 const byId = id => instruments.find(item => item.id === id);
 const money = value => value.toLocaleString("pl-PL",{minimumFractionDigits:2,maximumFractionDigits:2}) + " TR";
 const initialState = () => ({cash:STARTING_CASH,holdings:[],lastExchangeAt:null,history:[]});
 let invalidSavedState = false;
 let state = loadState();
-let activeFilter = "all";
 let toastTimer;
 let cooldownRefreshTimer;
 
@@ -30,18 +29,11 @@ function isValidSavedState(saved){
   if(saved.history !== undefined && !Array.isArray(saved.history)) return false;
 
   const ids = new Set();
-  const categories = new Set();
-  let nationalCount = 0;
   for(const holding of saved.holdings){
     const item = byId(holding?.id);
     if(!item || holding.units !== 1 || ids.has(holding.id)) return false;
-    if(categories.has(item.category)) return false;
     ids.add(holding.id);
-    categories.add(item.category);
-    if(item.edition === "national") nationalCount++;
   }
-  if(nationalCount > 1) return false;
-  if(saved.holdings.length === MAX_HOLDINGS && nationalCount !== 1) return false;
   return true;
 }
 
@@ -60,8 +52,6 @@ function loadState(){
 function save(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch{notify("Przeglądarka blokuje zapis. Zmiany pozostaną tylko do odświeżenia strony.");}}
 function portfolioValue(){return state.cash + state.holdings.reduce((sum,h)=>sum+h.units*byId(h.id).price,0);}
 function totalUnits(id){return state.holdings.find(h=>h.id===id)?.units||0;}
-function hasNational(){return state.holdings.some(h=>byId(h.id).edition==="national");}
-function hasOtherNational(exceptId){return state.holdings.some(h=>h.id!==exceptId && byId(h.id).edition==="national");}
 function cooldownRemaining(){return state.lastExchangeAt ? Math.max(0,COOLDOWN_MS-(Date.now()-state.lastExchangeAt)) : 0;}
 function scheduleCooldownRefresh(){
   clearTimeout(cooldownRefreshTimer);
@@ -74,9 +64,7 @@ function log(message,amount){state.history.unshift({message,amount,at:Date.now()
 function buy(id){
   const item=byId(id);
   if(state.holdings.length>=MAX_HOLDINGS){notify("Portfel jest pełny. Użyj opcji wymiany.");return;}
-  if(state.holdings.length===MAX_HOLDINGS-1 && !hasNational() && item.edition!=="national"){notify("Ostatnie miejsce w portfelu musi zająć instrument edycji krajowej.");return;}
-  if(item.edition==="national" && hasNational()){notify("Możesz mieć maksymalnie jeden instrument edycji krajowej.");return;}
-  if(state.holdings.some(h=>byId(h.id).category===item.category)){notify("Możesz mieć tylko jeden instrument z kategorii: "+item.category+".");return;}
+  if(state.holdings.some(h=>h.id===id)){notify("Ten temat masz już w portfelu.");return;}
   if(state.cash<item.price){notify("Masz za mało wolnych środków.");return;}
   state.cash-=item.price;
   state.holdings.push({id,units:1});
@@ -88,12 +76,10 @@ function exchange(oldId,newId){
   const oldItem=byId(oldId),newItem=byId(newId);
   if(cooldownRemaining()>0){notify("Następna wymiana za "+formatRemaining(cooldownRemaining())+".");return;}
   if(oldId===newId){notify("Wybierz inny instrument.");return;}
-  if(newItem.edition==="national" && hasOtherNational(oldId)){notify("Możesz mieć maksymalnie jeden instrument edycji krajowej.");return;}
-  if(state.holdings.some(h=>h.id!==oldId && byId(h.id).category===newItem.category)){notify("Ta kategoria jest już w Twoim portfelu.");return;}
+  if(state.holdings.some(h=>h.id===newId)){notify("Ten temat masz już w portfelu.");return;}
   const saleValue=totalUnits(oldId)*oldItem.price;
   const available=state.cash+saleValue;
   if(available<newItem.price){notify("Po sprzedaży nadal zabraknie środków.");return;}
-  if(oldItem.edition==="national" && newItem.edition!=="national" && !state.holdings.some(h=>h.id!==oldId && byId(h.id).edition==="national")){notify("Musisz zachować co najmniej jeden instrument edycji krajowej.");return;}
   state.cash=available-newItem.price;
   state.holdings=state.holdings.filter(h=>h.id!==oldId);
   state.holdings.push({id:newId,units:1});
@@ -105,7 +91,7 @@ function startExchange(oldId){
   if(state.holdings.length!==MAX_HOLDINGS){notify("Wymiana będzie dostępna po zapełnieniu portfela.");return;}
   const oldItem=byId(oldId);
   if(cooldownRemaining()>0){notify("Następna wymiana za "+formatRemaining(cooldownRemaining())+".");return;}
-  const candidates=instruments.filter(item=>item.id!==oldId && !state.holdings.some(h=>h.id!==oldId && byId(h.id).category===item.category) && !(item.edition==="national" && hasOtherNational(oldId)) && !(oldItem.edition==="national" && item.edition!=="national" && !state.holdings.some(h=>h.id!==oldId && byId(h.id).edition==="national")));
+  const candidates=instruments.filter(item=>item.id!==oldId && !state.holdings.some(h=>h.id!==oldId && h.id===item.id));
   const select=document.querySelector("#exchange-select");
   select.innerHTML=candidates.map(item=>'<option value="'+item.id+'">'+item.icon+' '+item.name+' · '+item.category+' · '+money(item.price)+'</option>').join("");
   document.querySelector("#exchange-description").textContent="Sprzedasz "+oldItem.name+" i kupisz wybrany instrument. Wymiana zablokuje kolejną zmianę składu portfela na 24 godziny.";
@@ -124,15 +110,13 @@ document.querySelector("#exchange-form").addEventListener("submit",event=>{
 });
 function renderInstruments(){
   const list=document.querySelector("#instrument-list");
-  const filtered=instruments.filter(item=>activeFilter==="all"||item.edition===activeFilter);
+  const filtered=instruments;
   list.innerHTML=filtered.map(item=>{
-    const sameCategory=state.holdings.some(h=>byId(h.id).category===item.category);
+    const alreadyOwned=state.holdings.some(h=>h.id===item.id);
     const full=state.holdings.length>=MAX_HOLDINGS;
-    const needsNational=state.holdings.length===MAX_HOLDINGS-1 && !hasNational() && item.edition!=="national";
-    const nationalLimit=item.edition==="national" && hasNational();
-    const disabled=full||sameCategory||needsNational||nationalLimit||state.cash<item.price;
-    const reason=full?"Portfel pełny":sameCategory?"Kategoria zajęta":needsNational?"Wymagany instrument krajowy":nationalLimit?"Limit: 1 krajowy":state.cash<item.price?"Za mało TR":"Kup 1 szt.";
-    return '<article class="instrument"><div class="instrument-main"><span class="instrument-icon">'+item.icon+'</span><div><div class="instrument-name">'+item.name+'</div><div class="instrument-meta">'+item.category+' <span class="edition">· '+(item.edition==="national"?"Edycja krajowa":"Edycja światowa")+'</span></div></div></div><div class="price">'+money(item.price)+'<small>'+(item.change>=0?"+":"")+item.change.toFixed(1).replace(".",",")+'% · demo</small></div><button class="buy-button" data-buy="'+item.id+'" '+(disabled?'disabled title="'+reason+'"':'')+'>'+(disabled?reason:"Kup")+'</button></article>';
+    const disabled=full||alreadyOwned||state.cash<item.price;
+    const reason=full?"Portfel pełny":alreadyOwned?"Już w portfelu":state.cash<item.price?"Za mało TR":"Kup 1 szt.";
+    return '<article class="instrument"><div class="instrument-main"><span class="instrument-icon">'+item.icon+'</span><div><div class="instrument-name">'+item.name+'</div><div class="instrument-meta">'+item.category+'</div></div></div><div class="price">'+money(item.price)+'<small>'+(item.change>=0?"+":"")+item.change.toFixed(1).replace(".",",")+'% · demo</small></div><button class="buy-button" data-buy="'+item.id+'" '+(disabled?'disabled title="'+reason+'"':'')+'>'+(disabled?reason:"Kup")+'</button></article>';
   }).join("");
   list.querySelectorAll("[data-buy]").forEach(button=>button.addEventListener("click",()=>buy(button.dataset.buy)));
 }
@@ -156,7 +140,7 @@ function renderMarketRankings(){
 }
 function renderPortfolio(){
   const el=document.querySelector("#portfolio");
-  if(!state.holdings.length){el.innerHTML='<div class="empty-state"><b>Twój portfel jest pusty.</b><br>Wybierz instrumenty z tablicy powyżej. Możesz kupić maksymalnie trzy instrumenty z różnych kategorii. Pełny portfel musi zawierać dokładnie jeden instrument edycji krajowej.</div>';return;}
+  if(!state.holdings.length){el.innerHTML='<div class="empty-state"><b>Twój portfel jest pusty.</b><br>Wybierz dowolne trzy różne tematy z tablicy powyżej. Nie ma obowiązkowych kategorii ani limitów geograficznych.</div>';return;}
   el.innerHTML=state.holdings.map(h=>{
     const item=byId(h.id),value=h.units*item.price;
     const previousValue=value/(1+item.change/100),delta=value-previousValue;
@@ -182,12 +166,6 @@ function render(){
   renderMarketRankings();renderInstruments();renderPortfolio();renderActivity();
   scheduleCooldownRefresh();
 }
-document.querySelector("#filters").addEventListener("click",event=>{
-  const button=event.target.closest("[data-filter]");if(!button)return;
-  activeFilter=button.dataset.filter;
-  document.querySelectorAll(".filter").forEach(x=>x.classList.toggle("active",x===button));
-  renderInstruments();
-});
 document.querySelector("#reset-button").addEventListener("click",()=>{
   if(confirm("Zresetować konto demo? Usunie to portfel i historię transakcji.")){state=initialState();save();render();notify("Konto demo zostało zresetowane.");}
 });
