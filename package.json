@@ -18,7 +18,8 @@
     "check:gkg-discovery": "node --check scripts/gkg-candidate-discovery-utils.mjs && node --check scripts/gkg-candidate-discovery-audit.mjs && node --test tests/gkg-candidate-discovery.test.mjs",
     "gkg:relevance": "node scripts/gkg-article-relevance-audit.mjs",
     "check:gkg-relevance": "node --check scripts/gkg-article-relevance-utils.mjs && node --check scripts/gkg-article-relevance-audit.mjs && node --test tests/gkg-article-relevance.test.mjs",
-    "webngrams:review-audit": "node scripts/webngrams-review-audit.mjs"
+    "webngrams:review-audit": "node scripts/webngrams-review-audit.mjs",
+    "check:supabase": "node --test tests/supabase-game-rules.test.mjs"
   },
   "engines": {
     "node": ">=20"
