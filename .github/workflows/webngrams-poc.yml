@@ -121,6 +121,13 @@ jobs:
         if: (github.event_name == 'schedule' || github.event_name == 'push') && success()
         run: npm run webngrams:archive
 
+      - name: Publish raw observations to Supabase (shadow mode)
+        if: (github.event_name == 'schedule' || github.event_name == 'push') && success() && secrets.SUPABASE_URL != '' && secrets.SUPABASE_SERVICE_ROLE_KEY != ''
+        run: npm run market:shadow:push
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+
       - name: Commit daily history
         if: (github.event_name == 'schedule' || github.event_name == 'push') && success()
         run: |
