@@ -5,12 +5,18 @@ on:
     paths:
       - "web/**"
       - "netlify.toml"
+      - "supabase/**"
+      - "tests/supabase-game-rules.test.mjs"
+      - "package.json"
       - ".github/workflows/game-ui.yml"
   push:
     branches: [main]
     paths:
       - "web/**"
       - "netlify.toml"
+      - "supabase/**"
+      - "tests/supabase-game-rules.test.mjs"
+      - "package.json"
       - ".github/workflows/game-ui.yml"
 
 permissions:
@@ -26,6 +32,8 @@ jobs:
           node-version: 24
       - name: Check JavaScript syntax
         run: node --check web/app.js
+      - name: Check Supabase game rules
+        run: npm run check:supabase
       - name: Check required frontend files
         run: |
           test -s web/index.html
