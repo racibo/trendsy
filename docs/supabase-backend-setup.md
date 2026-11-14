@@ -49,7 +49,7 @@ order by id;
 
 ## Co będzie w następnym kroku kodowania
 
-Po utworzeniu projektu i zastosowaniu migracji podłączymy frontend do Supabase:
+Po zastosowaniu migracji i uzupełnieniu `web/config.js` frontend będzie korzystał z Supabase:
 
 1. ekran logowania Magic Link e-mail i obsługa sesji;
 2. pobieranie katalogu, portfela i rankingu z bazy;
@@ -57,4 +57,4 @@ Po utworzeniu projektu i zastosowaniu migracji podłączymy frontend do Supabase
 4. stan ładowania, błędy i wylogowanie;
 5. test dwóch niezależnych kont i test wymiany z blokadą 24 h.
 
-Dopiero po tych testach wyłączymy tryb demo. Ceny w tej migracji są oznaczone jako `demo`; nie są jeszcze cenami wyliczonymi z GDELT/Web NGrams.
+Dopiero po tych testach wyłączymy tryb demo. Ceny w katalogu są oznaczone jako `demo`; nie są jeszcze cenami wyliczonymi z GDELT/Web NGrams.
