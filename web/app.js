@@ -11,6 +11,7 @@ let instruments = [];
 let state = {cash:100, holdings:[], lastExchangeAt:null, history:[]};
 let currentUser = null;
 let toastTimer;
+let exchangeUnlockTimer;
 
 const byId = id => instruments.find(item => item.id === id);
 const notify = message => {
@@ -55,15 +56,14 @@ async function loadGame() {
   currentUser=user;
   if(!user){showAuth();return;}
   showGame();
-  const [catalog,portfolio,holdings,transactions,leaderboard,profile]=await Promise.all([
+  const [catalog,portfolio,holdings,transactions,leaderboard]=await Promise.all([
     client.from("instruments").select("id,name,category,edition,icon,price,price_source").eq("is_active",true).order("name"),
     client.from("portfolios").select("cash,last_exchange_at").eq("user_id",user.id).single(),
     client.from("holdings").select("instrument_id,units,acquired_at").eq("user_id",user.id),
     client.from("transactions").select("transaction_type,sold_instrument_id,bought_instrument_id,cash_delta,created_at").eq("user_id",user.id).order("created_at",{ascending:false}).limit(8),
-    client.rpc("get_leaderboard",{p_limit:10}),
-    client.from("profiles").select("display_name").eq("id",user.id).maybeSingle()
+    client.rpc("get_leaderboard",{p_limit:10})
   ]);
-  for(const result of [catalog,portfolio,holdings,transactions,leaderboard,profile]) if(result.error) throw result.error;
+  for(const result of [catalog,portfolio,holdings,transactions,leaderboard]) if(result.error) throw result.error;
   instruments=catalog.data || [];
   state.cash=Number(portfolio.data.cash);
   state.lastExchangeAt=portfolio.data.last_exchange_at ? new Date(portfolio.data.last_exchange_at).getTime() : null;
@@ -72,7 +72,7 @@ async function loadGame() {
     const bought=byId(t.bought_instrument_id), sold=byId(t.sold_instrument_id);
     return {message:t.transaction_type==="exchange" ? "Wymiana: "+(sold?.name||"instrument")+" → "+(bought?.name||"instrument") : "Kupiono "+(bought?.name||"instrument"),amount:Number(t.cash_delta),at:new Date(t.created_at).getTime()};
   });
-  render(leaderboard.data || [],profile.data?.display_name || user.email);
+  render(leaderboard.data || []);
 }
 function portfolioValue(){return state.cash+state.holdings.reduce((sum,h)=>sum+h.units*Number(byId(h.id)?.price||0),0);}
 function cooldownRemaining(){return state.lastExchangeAt?Math.max(0,86400000-(Date.now()-state.lastExchangeAt)):0;}
@@ -97,7 +97,7 @@ function startExchange(oldId){
   document.querySelector("#exchange-description").textContent="Sprzedasz "+oldItem.name+" i kupisz wybrany instrument. Kolejna wymiana będzie możliwa po 24 godzinach.";
   const dialog=document.querySelector("#exchange-dialog");dialog.dataset.oldId=oldId;dialog.showModal();
 }
-function render(leaderboard=[],displayName="Gracz"){
+function render(leaderboard=[]){
   const value=portfolioValue(),profit=value-100,remaining=cooldownRemaining();
   document.querySelector("#total-value").innerHTML=money(value).replace(" TR",' <small>TR</small>');
   document.querySelector("#cash-value").innerHTML=money(state.cash).replace(" TR",' <small>TR</small>');
@@ -107,7 +107,7 @@ function render(leaderboard=[],displayName="Gracz"){
   document.querySelector("#exchange-status").textContent=remaining>0?"Wymiana ponownie za "+formatRemaining(remaining):state.holdings.length?"Wymiana dostępna":"Możesz rozpocząć inwestowanie";
   renderInstruments();renderPortfolio();renderActivity();
   const ranking=document.querySelector("#ranking-list");
-  ranking.innerHTML=leaderboard.length?leaderboard.map((row,index)=>'<div class="rank-row '+(row.display_name===displayName?'you':'')+'"><span class="rank-number">'+String(index+1).padStart(2,"0")+'</span><span class="rank-avatar '+(["purple","blue","green"][index%3])+'">'+escapeHtml(row.display_name.slice(0,2).toUpperCase())+'</span><span class="rank-name">'+escapeHtml(row.display_name)+'<small>Wartość portfela</small></span><b>'+money(row.portfolio_value)+'</b></div>').join(""):'<p class="empty-small">Ranking pojawi się, gdy gracze dołączą do gry.</p>';
+  ranking.innerHTML=leaderboard.length?leaderboard.map((row,index)=>'<div class="rank-row '+(row.is_current_user?'you':'')+'"><span class="rank-number">'+String(index+1).padStart(2,"0")+'</span><span class="rank-avatar '+(["purple","blue","green"][index%3])+'">'+escapeHtml(row.display_name.slice(0,2).toUpperCase())+'</span><span class="rank-name">'+escapeHtml(row.display_name)+'<small>Wartość portfela</small></span><b>'+money(row.portfolio_value)+'</b></div>').join(""):'<p class="empty-small">Ranking pojawi się, gdy gracze dołączą do gry.</p>';
   document.querySelector("#ranking-caption").textContent="Ranking rzeczywistych portfeli graczy.";
 }
 function renderInstruments(){
@@ -122,6 +122,14 @@ function renderInstruments(){
   list.querySelectorAll("[data-buy]").forEach(button=>button.addEventListener("click",()=>buy(button.dataset.buy)));
 }
 function renderPortfolio(){
+  clearTimeout(exchangeUnlockTimer);
+  const remaining=cooldownRemaining();
+  if(remaining>0){
+    exchangeUnlockTimer=setTimeout(()=>{
+      document.querySelector("#exchange-status").textContent=state.holdings.length===3?"Wymiana dostępna":"Możesz rozpocząć inwestowanie";
+      renderPortfolio();
+    },remaining+50);
+  }
   const el=document.querySelector("#portfolio");
   if(!state.holdings.length){el.innerHTML='<div class="empty-state"><b>Twój portfel jest pusty.</b><br>Wybierz dowolne trzy różne tematy. Nie ma obowiązkowych kategorii ani limitów geograficznych.</div>';return;}
   el.innerHTML=state.holdings.map(h=>{
