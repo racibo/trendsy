@@ -264,7 +264,8 @@ create or replace function public.get_leaderboard(p_limit integer default 50)
 returns table (
   display_name text,
   portfolio_value numeric,
-  profit numeric
+  profit numeric,
+  is_current_user boolean
 )
 language sql
 stable
@@ -273,7 +274,8 @@ set search_path = ''
 as $$
   select pr.display_name,
          round(p.cash + coalesce(sum(i.price * h.units), 0), 2) as portfolio_value,
-         round(p.cash + coalesce(sum(i.price * h.units), 0) - 100.00, 2) as profit
+         round(p.cash + coalesce(sum(i.price * h.units), 0) - 100.00, 2) as profit,
+         (p.user_id = auth.uid()) as is_current_user
   from public.portfolios p
   join public.profiles pr on pr.id = p.user_id
   left join public.holdings h on h.user_id = p.user_id
