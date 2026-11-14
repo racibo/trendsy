@@ -6,3 +6,13 @@
 .exchange-dialog{width:min(440px,calc(100% - 30px));padding:25px;background:#1a2531;color:var(--text);border:1px solid #43566b;border-radius:14px;box-shadow:0 25px 90px #000b}.exchange-dialog::backdrop{background:#050a10c9;backdrop-filter:blur(4px)}.exchange-dialog h2{font-size:23px;margin:0 0 8px}.dialog-copy{font-size:12px;color:#9aa9b9;line-height:1.6;margin:0 0 20px}.exchange-dialog label{display:block;font-size:11px;color:#9aa9b9;margin-bottom:7px}.exchange-dialog select{width:100%;background:#101923;border:1px solid #405267;color:#f1f5f9;border-radius:8px;padding:12px;font:12px Manrope}.dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:22px}.cancel-button{background:transparent;border:1px solid #43566b;color:#c5d0dc;border-radius:7px;padding:9px 14px;font:11px Manrope;cursor:pointer}
 
 .auth-panel{max-width:620px;margin:90px auto 120px;padding:38px;background:linear-gradient(145deg,#1b2531,#161e28);border:1px solid var(--line);border-radius:16px}.auth-panel h1{font-size:clamp(30px,4vw,46px);line-height:1.12;letter-spacing:-.055em;margin:0;font-weight:800}.auth-panel h1 span{color:#a8b6c7}.login-form{display:grid;gap:10px;max-width:390px;margin-top:28px}.login-form label{font-size:11px;color:#aab6c3}.login-form input{background:#101923;border:1px solid #405267;color:#f1f5f9;border-radius:8px;padding:13px;font:13px Manrope}.login-form button{margin-top:4px}.auth-message{font-size:11px;line-height:1.6;color:#a9b5c3;margin-top:18px;overflow-wrap:anywhere}[hidden]{display:none!important}@media(max-width:600px){.auth-panel{margin:55px auto 80px;padding:24px 18px}}
+/* Wyraźny komunikat o stanie projektu — widoczny także przed logowaniem. */
+.service-notice{margin:28px 0 10px;padding:22px 25px;border:1px solid #705b35;border-left:4px solid #e3b45d;border-radius:12px;background:linear-gradient(110deg,#30291f,#211f1b);color:#f4ead8}
+.notice-status{display:flex;align-items:center;gap:8px;font:10px 'DM Mono',monospace;letter-spacing:.12em;color:#f0c879}
+.notice-indicator{width:8px;height:8px;border-radius:50%;background:#e3b45d;box-shadow:0 0 10px #e3b45d66}
+.service-notice h1{font-size:clamp(19px,2.5vw,25px);letter-spacing:-.035em;margin:12px 0 8px;color:#fff4df}
+.service-notice p{max-width:900px;font-size:12px;line-height:1.7;color:#d2c4ad;margin:0}
+.service-notice .notice-next{margin-top:7px;color:#f0d9ad}
+.demo-label{color:#e7bd70}
+.demo-label i{background:#e3b45d;box-shadow:0 0 10px #e3b45d66}
+@media(max-width:720px){.service-notice{margin:18px 0 8px;padding:17px 16px}.service-notice h1{font-size:19px}.service-notice p{font-size:11px}}
