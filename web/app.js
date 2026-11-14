@@ -104,7 +104,6 @@ function render(leaderboard=[],displayName="Gracz"){
   document.querySelector("#holding-count").innerHTML=state.holdings.length+' <small>/ 3</small>';
   document.querySelector("#profit-value").innerHTML=(profit>=0?"+":"")+money(profit).replace(" TR",' <small>TR</small>');
   document.querySelector("#total-change").textContent=profit===0?"Twoje saldo początkowe":profit>=0?"Wzrost wartości portfela":"Spadek wartości portfela";
-  document.querySelector("#ranking-value").textContent=money(value);
   document.querySelector("#exchange-status").textContent=remaining>0?"Wymiana ponownie za "+formatRemaining(remaining):state.holdings.length?"Wymiana dostępna":"Możesz rozpocząć inwestowanie";
   renderInstruments();renderPortfolio();renderActivity();
   const ranking=document.querySelector("#ranking-list");
