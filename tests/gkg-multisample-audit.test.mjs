@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { gkgSampleFilenames, summarizeMultiSample, summarizeDailyHistory, renderDailyHistoryMarkdown, parseDailyHistoryJson, serializeDailyHistoryJson } from "../scripts/gkg-multisample-utils.mjs";
+import { gkgSampleFilenames, summarizeMultiSample, summarizeDailyHistory, renderDailyHistoryMarkdown, parseDailyHistoryJson, serializeDailyHistoryJson, serializeJsonWithNewline } from "../scripts/gkg-multisample-utils.mjs";
 
 test("selects evenly spaced quarter-hour GKG batches backwards from latest", () => {
   const samples = gkgSampleFilenames("20261111200000.gkg.csv.zip", 10, 150);
@@ -64,4 +64,13 @@ test("writes valid JSON with a real trailing newline and round-trips", () => {
 test("rejects malformed or non-array history instead of silently resetting it", () => {
   assert.throws(() => parseDailyHistoryJson("{broken"));
   assert.throws(() => parseDailyHistoryJson('{"date":"2026-11-11"}'), /Invalid history array/);
+});
+
+
+test("serializes report JSON with a real newline, not a literal escaped suffix", () => {
+  const report = { summary: { completeSamples: 10 }, status: "COMPLETE" };
+  const serialized = serializeJsonWithNewline(report);
+  assert.equal(JSON.parse(serialized).status, "COMPLETE");
+  assert.ok(serialized.endsWith("\n"));
+  assert.ok(!serialized.endsWith("\\n"));
 });
