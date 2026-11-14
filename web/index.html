@@ -32,7 +32,7 @@
       <section class="stats-grid" aria-label="Podsumowanie portfela">
         <article class="stat-card"><span class="stat-label">WARTOŚĆ PORTFELA</span><strong id="total-value">100,00 <small>TR</small></strong><span class="stat-foot" id="total-change">Twoje saldo początkowe</span></article>
         <article class="stat-card"><span class="stat-label">WOLNE ŚRODKI</span><strong id="cash-value">100,00 <small>TR</small></strong><span class="stat-foot">Gotowe do inwestowania</span></article>
-        <article class="stat-card"><span class="stat-label">INSTRUMENTY</span><strong id="holding-count">0 <small>/ 3</small></strong><span class="stat-foot">Maksymalnie 3 różne kategorie</span></article>
+        <article class="stat-card"><span class="stat-label">INSTRUMENTY</span><strong id="holding-count">0 <small>/ 3</small></strong><span class="stat-foot">Maksymalnie 3 różne tematy</span></article>
         <article class="stat-card"><span class="stat-label">WYNIK GRY</span><strong id="profit-value">0,00 <small>TR</small></strong><span class="stat-foot">Zmiana względem 100 TR</span></article>
       </section>
 
@@ -52,7 +52,7 @@
           <div id="portfolio" class="portfolio-list"></div>
 
           <div class="section-heading"><div><p class="eyebrow">MOŻLIWOŚCI</p><h2>Tablica instrumentów</h2></div><span class="live-label"><i></i> CENY PRZYKŁADOWE</span></div>
-          <div class="filters" id="filters"><button class="filter active" data-filter="all">Wszystkie</button><button class="filter" data-filter="national">Edycja krajowa</button><button class="filter" data-filter="world">Edycja światowa</button></div>
+          
           <div class="instrument-list" id="instrument-list"></div>
 
 <html lang="pl">
@@ -109,12 +109,12 @@
           <div class="instrument-list" id="instrument-list"></div>
         </div>
         <aside class="side-column">
-          <section class="side-card rules-card"><div class="side-title"><span class="side-icon">⌁</span><h3>Zasady gry</h3></div><ul class="rules-list"><li><b>100 TR</b><span>Kapitał na start</span></li><li><b>3 instrumenty</b><span>Maksymalnie 3 różne kategorie</span></li><li><b>1 krajowy</b><span>Dokładnie jeden w pełnym portfelu</span></li><li><b>24 godziny</b><span>Przerwa między wymianami</span></li></ul><p class="rule-note">Wymiana polega na zastąpieniu jednego instrumentu innym. Nie można po prostu sprzedać pozycji i ominąć limitu.</p></section>
+          <section class="side-card rules-card"><div class="side-title"><span class="side-icon">⌁</span><h3>Zasady gry</h3></div><ul class="rules-list"><li><b>100 TR</b><span>Kapitał na start</span></li><li><b>3 tematy</b><span>Dowolne trzy różne instrumenty</span></li><li><b>24 godziny</b><span>Przerwa między wymianami</span></li></ul><p class="rule-note">Wymiana polega na zastąpieniu jednego instrumentu innym. Nie można po prostu sprzedać pozycji i ominąć limitu.</p></section>
           <section class="side-card ranking-card"><div class="side-title"><span class="side-icon">↗</span><h3>Ranking graczy</h3></div><div class="ranking-list"><div class="rank-row"><span class="rank-number">01</span><span class="rank-avatar purple">MK</span><span class="rank-name">market_watcher<small>Portfel demo</small></span><b>118,40 TR</b></div><div class="rank-row"><span class="rank-number">02</span><span class="rank-avatar blue">AN</span><span class="rank-name">anna_trends<small>Portfel demo</small></span><b>112,75 TR</b></div><div class="rank-row you"><span class="rank-number">—</span><span class="rank-avatar green">TY</span><span class="rank-name">Ty<small>Twoja pozycja</small></span><b id="ranking-value">100,00 TR</b></div></div><p class="demo-caption">Ranking przykładowy — bez prawdziwych graczy.</p></section>
           <section class="side-card activity-card"><div class="side-title"><span class="side-icon">◷</span><h3>Ostatnie ruchy</h3></div><div id="activity" class="activity-list"><p class="empty-small">Twoje transakcje pojawią się tutaj.</p></div></section>
         </aside>
       </section>
-      <footer><span>TRENDSY <b>·</b> WERSJA TESTOWA</span><span>Wszystkie ceny i wyniki są demonstracyjne.</span></footer>
+      <footer><span>TRENDSY <b>·</b> WERSJA TESTOWA</span><span>Ceny i wyniki są demonstracyjne; dane rynkowe GDELT nie są jeszcze podłączone.</span></footer>
     </main>
   </div>
   <dialog class="exchange-dialog" id="exchange-dialog">
