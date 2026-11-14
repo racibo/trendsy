@@ -37,14 +37,14 @@
   },
   {
     "date": "2026-11-14",
-    "startedAt": "2026-11-14T10:47:51.789Z",
-    "completedAt": "2026-11-14T10:49:09.855Z",
-    "status": "COMPLETE",
+    "startedAt": "2026-11-14T11:26:12.536Z",
+    "completedAt": "2026-11-14T11:27:31.023Z",
+    "status": "PARTIAL",
     "requestedSamples": 10,
-    "completeSamples": 10,
-    "weightedMatchRate": 0.9166,
-    "meanMatchRate": 0.9139,
-    "totalGkgUniqueUrls": 10331,
-    "totalMatchedUrls": 9469
+    "completeSamples": 9,
+    "weightedMatchRate": 0.9161,
+    "meanMatchRate": 0.9127,
+    "totalGkgUniqueUrls": 9140,
+    "totalMatchedUrls": 8373
   }
 ]
