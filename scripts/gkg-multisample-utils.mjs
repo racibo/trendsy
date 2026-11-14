@@ -63,9 +63,13 @@ export function parseDailyHistoryJson(content) {
   return history;
 }
 
+export function serializeJsonWithNewline(value) {
+  return JSON.stringify(value, null, 2) + "\n";
+}
+
 export function serializeDailyHistoryJson(history) {
   if (!Array.isArray(history)) throw new Error("History must be an array.");
-  return JSON.stringify(history, null, 2) + "\n";
+  return serializeJsonWithNewline(history);
 }
 
 export function summarizeDailyHistory(history) {
