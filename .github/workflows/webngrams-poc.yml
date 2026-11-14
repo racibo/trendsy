@@ -125,14 +125,14 @@ jobs:
       - name: Publish raw observations to Supabase (shadow mode)
         if: (github.event_name == 'schedule' || github.event_name == 'push') && success()
         run: |
-          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_SERVICE_ROLE_KEY" ]; then
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_SECRET_KEY" ]; then
             echo "::notice::Supabase secrets are not configured; raw observation publishing was skipped."
             exit 0
           fi
           npm run market:shadow:push
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
 
       - name: Commit daily history
         if: (github.event_name == 'schedule' || github.event_name == 'push') && success()
