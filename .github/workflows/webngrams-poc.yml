@@ -56,6 +56,7 @@ jobs:
         with:
           node-version: 24
       - run: npm run check:webngrams
+      - run: npm run check:market
 
   sample:
     if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || github.event_name == 'push'
@@ -120,6 +121,18 @@ jobs:
       - name: Create compact daily history record
         if: (github.event_name == 'schedule' || github.event_name == 'push') && success()
         run: npm run webngrams:archive
+
+      - name: Publish raw observations to Supabase (shadow mode)
+        if: (github.event_name == 'schedule' || github.event_name == 'push') && success()
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_SERVICE_ROLE_KEY" ]; then
+            echo "::notice::Supabase secrets are not configured; raw observation publishing was skipped."
+            exit 0
+          fi
+          npm run market:shadow:push
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
 
       - name: Commit daily history
         if: (github.event_name == 'schedule' || github.event_name == 'push') && success()
