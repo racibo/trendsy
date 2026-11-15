@@ -6,7 +6,7 @@ const API = "https://api.gdeltproject.org/api/v2/doc/doc";
 const INPUT = path.resolve("output/gkg-candidate-discovery.json");
 const OUTPUT_DIR = path.resolve("output");
 const TIMESPAN = process.env.GKG_RELEVANCE_TIMESPAN ?? "3days";
-const MAX_RECORDS = Math.min(50, Math.max(1, Number(process.env.GKG_RELEVANCE_MAX_RECORDS ?? 20)));
+const MAX_RECORDS = Math.min(50, Math.max(1, Number(process.env.GKG_RELEVANCE_MAX_RECORDS ?? 20)));\nconst MAX_CANDIDATES = Math.min(40, Math.max(1, Number(process.env.GKG_RELEVANCE_MAX_CANDIDATES ?? 16)));
 const MIN_REQUEST_INTERVAL_MS = 15_000;
 const MAX_ATTEMPTS = 4;
 const USER_AGENT = "Trendsy-GKG-Article-Relevance-Audit/1.0 (research prototype)";
@@ -178,7 +178,7 @@ const report = {
   generatedAt: new Date().toISOString(),
   timespan: TIMESPAN,
   maxRecordsPerQuery: MAX_RECORDS,
-  requestedQueries: candidates.length * 2,
+  requestedCandidates: candidates.length,\n  candidateLimit: MAX_CANDIDATES,\n  requestedQueries: candidates.length * 2,
   summary: {
     candidates: candidates.length,
     successfulCandidates: candidates.filter(item => item.exactPhrase.status === "ok" || item.repeat2.status === "ok").length,
