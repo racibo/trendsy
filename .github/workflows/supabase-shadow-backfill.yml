@@ -1,0 +1,37 @@
+name: Supabase shadow history backfill
+
+on:
+  workflow_dispatch:
+    inputs:
+      start_date:
+        description: First archived UTC date to import (YYYY-MM-DD)
+        required: true
+        default: "2026-11-09"
+      end_date:
+        description: Last archived UTC date to import (YYYY-MM-DD)
+        required: true
+        default: "2026-11-15"
+
+permissions:
+  contents: read
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+      - name: Validate shadow ingestion code
+        run: npm run check:market
+      - name: Import and verify archived observations
+        run: npm run market:shadow:backfill -- "$START_DATE" "$END_DATE"
+        env:
+          START_DATE: ${{ inputs.start_date }}
+          END_DATE: ${{ inputs.end_date }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
