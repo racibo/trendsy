@@ -58,9 +58,9 @@ jobs:
       - name: Discover names from sampled GKG batches
         run: npm run gkg:discover
         env:
-          GKG_DISCOVERY_SAMPLE_COUNT: 10
+          GKG_DISCOVERY_SAMPLE_COUNT: 30
           GKG_DISCOVERY_SPACING_MINUTES: 150
-          GKG_DISCOVERY_CANDIDATE_LIMIT: 200
+          GKG_DISCOVERY_CANDIDATE_LIMIT: 300
       - name: Audit article relevance using GDELT DOC headlines
         run: npm run gkg:relevance
         env:
