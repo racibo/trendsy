@@ -1,5 +1,9 @@
 name: GKG multi-sample coverage audit
 
+concurrency:
+  group: trendsy-history-archive-main
+  cancel-in-progress: false
+
 on:
   schedule:
     - cron: "30 3 * * *"
