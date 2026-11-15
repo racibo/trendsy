@@ -1,5 +1,9 @@
 name: Web NGrams proof of concept
 
+concurrency:
+  group: trendsy-history-archive-main
+  cancel-in-progress: false
+
 on:
   workflow_dispatch:
     inputs:
