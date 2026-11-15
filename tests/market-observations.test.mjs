@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { validateDailySnapshot } from "../scripts/market-observations.mjs";
+import { publishObservations } from "../scripts/publish-market-observations.mjs";
 
 const base = {
   date: "2026-11-14",
@@ -28,4 +29,56 @@ test("rejects negative and non-integer counters", () => {
 
 test("rejects an empty candidate list", () => {
   assert.throws(() => validateDailySnapshot({ ...base, results: [] }), /no candidate results/);
+});
+
+test("confirms every observation returned by Supabase", async () => {
+  const rows = validateDailySnapshot(base);
+  let request;
+  const confirmed = await publishObservations({
+    baseUrl: "https://example.supabase.co/",
+    secretKey: "test-secret",
+    rows,
+    fetchImpl: async (url, options) => {
+      request = { url, options };
+      return {
+        ok: true,
+        json: async () => rows.map(row => ({
+          candidate_id: row.candidate_id,
+          observation_date: row.observation_date
+        }))
+      };
+    }
+  });
+
+  assert.equal(confirmed, 1);
+  assert.equal(request.url, "https://example.supabase.co/rest/v1/market_observations?on_conflict=candidate_id,observation_date&select=candidate_id,observation_date");
+  assert.equal(request.options.headers.apikey, "test-secret");
+  assert.equal(request.options.headers.Prefer, "resolution=merge-duplicates,return=representation");
+  assert.equal("Authorization" in request.options.headers, false);
+});
+
+test("rejects a successful HTTP response that confirms fewer rows than sent", async () => {
+  const rows = validateDailySnapshot(base);
+  await assert.rejects(
+    publishObservations({
+      baseUrl: "https://example.supabase.co",
+      secretKey: "test-secret",
+      rows,
+      fetchImpl: async () => ({ ok: true, json: async () => [] })
+    }),
+    /confirmation mismatch: expected 1 observations, received 0/
+  );
+});
+
+test("rejects an unreadable Supabase confirmation", async () => {
+  const rows = validateDailySnapshot(base);
+  await assert.rejects(
+    publishObservations({
+      baseUrl: "https://example.supabase.co",
+      secretKey: "test-secret",
+      rows,
+      fetchImpl: async () => ({ ok: true, json: async () => { throw new Error("invalid JSON"); } })
+    }),
+    /did not return a readable row confirmation/
+  );
 });
