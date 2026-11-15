@@ -147,7 +147,16 @@ const discovery = JSON.parse(await fs.readFile(INPUT, "utf8"));
 const sample = Array.isArray(discovery.manualReviewSample) ? discovery.manualReviewSample : [];
 if (!sample.length) throw new Error("GKG discovery report has no manualReviewSample rows");
 const candidates = [];
-for (const candidate of sample) {
+const strataOrder = ["high_frequency", "medium_frequency", "low_frequency", "domain_concentrated", "low_domain_diversity", "no_entity_cross_signal", "variant_rich", "publisher_name_overlap"];
+const selected = new Map();
+for (const stratum of strataOrder) {
+  for (const candidate of sample.filter(item => (item.strata ?? []).includes(stratum))) {
+    if (selected.size >= MAX_CANDIDATES) break;
+    selected.set(candidate.normalizedName, candidate);
+  }
+  if (selected.size >= MAX_CANDIDATES) break;
+}
+for (const candidate of selected.values()) {
   const queries = buildRelevanceQueries(candidate.name);
   console.log("Checking " + candidate.name);
   const exact = await fetchArticles(queries.exactPhrase);
