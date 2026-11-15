@@ -155,18 +155,18 @@ export function renderLeagueCandidateScreen(report) {
     "",
     "To ranking priorytetu do ręcznej oceny, a nie automatyczny ranking popularności ani gotowa liga. Żaden kandydat nie trafia automatycznie do gry.",
     "",
-    "| # | Kandydat | Punkty selekcyjne | Artykuły | Domeny | Próbki | Udział największej domeny | Sygnał PERSON/ORG |",
+    "| # | Kandydat | Punkty selekcyjne | Artykuły | Domeny | Próbki | Udział największej domeny | Typ sygnału | PERSON/ORG/LOCATION |",
     "|---:|---|---:|---:|---:|---:|---:|---:|",
     ...report.top16ResearchShortlist.map((item, index) =>
       "| " + (index + 1) + " | " + item.name.replaceAll("|", "\\|") + " | " + item.score +
       " | " + item.uniqueArticles + " | " + item.uniqueDomains + " | " + item.sampledBatches +
-      " | " + Math.round(item.topDomainShare * 100) + "% | " +
-      (item.personSignalArticles + item.organizationSignalArticles) + " |"
+      " | " + Math.round(item.topDomainShare * 100) + "% | " + item.candidateType + " | " +
+      (item.personSignalArticles + item.organizationSignalArticles + item.locationSignalArticles) + " |"
     ),
     "",
     "## Kryteria wstrzymania",
     "",
-    "Kandydat jest wstrzymany, jeśli ma mniej niż 5 unikalnych artykułów, mniej niż 3 próbki czasowe, mniej niż 3 domeny, ponad 75% materiałów z jednej domeny, nazwę ogólną/boilerplate albo niejednoznaczną nazwę jednowyrazową bez potwierdzenia PERSON/ORGANIZATIONS.",
+    "Kandydat jest wstrzymany, jeśli ma mniej niż 5 unikalnych artykułów, mniej niż 3 próbki czasowe, mniej niż 3 domeny, ponad 75% materiałów z jednej domeny, nazwę ogólną/boilerplate albo niejednoznaczną nazwę jednowyrazową bez potwierdzenia PERSON/ORGANIZATIONS/LOCATIONS.",
     "",
     "## Ograniczenia",
     "",
