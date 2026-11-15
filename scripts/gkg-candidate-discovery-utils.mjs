@@ -51,7 +51,7 @@ function buildQualityDiagnostics(item, totalBatches) {
   const topDomain = domainRows[0] ?? null;
   const topDomainShare = articleCount ? (topDomain?.[1] ?? 0) / articleCount : 0;
   const batchCoverage = totalBatches ? item.batches.size / totalBatches : 0;
-  const entitySignalArticles = new Set([...item.personDocuments, ...item.organizationDocuments]).size;
+  const entitySignalArticles = new Set([...item.personDocuments, ...item.organizationDocuments, ...item.locationDocuments]).size;
   const variantRows = [...item.nameVariants.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
   const normalizedTokens = item.key.split(" ");
   const publisherNameOverlap = domainRows.some(([domain]) => {
@@ -205,6 +205,7 @@ export function addGkgDocument(accumulator, row, sampleFilename) {
         batches: new Set(),
         personDocuments: new Set(),
         organizationDocuments: new Set(),
+        locationDocuments: new Set(),
         mentionOccurrences: 0,
         evidence: []
       };
@@ -225,6 +226,8 @@ export function addGkgDocument(accumulator, row, sampleFilename) {
     }
     if (personKeys.has(key)) candidate.personDocuments.add(row.url);
     if (organizationKeys.has(key)) candidate.organizationDocuments.add(row.url);
+    const locationKeys = new Set((row.locations ?? []).map(normalizeCandidateName));
+    if (locationKeys.has(key)) candidate.locationDocuments.add(row.url);
     if (candidate.evidence.length < 3) {
       candidate.evidence.push({
         url: row.url,
@@ -257,6 +260,7 @@ export function summarizeCandidateDiscovery(accumulator, sampleStats, limit = 20
         mentionOccurrences: item.mentionOccurrences,
         personSignalArticles: item.personDocuments.size,
         organizationSignalArticles: item.organizationDocuments.size,
+        locationSignalArticles: item.locationDocuments.size,
         nameVariants: variants.slice(0, 8).map(([name, occurrences]) => ({ name, occurrences })),
         languageCoverage: {
           knownLanguageArticles,
