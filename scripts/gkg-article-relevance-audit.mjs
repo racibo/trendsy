@@ -8,8 +8,8 @@ const OUTPUT_DIR = path.resolve("output");
 const TIMESPAN = process.env.GKG_RELEVANCE_TIMESPAN ?? "3days";
 const MAX_RECORDS = Math.min(50, Math.max(1, Number(process.env.GKG_RELEVANCE_MAX_RECORDS ?? 20)));
 const MAX_CANDIDATES = Math.min(40, Math.max(1, Number(process.env.GKG_RELEVANCE_MAX_CANDIDATES ?? 16)));
-const MIN_REQUEST_INTERVAL_MS = 15_000;
-const MAX_ATTEMPTS = 4;
+const MIN_REQUEST_INTERVAL_MS = 20_000;
+const MAX_ATTEMPTS = 2;
 const USER_AGENT = "Trendsy-GKG-Article-Relevance-Audit/1.0 (research prototype)";
 let lastRequestStartedAt = 0;
 
@@ -150,11 +150,16 @@ const candidates = [];
 const strataOrder = ["high_frequency", "medium_frequency", "low_frequency", "domain_concentrated", "low_domain_diversity", "no_entity_cross_signal", "variant_rich", "publisher_name_overlap"];
 const selected = new Map();
 for (const stratum of strataOrder) {
-  for (const candidate of sample.filter(item => (item.strata ?? []).includes(stratum))) {
+  const matches = sample.filter(item => (item.strata ?? []).includes(stratum));
+  for (const candidate of matches.slice(0, 2)) {
     if (selected.size >= MAX_CANDIDATES) break;
     selected.set(candidate.normalizedName, candidate);
   }
   if (selected.size >= MAX_CANDIDATES) break;
+}
+for (const candidate of sample) {
+  if (selected.size >= MAX_CANDIDATES) break;
+  selected.set(candidate.normalizedName, candidate);
 }
 for (const candidate of selected.values()) {
   const queries = buildRelevanceQueries(candidate.name);
