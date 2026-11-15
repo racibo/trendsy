@@ -25,7 +25,7 @@ async function main() {
   });
   if (!response.ok) {
     const detail = (await response.text()).slice(0, 1000);
-    throw new Error(`Supabase import failed (HTTP \${response.status}): \${detail}`);
+    throw new Error(`Supabase import failed (HTTP ${response.status}): ${detail}`);
   }
   console.log(`Published ${rows.length} raw observations for ${date}; game prices were not changed.`);
 }
