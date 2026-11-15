@@ -6,7 +6,7 @@ function candidate(name, overrides = {}) {
   return {
     name, normalizedName: name.toLowerCase(), uniqueArticles: 30, uniqueDomains: 8,
     sampledBatches: 12, singleTokenName: false, personSignalArticles: 15,
-    organizationSignalArticles: 0, languageCoverage: { coverage: 0.8 },
+    organizationSignalArticles: 0, locationSignalArticles: 0, languageCoverage: { coverage: 0.8 },
     quality: { topDomainShare: 0.2, reviewFlags: [] },
     evidence: [{ url: "https://example.com/story" }],
     ...overrides
@@ -63,4 +63,13 @@ test("builds at most 16 research candidates and never auto-admits them to the ga
 test("refuses to create a final league shortlist from incomplete discovery", () => {
   const discovery = { status: "PARTIAL", summary: { completeSamples: 4 }, candidates: [] };
   assert.equal(discovery.status, "PARTIAL");
+});
+
+
+test("classifies candidates with location cross-signals as places", () => {
+  const result = scoreLeagueCandidate(candidate("Gdańsk", {
+    personSignalArticles: 0, organizationSignalArticles: 0, locationSignalArticles: 18
+  }), null, 30);
+  assert.equal(result.candidateType, "place");
+  assert.equal(result.eligibleForReview, true);
 });
