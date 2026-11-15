@@ -51,7 +51,7 @@ function buildQualityDiagnostics(item, totalBatches) {
   const topDomain = domainRows[0] ?? null;
   const topDomainShare = articleCount ? (topDomain?.[1] ?? 0) / articleCount : 0;
   const batchCoverage = totalBatches ? item.batches.size / totalBatches : 0;
-  const entitySignalArticles = new Set([...item.personDocuments, ...item.organizationDocuments]).size;
+  const entitySignalArticles = new Set([...item.personDocuments, ...item.organizationDocuments, ...item.locationDocuments]).size;
   const variantRows = [...item.nameVariants.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
   const normalizedTokens = item.key.split(" ");
   const publisherNameOverlap = domainRows.some(([domain]) => {
@@ -62,7 +62,7 @@ function buildQualityDiagnostics(item, totalBatches) {
   if (topDomainShare >= 0.5) warnings.push("domain_concentration_50pct_or_more");
   if (item.domains.size <= 3) warnings.push("low_domain_count_3_or_less");
   if (batchCoverage <= 0.3) warnings.push("low_sample_batch_coverage_30pct_or_less");
-  if (entitySignalArticles === 0) warnings.push("no_person_or_organization_cross_signal");
+  if (entitySignalArticles === 0) warnings.push("no_person_organization_or_location_cross_signal");
   if (variantRows.length >= 3) warnings.push("multiple_name_variants");
   if (publisherNameOverlap) warnings.push("candidate_name_overlaps_source_domain");
   if (GENERIC_PHRASE_PATTERNS.some(pattern => pattern.test(item.key))) warnings.push("possible_generic_or_boilerplate_phrase");
@@ -190,6 +190,7 @@ export function addGkgDocument(accumulator, row, sampleFilename) {
 
   const personKeys = new Set((row.persons ?? []).map(normalizeCandidateName));
   const organizationKeys = new Set((row.organizations ?? []).map(normalizeCandidateName));
+  const locationKeys = new Set((row.locations ?? []).map(normalizeCandidateName));
   for (const [key, item] of uniqueNames) {
     let candidate = accumulator.get(key);
     if (!candidate) {
@@ -205,6 +206,7 @@ export function addGkgDocument(accumulator, row, sampleFilename) {
         batches: new Set(),
         personDocuments: new Set(),
         organizationDocuments: new Set(),
+        locationDocuments: new Set(),
         mentionOccurrences: 0,
         evidence: []
       };
@@ -225,6 +227,7 @@ export function addGkgDocument(accumulator, row, sampleFilename) {
     }
     if (personKeys.has(key)) candidate.personDocuments.add(row.url);
     if (organizationKeys.has(key)) candidate.organizationDocuments.add(row.url);
+    if (locationKeys.has(key)) candidate.locationDocuments.add(row.url);
     if (candidate.evidence.length < 3) {
       candidate.evidence.push({
         url: row.url,
@@ -257,6 +260,7 @@ export function summarizeCandidateDiscovery(accumulator, sampleStats, limit = 20
         mentionOccurrences: item.mentionOccurrences,
         personSignalArticles: item.personDocuments.size,
         organizationSignalArticles: item.organizationDocuments.size,
+        locationSignalArticles: item.locationDocuments.size,
         nameVariants: variants.slice(0, 8).map(([name, occurrences]) => ({ name, occurrences })),
         languageCoverage: {
           knownLanguageArticles,

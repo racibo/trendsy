@@ -105,7 +105,7 @@ test("adds transparent quality flags and a stratified manual review sample", () 
   const candidate = report.candidates.find(item => item.normalizedName === "chief executive officer");
   assert.ok(candidate.quality.reviewFlags.includes("domain_concentration_50pct_or_more"));
   assert.ok(candidate.quality.reviewFlags.includes("low_domain_count_3_or_less"));
-  assert.ok(candidate.quality.reviewFlags.includes("no_person_or_organization_cross_signal"));
+  assert.ok(candidate.quality.reviewFlags.includes("no_person_organization_or_location_cross_signal"));
   assert.ok(candidate.quality.reviewFlags.includes("possible_generic_or_boilerplate_phrase"));
   assert.ok(report.manualReviewSample.some(item =>
     item.normalizedName === "chief executive officer" && item.strata.includes("domain_concentrated")
@@ -143,4 +143,23 @@ test("suggests possible aliases from shared tokens and repeated article co-occur
   assert.deepEqual(pair.sharedTokens, ["donald", "trump"]);
   assert.equal(pair.assessment, null);
   assert.equal(report.candidates.length, 2);
+});
+
+
+test("corroborates place candidates with GKG LOCATIONS field", () => {
+  const accumulator = createCandidateAccumulator();
+  for (let index = 0; index < 3; index++) {
+    addGkgDocument(accumulator, {
+      valid: true, sourceCollectionId: "1",
+      url: `https://publisher-${index}.example/gdansk`,
+      allNames: ["Gdańsk,1"], persons: [], organizations: [],
+      locations: ["Gdańsk"], themes: []
+    }, `batch-${index}`);
+  }
+  const report = summarizeCandidateDiscovery(accumulator, [
+    { status: "COMPLETE" }, { status: "COMPLETE" }, { status: "COMPLETE" }
+  ]);
+  const gdansk = report.candidates.find(item => item.normalizedName === "gdańsk");
+  assert.equal(gdansk.locationSignalArticles, 3);
+  assert.equal(gdansk.quality.entitySignalArticles, 3);
 });

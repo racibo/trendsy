@@ -18,7 +18,13 @@ export function scoreLeagueCandidate(candidate, relevance = null, completeSample
   const domainDiversity = clamp(domains / 10);
   const personSignal = Number(candidate.personSignalArticles ?? 0);
   const organizationSignal = Number(candidate.organizationSignalArticles ?? 0);
-  const crossSignalCoverage = clamp(Math.max(personSignal, organizationSignal) / Math.max(1, articles));
+  const locationSignal = Number(candidate.locationSignalArticles ?? 0);
+  const crossSignalCoverage = clamp(Math.max(personSignal, organizationSignal, locationSignal) / Math.max(1, articles));
+  const candidateType = locationSignal >= personSignal && locationSignal >= organizationSignal && locationSignal > 0
+    ? "place"
+    : personSignal >= organizationSignal && personSignal > 0
+      ? "person"
+      : organizationSignal > 0 ? "organization" : "unclassified";
   const languageCoverage = clamp(Number(candidate.languageCoverage?.coverage ?? 0));
   const exact = relevance?.exactPhrase;
   const repeat = relevance?.repeat2;
@@ -67,6 +73,8 @@ export function scoreLeagueCandidate(candidate, relevance = null, completeSample
     topDomainShare: Number(topDomainShare.toFixed(3)),
     personSignalArticles: personSignal,
     organizationSignalArticles: organizationSignal,
+    locationSignalArticles: locationSignal,
+    candidateType,
     crossSignalCoverage: Number(crossSignalCoverage.toFixed(3)),
     languageCoverage: Number(languageCoverage.toFixed(3)),
     relevance: {
@@ -147,18 +155,18 @@ export function renderLeagueCandidateScreen(report) {
     "",
     "To ranking priorytetu do ręcznej oceny, a nie automatyczny ranking popularności ani gotowa liga. Żaden kandydat nie trafia automatycznie do gry.",
     "",
-    "| # | Kandydat | Punkty selekcyjne | Artykuły | Domeny | Próbki | Udział największej domeny | Sygnał PERSON/ORG |",
-    "|---:|---|---:|---:|---:|---:|---:|---:|",
+    "| # | Kandydat | Punkty selekcyjne | Artykuły | Domeny | Próbki | Udział największej domeny | Typ sygnału | PERSON/ORG/LOCATION |",
+    "|---:|---|---:|---:|---:|---:|---:|---:|---:|",
     ...report.top16ResearchShortlist.map((item, index) =>
       "| " + (index + 1) + " | " + item.name.replaceAll("|", "\\|") + " | " + item.score +
       " | " + item.uniqueArticles + " | " + item.uniqueDomains + " | " + item.sampledBatches +
-      " | " + Math.round(item.topDomainShare * 100) + "% | " +
-      (item.personSignalArticles + item.organizationSignalArticles) + " |"
+      " | " + Math.round(item.topDomainShare * 100) + "% | " + item.candidateType + " | " +
+      (item.personSignalArticles + item.organizationSignalArticles + item.locationSignalArticles) + " |"
     ),
     "",
     "## Kryteria wstrzymania",
     "",
-    "Kandydat jest wstrzymany, jeśli ma mniej niż 5 unikalnych artykułów, mniej niż 3 próbki czasowe, mniej niż 3 domeny, ponad 75% materiałów z jednej domeny, nazwę ogólną/boilerplate albo niejednoznaczną nazwę jednowyrazową bez potwierdzenia PERSON/ORGANIZATIONS.",
+    "Kandydat jest wstrzymany, jeśli ma mniej niż 5 unikalnych artykułów, mniej niż 3 próbki czasowe, mniej niż 3 domeny, ponad 75% materiałów z jednej domeny, nazwę ogólną/boilerplate albo niejednoznaczną nazwę jednowyrazową bez potwierdzenia PERSON/ORGANIZATIONS/LOCATIONS.",
     "",
     "## Ograniczenia",
     "",

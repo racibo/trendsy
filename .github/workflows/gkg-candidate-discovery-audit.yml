@@ -14,6 +14,7 @@ on:
       - "scripts/gkg-multisample-utils.mjs"
       - "scripts/league-candidate-screen.mjs"
       - "scripts/league-candidate-screen-utils.mjs"
+      - "tests/gkg-audit-utils.test.mjs"
       - "tests/gkg-candidate-discovery.test.mjs"
       - "tests/gkg-article-relevance.test.mjs"
       - "tests/league-candidate-screen.test.mjs"
@@ -46,6 +47,7 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 24
+      - run: npm run check:gkg
       - run: npm run check:gkg-discovery
       - run: npm run check:gkg-relevance
       - run: npm run check:league-screen
