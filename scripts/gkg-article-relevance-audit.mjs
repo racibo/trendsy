@@ -188,7 +188,9 @@ const report = {
   generatedAt: new Date().toISOString(),
   timespan: TIMESPAN,
   maxRecordsPerQuery: MAX_RECORDS,
-  requestedCandidates: candidates.length,\n  candidateLimit: MAX_CANDIDATES,\n  requestedQueries: candidates.length * 2,
+  requestedCandidates: candidates.length,
+  candidateLimit: MAX_CANDIDATES,
+  requestedQueries: candidates.length * 2,
   summary: {
     candidates: candidates.length,
     successfulCandidates: candidates.filter(item => item.exactPhrase.status === "ok" || item.repeat2.status === "ok").length,
