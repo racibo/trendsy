@@ -62,7 +62,7 @@ function buildQualityDiagnostics(item, totalBatches) {
   if (topDomainShare >= 0.5) warnings.push("domain_concentration_50pct_or_more");
   if (item.domains.size <= 3) warnings.push("low_domain_count_3_or_less");
   if (batchCoverage <= 0.3) warnings.push("low_sample_batch_coverage_30pct_or_less");
-  if (entitySignalArticles === 0) warnings.push("no_person_or_organization_cross_signal");
+  if (entitySignalArticles === 0) warnings.push("no_person_organization_or_location_cross_signal");
   if (variantRows.length >= 3) warnings.push("multiple_name_variants");
   if (publisherNameOverlap) warnings.push("candidate_name_overlaps_source_domain");
   if (GENERIC_PHRASE_PATTERNS.some(pattern => pattern.test(item.key))) warnings.push("possible_generic_or_boilerplate_phrase");
