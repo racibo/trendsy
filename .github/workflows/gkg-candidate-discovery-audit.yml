@@ -73,6 +73,18 @@ jobs:
           GKG_DISCOVERY_SAMPLE_COUNT: 30
           GKG_DISCOVERY_SPACING_MINUTES: 150
           GKG_DISCOVERY_CANDIDATE_LIMIT: 300
+      - name: Archive candidate discovery before headline audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: gkg-candidate-discovery-snapshot
+          path: |
+            output/gkg-candidate-discovery.json
+            output/gkg-candidate-discovery.md
+          if-no-files-found: error
+          retention-days: 30
+      - name: Publish discovery summary
+        if: always() && hashFiles('output/gkg-candidate-discovery.md') != ''
+        run: cat output/gkg-candidate-discovery.md >> "$GITHUB_STEP_SUMMARY"
       - name: Audit article relevance using GDELT DOC headlines
         run: npm run gkg:relevance
         env:
