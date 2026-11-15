@@ -190,6 +190,7 @@ export function addGkgDocument(accumulator, row, sampleFilename) {
 
   const personKeys = new Set((row.persons ?? []).map(normalizeCandidateName));
   const organizationKeys = new Set((row.organizations ?? []).map(normalizeCandidateName));
+  const locationKeys = new Set((row.locations ?? []).map(normalizeCandidateName));
   for (const [key, item] of uniqueNames) {
     let candidate = accumulator.get(key);
     if (!candidate) {
@@ -226,7 +227,6 @@ export function addGkgDocument(accumulator, row, sampleFilename) {
     }
     if (personKeys.has(key)) candidate.personDocuments.add(row.url);
     if (organizationKeys.has(key)) candidate.organizationDocuments.add(row.url);
-    const locationKeys = new Set((row.locations ?? []).map(normalizeCandidateName));
     if (locationKeys.has(key)) candidate.locationDocuments.add(row.url);
     if (candidate.evidence.length < 3) {
       candidate.evidence.push({
