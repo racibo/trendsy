@@ -163,3 +163,23 @@ test("corroborates place candidates with GKG LOCATIONS field", () => {
   assert.equal(gdansk.locationSignalArticles, 3);
   assert.equal(gdansk.quality.entitySignalArticles, 3);
 });
+
+
+test("flags generic roles and known news publishers as low-quality topic candidates", () => {
+  const accumulator = createCandidateAccumulator();
+  for (let index = 0; index < 4; index++) {
+    const common = {
+      valid: true, sourceCollectionId: "1",
+      url: `https://publisher-${index}.example/story`,
+      persons: [], organizations: [], locations: [], themes: []
+    };
+    addGkgDocument(accumulator, {
+      ...common, allNames: ["Prime Minister,1", "Associated Press,2"]
+    }, `batch-${index}`);
+  }
+  const report = summarizeCandidateDiscovery(accumulator, [
+    { status: "COMPLETE" }, { status: "COMPLETE" }, { status: "COMPLETE" }, { status: "COMPLETE" }
+  ]);
+  assert.ok(report.candidates.find(item => item.normalizedName === "prime minister").quality.reviewFlags.includes("possible_generic_or_boilerplate_phrase"));
+  assert.ok(report.candidates.find(item => item.normalizedName === "associated press").quality.reviewFlags.includes("likely_media_publisher_name"));
+});
