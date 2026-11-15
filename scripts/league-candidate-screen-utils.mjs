@@ -1,5 +1,3 @@
-const GENERIC_FLAGS = new Set(["possible_generic_or_boilerplate_phrase"]);
-
 function clamp(value, min = 0, max = 1) {
   return Math.min(max, Math.max(min, Number.isFinite(value) ? value : 0));
 }
@@ -55,7 +53,8 @@ export function scoreLeagueCandidate(candidate, relevance = null, completeSample
   if (batches < 3) exclusionReasons.push("fewer_than_3_sample_batches");
   if (domains < 3) exclusionReasons.push("fewer_than_3_domains");
   if (topDomainShare > 0.75) exclusionReasons.push("one_domain_over_75_percent");
-  for (const flag of flags) if (GENERIC_FLAGS.has(flag)) exclusionReasons.push("generic_or_boilerplate_name");
+  for (const flag of flags) if (flag === "possible_generic_or_boilerplate_phrase") exclusionReasons.push("generic_or_boilerplate_name");
+  if (flags.has("likely_media_publisher_name")) exclusionReasons.push("media_publisher_not_topic_candidate");
   if (candidate.singleTokenName && crossSignalCoverage < 0.25) exclusionReasons.push("ambiguous_single_token_without_entity_cross_signal");
 
   const score = Number(Object.values(components).reduce((sum, value) => sum + value, 0).toFixed(2));
