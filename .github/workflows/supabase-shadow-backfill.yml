@@ -1,6 +1,11 @@
 name: Supabase shadow history backfill
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/supabase-shadow-backfill.yml"
   workflow_dispatch:
     inputs:
       start_date:
@@ -31,7 +36,7 @@ jobs:
       - name: Import and verify archived observations
         run: npm run market:shadow:backfill -- "$START_DATE" "$END_DATE"
         env:
-          START_DATE: ${{ inputs.start_date }}
-          END_DATE: ${{ inputs.end_date }}
+          START_DATE: ${{ github.event.inputs.start_date || '2026-11-09' }}
+          END_DATE: ${{ github.event.inputs.end_date || '2026-11-15' }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
