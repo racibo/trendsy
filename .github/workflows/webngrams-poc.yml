@@ -14,6 +14,8 @@ on:
   schedule:
     - cron: "35 6 * * *"
   push:
+    branches:
+      - main
     paths:
       - "scripts/webngrams-smoke-test.mjs"
       - "scripts/webngrams-review-audit.mjs"
