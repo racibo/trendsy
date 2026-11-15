@@ -144,3 +144,22 @@ test("suggests possible aliases from shared tokens and repeated article co-occur
   assert.equal(pair.assessment, null);
   assert.equal(report.candidates.length, 2);
 });
+
+
+test("corroborates place candidates with GKG LOCATIONS field", () => {
+  const accumulator = createCandidateAccumulator();
+  for (let index = 0; index < 3; index++) {
+    addGkgDocument(accumulator, {
+      valid: true, sourceCollectionId: "1",
+      url: `https://publisher-${index}.example/gdansk`,
+      allNames: ["Gdańsk,1"], persons: [], organizations: [],
+      locations: ["Gdańsk"], themes: []
+    }, `batch-${index}`);
+  }
+  const report = summarizeCandidateDiscovery(accumulator, [
+    { status: "COMPLETE" }, { status: "COMPLETE" }, { status: "COMPLETE" }
+  ]);
+  const gdansk = report.candidates.find(item => item.normalizedName === "gdańsk");
+  assert.equal(gdansk.locationSignalArticles, 3);
+  assert.equal(gdansk.quality.entitySignalArticles, 3);
+});
