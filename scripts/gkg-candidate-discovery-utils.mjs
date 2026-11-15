@@ -37,6 +37,13 @@ const GENERIC_PHRASE_PATTERNS = [
   /\bmarket report\b/i
 ];
 
+const MEDIA_PUBLISHER_NAMES = new Set([
+  "associated press", "reuters", "bbc", "cnn", "fox news", "new york times",
+  "the new york times", "washington post", "the washington post", "the guardian",
+  "guardian", "bloomberg", "npr", "al jazeera", "sky news", "nbc", "cbs",
+  "abc news", "ap news", "usa today"
+]);
+
 function domainTokens(domain) {
   return String(domain ?? "").toLowerCase()
     .replace(/^www\./, "")
@@ -66,6 +73,7 @@ function buildQualityDiagnostics(item, totalBatches) {
   if (variantRows.length >= 3) warnings.push("multiple_name_variants");
   if (publisherNameOverlap) warnings.push("candidate_name_overlaps_source_domain");
   if (GENERIC_PHRASE_PATTERNS.some(pattern => pattern.test(item.key))) warnings.push("possible_generic_or_boilerplate_phrase");
+  if (MEDIA_PUBLISHER_NAMES.has(item.key)) warnings.push("likely_media_publisher_name");
   return {
     topDomain: topDomain ? { domain: topDomain[0], articles: topDomain[1] } : null,
     topDomainShare: Number(topDomainShare.toFixed(4)),
