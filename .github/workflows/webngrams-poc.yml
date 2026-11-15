@@ -1,9 +1,5 @@
 name: Web NGrams proof of concept
 
-concurrency:
-  group: ${{ github.event_name == 'pull_request' && format('trendsy-history-archive-pr-{0}', github.workflow) || 'trendsy-history-archive-main' }}
-  cancel-in-progress: false
-
 on:
   workflow_dispatch:
     inputs:
@@ -158,6 +154,17 @@ jobs:
             echo "No daily history changes to commit."
           else
             git commit -m "Archive Web NGrams daily metrics"
-            git push
+            for attempt in 1 2 3; do
+              git fetch origin main
+              git rebase origin/main
+              if git push origin HEAD:main; then
+                break
+              fi
+              if [ "$attempt" -eq 3 ]; then
+                echo "::error::Could not publish Web NGrams history after three attempts."
+                exit 1
+              fi
+              sleep 2
+            done
           fi
 
