@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { validateDailySnapshot } from "../scripts/market-observations.mjs";
 import { publishObservations } from "../scripts/publish-market-observations.mjs";
+import { listDates } from "../scripts/backfill-market-observations.mjs";
 
 const base = {
   date: "2026-11-14",
@@ -81,4 +82,18 @@ test("rejects an unreadable Supabase confirmation", async () => {
     }),
     /did not return a readable row confirmation/
   );
+});
+
+
+test("lists every UTC archive date in an inclusive backfill range", () => {
+  assert.deepEqual(listDates("2026-11-09", "2026-11-11"), [
+    "2026-11-09",
+    "2026-11-10",
+    "2026-11-11"
+  ]);
+});
+
+test("rejects invalid or reversed backfill date ranges", () => {
+  assert.throws(() => listDates("2026-02-30", "2026-03-01"), /valid start and end dates/);
+  assert.throws(() => listDates("2026-11-12", "2026-11-09"), /must not be after/);
 });
