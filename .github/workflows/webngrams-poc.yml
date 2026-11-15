@@ -1,5 +1,9 @@
 name: Web NGrams proof of concept
 
+concurrency:
+  group: ${{ github.event_name == 'pull_request' && format('trendsy-history-archive-pr-{0}', github.workflow) || 'trendsy-history-archive-main' }}
+  cancel-in-progress: false
+
 on:
   workflow_dispatch:
     inputs:
@@ -10,6 +14,8 @@ on:
   schedule:
     - cron: "35 6 * * *"
   push:
+    branches:
+      - main
     paths:
       - "scripts/webngrams-smoke-test.mjs"
       - "scripts/webngrams-review-audit.mjs"

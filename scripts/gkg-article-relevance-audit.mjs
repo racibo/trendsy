@@ -7,8 +7,8 @@ const INPUT = path.resolve("output/gkg-candidate-discovery.json");
 const OUTPUT_DIR = path.resolve("output");
 const TIMESPAN = process.env.GKG_RELEVANCE_TIMESPAN ?? "3days";
 const MAX_RECORDS = Math.min(50, Math.max(1, Number(process.env.GKG_RELEVANCE_MAX_RECORDS ?? 20)));
-const MIN_REQUEST_INTERVAL_MS = 6_000;
-const MAX_ATTEMPTS = 3;
+const MIN_REQUEST_INTERVAL_MS = 15_000;
+const MAX_ATTEMPTS = 4;
 const USER_AGENT = "Trendsy-GKG-Article-Relevance-Audit/1.0 (research prototype)";
 let lastRequestStartedAt = 0;
 
@@ -49,7 +49,7 @@ async function fetchArticles(query) {
         const detail = (await response.text()).slice(0, 400);
         lastError = new Error("HTTP " + response.status + ": " + detail);
         if (response.status === 429 && attempt < MAX_ATTEMPTS) {
-          const delay = Math.max(retryAfterMs(response) ?? 12_000, 12_000) * attempt;
+          const delay = Math.max(retryAfterMs(response) ?? 30_000, 30_000) * attempt;
           await sleep(delay);
           continue;
         }
