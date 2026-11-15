@@ -72,7 +72,7 @@ jobs:
         run: npm run gkg:relevance
         env:
           GKG_RELEVANCE_TIMESPAN: 3days
-          GKG_RELEVANCE_MAX_RECORDS: 20
+          GKG_RELEVANCE_MAX_RECORDS: 20\n          GKG_RELEVANCE_MAX_CANDIDATES: 16
       - name: Screen candidates for league review
         run: npm run league:screen
       - uses: actions/upload-artifact@v4
