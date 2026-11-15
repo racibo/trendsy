@@ -1,5 +1,3 @@
-const GENERIC_FLAGS = new Set(["possible_generic_or_boilerplate_phrase", "likely_media_publisher_name"]);
-
 function clamp(value, min = 0, max = 1) {
   return Math.min(max, Math.max(min, Number.isFinite(value) ? value : 0));
 }
