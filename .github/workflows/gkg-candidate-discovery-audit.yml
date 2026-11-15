@@ -53,6 +53,9 @@ jobs:
       - run: npm run check:league-screen
 
   live-audit:
+    concurrency:
+      group: trendsy-gkg-candidate-relevance-audit
+      cancel-in-progress: false
     if: github.event_name == 'workflow_dispatch' || github.event_name == 'push'
     needs: validate
     runs-on: ubuntu-latest
