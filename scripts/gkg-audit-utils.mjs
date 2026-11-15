@@ -7,6 +7,7 @@ export const GKG_FIELD_INDEX = Object.freeze({
   sourceCommonName: 3,
   documentIdentifier: 4,
   themes: 7,
+  locations: 9,
   enhancedThemes: 8,
   persons: 11,
   organizations: 13,
