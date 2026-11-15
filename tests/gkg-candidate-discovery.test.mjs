@@ -105,7 +105,7 @@ test("adds transparent quality flags and a stratified manual review sample", () 
   const candidate = report.candidates.find(item => item.normalizedName === "chief executive officer");
   assert.ok(candidate.quality.reviewFlags.includes("domain_concentration_50pct_or_more"));
   assert.ok(candidate.quality.reviewFlags.includes("low_domain_count_3_or_less"));
-  assert.ok(candidate.quality.reviewFlags.includes("no_person_or_organization_cross_signal"));
+  assert.ok(candidate.quality.reviewFlags.includes("no_person_organization_or_location_cross_signal"));
   assert.ok(candidate.quality.reviewFlags.includes("possible_generic_or_boilerplate_phrase"));
   assert.ok(report.manualReviewSample.some(item =>
     item.normalizedName === "chief executive officer" && item.strata.includes("domain_concentrated")
