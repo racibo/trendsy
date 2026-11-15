@@ -7,6 +7,7 @@ const INPUT = path.resolve("output/gkg-candidate-discovery.json");
 const OUTPUT_DIR = path.resolve("output");
 const TIMESPAN = process.env.GKG_RELEVANCE_TIMESPAN ?? "3days";
 const MAX_RECORDS = Math.min(50, Math.max(1, Number(process.env.GKG_RELEVANCE_MAX_RECORDS ?? 20)));
+const MAX_CANDIDATES = Math.min(40, Math.max(1, Number(process.env.GKG_RELEVANCE_MAX_CANDIDATES ?? 16)));
 const MIN_REQUEST_INTERVAL_MS = 15_000;
 const MAX_ATTEMPTS = 4;
 const USER_AGENT = "Trendsy-GKG-Article-Relevance-Audit/1.0 (research prototype)";
@@ -146,7 +147,16 @@ const discovery = JSON.parse(await fs.readFile(INPUT, "utf8"));
 const sample = Array.isArray(discovery.manualReviewSample) ? discovery.manualReviewSample : [];
 if (!sample.length) throw new Error("GKG discovery report has no manualReviewSample rows");
 const candidates = [];
-for (const candidate of sample) {
+const strataOrder = ["high_frequency", "medium_frequency", "low_frequency", "domain_concentrated", "low_domain_diversity", "no_entity_cross_signal", "variant_rich", "publisher_name_overlap"];
+const selected = new Map();
+for (const stratum of strataOrder) {
+  for (const candidate of sample.filter(item => (item.strata ?? []).includes(stratum))) {
+    if (selected.size >= MAX_CANDIDATES) break;
+    selected.set(candidate.normalizedName, candidate);
+  }
+  if (selected.size >= MAX_CANDIDATES) break;
+}
+for (const candidate of selected.values()) {
   const queries = buildRelevanceQueries(candidate.name);
   console.log("Checking " + candidate.name);
   const exact = await fetchArticles(queries.exactPhrase);
@@ -178,6 +188,8 @@ const report = {
   generatedAt: new Date().toISOString(),
   timespan: TIMESPAN,
   maxRecordsPerQuery: MAX_RECORDS,
+  requestedCandidates: candidates.length,
+  candidateLimit: MAX_CANDIDATES,
   requestedQueries: candidates.length * 2,
   summary: {
     candidates: candidates.length,
