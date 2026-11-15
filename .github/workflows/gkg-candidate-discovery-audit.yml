@@ -11,9 +11,15 @@ on:
       - "scripts/gkg-article-relevance-audit.mjs"
       - "scripts/gkg-article-relevance-utils.mjs"
       - "scripts/gkg-audit-utils.mjs"
+      - "scripts/league-candidate-screen.mjs"
+      - "scripts/league-candidate-screen-utils.mjs"
+      - "tests/league-candidate-screen.test.mjs"
       - "scripts/gkg-multisample-utils.mjs"
       - "tests/gkg-candidate-discovery.test.mjs"
       - "tests/gkg-article-relevance.test.mjs"
+      - "scripts/league-candidate-screen.mjs"
+      - "scripts/league-candidate-screen-utils.mjs"
+      - "tests/league-candidate-screen.test.mjs"
       - "package.json"
       - ".github/workflows/gkg-candidate-discovery-audit.yml"
   pull_request:
@@ -42,6 +48,7 @@ jobs:
           node-version: 24
       - run: npm run check:gkg-discovery
       - run: npm run check:gkg-relevance
+      - run: npm run check:league-screen
 
   live-audit:
     if: github.event_name == 'workflow_dispatch' || github.event_name == 'push'
@@ -66,6 +73,8 @@ jobs:
         env:
           GKG_RELEVANCE_TIMESPAN: 3days
           GKG_RELEVANCE_MAX_RECORDS: 20
+      - name: Screen candidates for league review
+        run: npm run league:screen
       - uses: actions/upload-artifact@v4
         with:
           name: gkg-candidate-and-relevance-audit
@@ -74,11 +83,16 @@ jobs:
             output/gkg-candidate-discovery.md
             output/gkg-article-relevance.json
             output/gkg-article-relevance.md
+            output/league-candidate-screen.json
+            output/league-candidate-screen.md
           if-no-files-found: error
           retention-days: 30
       - name: Publish discovery summary
         if: always() && hashFiles('output/gkg-candidate-discovery.md') != ''
         run: cat output/gkg-candidate-discovery.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Publish league candidate screen
+        if: always() && hashFiles('output/league-candidate-screen.md') != ''
+        run: cat output/league-candidate-screen.md >> "$GITHUB_STEP_SUMMARY"
       - name: Publish relevance summary
         if: always() && hashFiles('output/gkg-article-relevance.md') != ''
         run: cat output/gkg-article-relevance.md >> "$GITHUB_STEP_SUMMARY"
