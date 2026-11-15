@@ -27,6 +27,11 @@ export function createCandidateAccumulator() {
 
 const GENERIC_PHRASE_PATTERNS = [
   /\bchief executive officer\b/i,
+  /\bprime minister\b/i,
+  /\bsupreme court\b/i,
+  /\bgovernment\b/i,
+  /\bpolice\b/i,
+  /\bpresident\b/i,
   /\btrusted news\b/i,
   /\bget free report\b/i,
   /\bstock advisor\b/i,
