@@ -18,7 +18,13 @@ export function scoreLeagueCandidate(candidate, relevance = null, completeSample
   const domainDiversity = clamp(domains / 10);
   const personSignal = Number(candidate.personSignalArticles ?? 0);
   const organizationSignal = Number(candidate.organizationSignalArticles ?? 0);
-  const crossSignalCoverage = clamp(Math.max(personSignal, organizationSignal) / Math.max(1, articles));
+  const locationSignal = Number(candidate.locationSignalArticles ?? 0);
+  const crossSignalCoverage = clamp(Math.max(personSignal, organizationSignal, locationSignal) / Math.max(1, articles));
+  const candidateType = locationSignal >= personSignal && locationSignal >= organizationSignal && locationSignal > 0
+    ? "place"
+    : personSignal >= organizationSignal && personSignal > 0
+      ? "person"
+      : organizationSignal > 0 ? "organization" : "unclassified";
   const languageCoverage = clamp(Number(candidate.languageCoverage?.coverage ?? 0));
   const exact = relevance?.exactPhrase;
   const repeat = relevance?.repeat2;
@@ -67,6 +73,8 @@ export function scoreLeagueCandidate(candidate, relevance = null, completeSample
     topDomainShare: Number(topDomainShare.toFixed(3)),
     personSignalArticles: personSignal,
     organizationSignalArticles: organizationSignal,
+    locationSignalArticles: locationSignal,
+    candidateType,
     crossSignalCoverage: Number(crossSignalCoverage.toFixed(3)),
     languageCoverage: Number(languageCoverage.toFixed(3)),
     relevance: {
