@@ -156,7 +156,7 @@ export function renderLeagueCandidateScreen(report) {
     "To ranking priorytetu do ręcznej oceny, a nie automatyczny ranking popularności ani gotowa liga. Żaden kandydat nie trafia automatycznie do gry.",
     "",
     "| # | Kandydat | Punkty selekcyjne | Artykuły | Domeny | Próbki | Udział największej domeny | Typ sygnału | PERSON/ORG/LOCATION |",
-    "|---:|---|---:|---:|---:|---:|---:|---:|",
+    "|---:|---|---:|---:|---:|---:|---:|---:|---:|",
     ...report.top16ResearchShortlist.map((item, index) =>
       "| " + (index + 1) + " | " + item.name.replaceAll("|", "\\|") + " | " + item.score +
       " | " + item.uniqueArticles + " | " + item.uniqueDomains + " | " + item.sampledBatches +
