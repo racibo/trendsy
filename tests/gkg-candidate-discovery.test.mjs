@@ -153,7 +153,7 @@ test("corroborates place candidates with GKG LOCATIONS field", () => {
       valid: true, sourceCollectionId: "1",
       url: `https://publisher-${index}.example/gdansk`,
       allNames: ["Gdańsk,1"], persons: [], organizations: [],
-      locations: ["Gdańsk"], themes: []
+      locations: ["Gdańsk, Pomerania, Poland"], themes: []
     }, `batch-${index}`);
   }
   const report = summarizeCandidateDiscovery(accumulator, [

@@ -18,7 +18,7 @@ function makeGkgLine(overrides = {}) {
   fields[3] = "example.com";
   fields[4] = "https://example.com/story";
   fields[7] = "POLITICS;ECON_STOCKMARKET";
-  fields[9] = "Gdańsk#PL#54.35#18.65#PL";
+  fields[9] = "4#Gdańsk, Pomerania, Poland#PL#PL22#54.35#18.65";
   fields[11] = "Jane Doe";
   fields[13] = "Example Organization";
   fields[23] = "Climate Summit,120;World Cup,450";
@@ -33,7 +33,7 @@ test("parses GKG document identity, themes, names and original language", () => 
   assert.equal(parsed.sourceCollectionId, "1");
   assert.equal(parsed.url, "https://example.com/story");
   assert.deepEqual(parsed.themes, ["POLITICS", "ECON_STOCKMARKET"]);
-  assert.deepEqual(parsed.locations, ["Gdańsk"]);
+  assert.deepEqual(parsed.locations, ["Gdańsk, Pomerania, Poland"]);
   assert.deepEqual(parsed.allNames, ["Climate Summit", "World Cup"]);
   assert.equal(parsed.sourceLanguage, "pol");
 });

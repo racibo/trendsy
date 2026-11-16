@@ -39,7 +39,7 @@ export function parseGkgLine(line) {
     sourceCommonName: get("sourceCommonName"),
     url: get("documentIdentifier"),
     themes,
-    locations: get("locations").split(";").map(value => value.split("#")[0].trim()).filter(Boolean),
+    locations: get("locations").split(";").map(value => value.split("#")[1]?.trim() ?? "").filter(Boolean),
     persons: get("persons").split(";").map(value => value.trim()).filter(Boolean),
     organizations: get("organizations").split(";").map(value => value.trim()).filter(Boolean),
     allNames,
