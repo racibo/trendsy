@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { buildRelevanceQueries, summarizeArticleResults } from "./gkg-article-relevance-utils.mjs";
+import { buildRelevanceQueries, normalizeArticleUrl, summarizeArticleResults } from "./gkg-article-relevance-utils.mjs";
 
 const API = "https://api.gdeltproject.org/api/v2/doc/doc";
 const INPUT = path.resolve("output/gkg-candidate-discovery.json");
@@ -127,7 +127,7 @@ function renderMarkdown(report) {
           article.matchesGkgEvidenceUrl ? "same URL as GKG evidence" : null
         ].filter(Boolean);
         const safeTitle = article.title.replaceAll("[", "\\[").replaceAll("]", "\\]");
-        lines.push("- [" + safeTitle + "](" + article.url + ") — " + (article.domain ?? "unknown domain") + "; " + (article.language ?? "language unknown") + "; " + (article.sourcecountry ?? "country unknown") + (flags.length ? " (" + flags.join(", ") + ")" : ""));
+        lines.push("- [" + safeTitle + "](" + article.url + ") — " + (article.domain ?? "unknown domain") + "; " + (article.language ?? "language unknown") + "; " + (article.sourcecountry ?? "country unknown") + "; token coverage " + (article.headlineAssessment.tokenCoverage * 100).toFixed(0) + "%; matched tokens: " + (article.headlineAssessment.matchedCandidateTokens.join(", ") || "none") + (flags.length ? " (" + flags.join(", ") + ")" : ""));
       }
     }
     lines.push("", "- Manual headline-focus assessment: " + (item.manualAssessment.headlineFocus ?? "not assessed"), "- Manual evidence-relevance assessment: " + (item.manualAssessment.evidenceRelevance ?? "not assessed"), "");
@@ -149,7 +149,7 @@ const discovery = JSON.parse(await fs.readFile(INPUT, "utf8"));
 const sample = Array.isArray(discovery.manualReviewSample) ? discovery.manualReviewSample : [];
 if (!sample.length) throw new Error("GKG discovery report has no manualReviewSample rows");
 const candidates = [];
-const strataOrder = ["high_frequency", "medium_frequency", "low_frequency", "domain_concentrated", "low_domain_diversity", "no_entity_cross_signal", "variant_rich", "publisher_name_overlap"];
+const strataOrder = ["high_frequency", "single_token_name", "medium_frequency", "low_frequency", "domain_concentrated", "low_domain_diversity", "no_entity_cross_signal", "variant_rich", "publisher_name_overlap"];
 const selected = new Map();
 for (const stratum of strataOrder) {
   const matches = sample.filter(item => (item.strata ?? []).includes(stratum));
@@ -189,6 +189,28 @@ for (const candidate of selected.values()) {
     queryDiagnostics: { exactPhrase: queries.exactPhrase, repeatQuery: queries.repeatQuery, repeatedToken: queries.repeatedToken }
   });
 }
+const uniqueArticleRows = new Map();
+const urlsByCandidate = new Map();
+for (const candidate of candidates) {
+  for (const group of [candidate.exactPhrase, candidate.repeat2]) {
+    if (group.status !== "ok") continue;
+    for (const article of group.articles) {
+      const normalizedUrl = normalizeArticleUrl(article.url);
+      if (!normalizedUrl) continue;
+      const key = candidate.normalizedName + "|" + normalizedUrl;
+      if (!uniqueArticleRows.has(key)) uniqueArticleRows.set(key, { ...article, candidate: candidate.name });
+      if (!urlsByCandidate.has(normalizedUrl)) urlsByCandidate.set(normalizedUrl, new Set());
+      urlsByCandidate.get(normalizedUrl).add(candidate.normalizedName);
+    }
+  }
+}
+const uniqueArticles = [...uniqueArticleRows.values()];
+const countBy = (field) => Object.entries(uniqueArticles.reduce((counts, item) => {
+  const value = item[field] || "unknown";
+  counts[value] = (counts[value] ?? 0) + 1;
+  return counts;
+}, {})).sort((a, b) => b[1] - a[1]).slice(0, 15).map(([label, count]) => ({ label, count }));
+const crossCandidateSharedUrlCount = [...urlsByCandidate.values()].filter(names => names.size > 1).length;
 const report = {
   schemaVersion: 1,
   source: "GDELT DOC 2.0 API — artlist",
@@ -203,7 +225,17 @@ const report = {
     successfulCandidates: candidates.filter(item => item.exactPhrase.status === "ok" || item.repeat2.status === "ok").length,
     failedCandidates: candidates.filter(item => item.exactPhrase.status !== "ok" && item.repeat2.status !== "ok").length,
     exactPhraseArticles: candidates.reduce((sum, item) => sum + item.exactPhrase.returnedArticles, 0),
-    repeat2Articles: candidates.reduce((sum, item) => sum + item.repeat2.returnedArticles, 0)
+    repeat2Articles: candidates.reduce((sum, item) => sum + item.repeat2.returnedArticles, 0),
+    uniqueCandidateArticleUrls: uniqueArticles.length,
+    headlineExactPhraseArticles: uniqueArticles.filter(item => item.headlineAssessment.exactPhraseInHeadline).length,
+    meanHeadlineTokenCoverage: uniqueArticles.length
+      ? Number((uniqueArticles.reduce((sum, item) => sum + item.headlineAssessment.tokenCoverage, 0) / uniqueArticles.length).toFixed(4))
+      : 0,
+    gkgEvidenceUrlMatches: uniqueArticles.filter(item => item.matchesGkgEvidenceUrl).length,
+    crossCandidateSharedUrlCount,
+    languageBreakdown: countBy("language"),
+    sourceCountryBreakdown: countBy("sourcecountry"),
+    topDomains: countBy("domain")
   },
   candidates
 };
