@@ -183,3 +183,23 @@ test("flags generic roles and known news publishers as low-quality topic candida
   assert.ok(report.candidates.find(item => item.normalizedName === "prime minister").quality.reviewFlags.includes("possible_generic_or_boilerplate_phrase"));
   assert.ok(report.candidates.find(item => item.normalizedName === "associated press").quality.reviewFlags.includes("likely_media_publisher_name"));
 });
+
+test("includes single-token candidates in the manual review sample", () => {
+  const accumulator = createCandidateAccumulator();
+  for (let index = 0; index < 4; index++) {
+    addGkgDocument(accumulator, {
+      valid: true, sourceCollectionId: "1",
+      url: `https://publisher-${index}.example/story`,
+      allNames: ["Paris,1", "Paris Agreement,2"],
+      persons: [], organizations: [], locations: [], themes: []
+    }, `batch-${index}`);
+  }
+  const report = summarizeCandidateDiscovery(accumulator, [
+    { status: "COMPLETE" }, { status: "COMPLETE" },
+    { status: "COMPLETE" }, { status: "COMPLETE" }
+  ]);
+  const paris = report.manualReviewSample.find(item => item.normalizedName === "paris");
+  assert.ok(paris);
+  assert.equal(paris.singleTokenName, true);
+  assert.ok(paris.strata.includes("single_token_name"));
+});
