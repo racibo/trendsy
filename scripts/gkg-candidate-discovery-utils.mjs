@@ -93,6 +93,7 @@ function buildQualityDiagnostics(item, totalBatches) {
 function buildReviewSample(candidates, limitPerStratum = 5) {
   const strata = [
     ["high_frequency", item => item.uniqueArticles >= 50],
+    ["single_token_name", item => !item.key.includes(" ")],
     ["medium_frequency", item => item.uniqueArticles >= 10 && item.uniqueArticles < 50],
     ["low_frequency", item => item.uniqueArticles < 10],
     ["domain_concentrated", item => item.quality.topDomainShare >= 0.5],
@@ -112,6 +113,7 @@ function buildReviewSample(candidates, limitPerStratum = 5) {
       else selected.set(candidate.normalizedName, {
         name: candidate.name,
         normalizedName: candidate.normalizedName,
+        singleTokenName: !candidate.normalizedName.includes(" "),
         uniqueArticles: candidate.uniqueArticles,
         uniqueDomains: candidate.uniqueDomains,
         sampledBatches: candidate.sampledBatches,
