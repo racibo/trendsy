@@ -146,7 +146,7 @@ test("suggests possible aliases from shared tokens and repeated article co-occur
 });
 
 
-test("corroborates place candidates with GKG LOCATIONS field", () => {
+test("corroborates place candidates with full GKG LOCATIONS values and their comma-separated components", () => {
   const accumulator = createCandidateAccumulator();
   for (let index = 0; index < 3; index++) {
     addGkgDocument(accumulator, {
