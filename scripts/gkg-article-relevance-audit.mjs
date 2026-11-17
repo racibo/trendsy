@@ -8,8 +8,8 @@ const OUTPUT_DIR = path.resolve("output");
 const TIMESPAN = process.env.GKG_RELEVANCE_TIMESPAN ?? "3days";
 const MAX_RECORDS = Math.min(50, Math.max(1, Number(process.env.GKG_RELEVANCE_MAX_RECORDS ?? 20)));
 const MAX_CANDIDATES = Math.min(40, Math.max(1, Number(process.env.GKG_RELEVANCE_MAX_CANDIDATES ?? 16)));
-const MIN_REQUEST_INTERVAL_MS = 20_000;
-const MAX_ATTEMPTS = 2;
+const MIN_REQUEST_INTERVAL_MS = 20_000; // Keep requests serialized; retry backoff below handles provider throttling.
+const MAX_ATTEMPTS = 5;
 const USER_AGENT = "Trendsy-GKG-Article-Relevance-Audit/1.0 (research prototype)";
 let lastRequestStartedAt = 0;
 
@@ -50,12 +50,14 @@ async function fetchArticles(query) {
         const detail = (await response.text()).slice(0, 400);
         lastError = new Error("HTTP " + response.status + ": " + detail);
         if (response.status === 429 && attempt < MAX_ATTEMPTS) {
-          const delay = Math.max(retryAfterMs(response) ?? 30_000, 30_000) * attempt;
+          const exponentialBackoff = Math.min(60_000 * (2 ** (attempt - 1)), 10 * 60_000);
+          const delay = Math.max(retryAfterMs(response) ?? 0, exponentialBackoff);
+          console.warn(`GDELT DOC HTTP 429; retrying attempt ${attempt + 1}/${MAX_ATTEMPTS} after ${Math.ceil(delay / 1000)}s`);
           await sleep(delay);
           continue;
         }
         if (response.status >= 500 && attempt < MAX_ATTEMPTS) {
-          await sleep(5_000 * attempt);
+          await sleep(Math.min(15_000 * (2 ** (attempt - 1)), 2 * 60_000));
           continue;
         }
         break;
@@ -79,7 +81,7 @@ async function fetchArticles(query) {
       };
     } catch (error) {
       lastError = error;
-      if (attempt < MAX_ATTEMPTS) await sleep(5_000 * attempt);
+      if (attempt < MAX_ATTEMPTS) await sleep(Math.min(10_000 * (2 ** (attempt - 1)), 2 * 60_000));
     }
   }
   return { status: "error", error: String(lastError ?? "Unknown GDELT DOC API error") };
