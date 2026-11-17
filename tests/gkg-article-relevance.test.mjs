@@ -7,11 +7,12 @@ import {
   summarizeArticleResults
 } from "../scripts/gkg-article-relevance-utils.mjs";
 
-test("builds exact phrase and repeat2 query without changing the candidate", () => {
+test("builds exact phrase and proximity query for multi-token candidates", () => {
   assert.deepEqual(buildRelevanceQueries("Donald Trump"), {
     exactPhrase: '"Donald Trump"',
     repeatedToken: "donald",
-    repeatQuery: '"Donald Trump" repeat2:"donald"'
+    contextOperator: "near10",
+    repeatQuery: '"Donald Trump" near10:"donald trump"'
   });
 });
 
@@ -45,4 +46,14 @@ test("matches GKG evidence URLs and leaves human assessment blank", () => {
   assert.equal(result.exactPhrase.gkgEvidenceUrlMatches, 1);
   assert.equal(result.exactPhrase.headlineExactPhraseCount, 1);
   assert.equal(result.manualAssessment.headlineFocus, null);
+});
+
+
+test("uses a repeated-token filter for ambiguous single-token candidates", () => {
+  assert.deepEqual(buildRelevanceQueries("Paris"), {
+    exactPhrase: '"Paris"',
+    repeatedToken: "paris",
+    contextOperator: "repeat3",
+    repeatQuery: '"Paris" repeat3:"paris"'
+  });
 });

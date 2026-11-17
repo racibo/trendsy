@@ -93,6 +93,7 @@ function buildQualityDiagnostics(item, totalBatches) {
 function buildReviewSample(candidates, limitPerStratum = 5) {
   const strata = [
     ["high_frequency", item => item.uniqueArticles >= 50],
+    ["single_token_name", item => item.singleTokenName],
     ["medium_frequency", item => item.uniqueArticles >= 10 && item.uniqueArticles < 50],
     ["low_frequency", item => item.uniqueArticles < 10],
     ["domain_concentrated", item => item.quality.topDomainShare >= 0.5],
@@ -112,6 +113,7 @@ function buildReviewSample(candidates, limitPerStratum = 5) {
       else selected.set(candidate.normalizedName, {
         name: candidate.name,
         normalizedName: candidate.normalizedName,
+        singleTokenName: !candidate.normalizedName.includes(" "),
         uniqueArticles: candidate.uniqueArticles,
         uniqueDomains: candidate.uniqueDomains,
         sampledBatches: candidate.sampledBatches,
@@ -203,7 +205,10 @@ export function addGkgDocument(accumulator, row, sampleFilename) {
 
   const personKeys = new Set((row.persons ?? []).map(normalizeCandidateName));
   const organizationKeys = new Set((row.organizations ?? []).map(normalizeCandidateName));
-  const locationKeys = new Set((row.locations ?? []).flatMap(value => [\n    normalizeCandidateName(value),\n    ...String(value).split(",").map(normalizeCandidateName)\n  ]).filter(Boolean));
+  const locationKeys = new Set((row.locations ?? []).flatMap(value => [
+    normalizeCandidateName(value),
+    ...String(value).split(",").map(normalizeCandidateName)
+  ]).filter(Boolean));
   for (const [key, item] of uniqueNames) {
     let candidate = accumulator.get(key);
     if (!candidate) {

@@ -13,10 +13,14 @@ export function buildRelevanceQueries(candidateName) {
   const tokens = normalizeText(name).split(" ").filter(Boolean);
   const repeatedToken = [...tokens].sort((a, b) => b.length - a.length || a.localeCompare(b))[0];
   const phrase = '"' + name.replaceAll('"', '\\"') + '"';
+  const contextOperator = tokens.length >= 2
+    ? 'near10:"' + tokens.join(" ") + '"'
+    : 'repeat3:"' + repeatedToken + '"';
   return {
     exactPhrase: phrase,
     repeatedToken,
-    repeatQuery: phrase + ' repeat2:"' + repeatedToken + '"'
+    contextOperator: tokens.length >= 2 ? "near10" : "repeat3",
+    repeatQuery: phrase + " " + contextOperator
   };
 }
 
