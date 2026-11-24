@@ -25,7 +25,7 @@ test("summarizes per-sample join stability and weighted coverage", () => {
     { status: "NGRAMS_MISSING", availableNgramsFileCount: 0 },
     { status: "ERROR", availableNgramsFileCount: 0, error: "fetch failed" }
   ]);
-  assert.equal(summary.requestedSamples, 4);
+  assert.equal(summary.requestedSamples, 5);
   assert.equal(summary.completeSamples, 2);
   assert.equal(summary.missingGkgSamples, 1);
   assert.equal(summary.samplesWithoutNgrams, 2);\n  assert.equal(summary.confirmedNgramsMissingSamples, 1);\n  assert.equal(summary.errorSamples, 1);\n  assert.equal(summary.errorSamplesWithoutNgrams, 1);
