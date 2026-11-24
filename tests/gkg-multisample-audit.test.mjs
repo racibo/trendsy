@@ -22,12 +22,13 @@ test("summarizes per-sample join stability and weighted coverage", () => {
     { status: "COMPLETE", urlJoin: { gkgToWebNgramMatchRate: 0.8, gkgUniqueUrls: 100, normalizedMatches: 80 }, availableNgramsFileCount: 2, availableFileOffsets: [-14, -13] },
     { status: "COMPLETE", urlJoin: { gkgToWebNgramMatchRate: 0.6, gkgUniqueUrls: 200, normalizedMatches: 120 }, availableNgramsFileCount: 1, availableFileOffsets: [-12] },
     { status: "GKG_MISSING" },
-    { status: "NGRAMS_MISSING" }
+    { status: "NGRAMS_MISSING", availableNgramsFileCount: 0 },
+    { status: "ERROR", availableNgramsFileCount: 0, error: "fetch failed" }
   ]);
   assert.equal(summary.requestedSamples, 4);
   assert.equal(summary.completeSamples, 2);
   assert.equal(summary.missingGkgSamples, 1);
-  assert.equal(summary.samplesWithoutNgrams, 1);
+  assert.equal(summary.samplesWithoutNgrams, 2);\n  assert.equal(summary.confirmedNgramsMissingSamples, 1);\n  assert.equal(summary.errorSamples, 1);\n  assert.equal(summary.errorSamplesWithoutNgrams, 1);
   assert.equal(summary.meanMatchRate, 0.7);
   assert.equal(summary.medianMatchRate, 0.7);
   assert.equal(summary.weightedMatchRate, 0.6667);
@@ -73,4 +74,21 @@ test("serializes report JSON with a real newline, not a literal escaped suffix",
   assert.equal(JSON.parse(serialized).status, "COMPLETE");
   assert.ok(serialized.endsWith("\n"));
   assert.ok(!serialized.endsWith("\\n"));
+});
+
+test("a newer partial day invalidates an otherwise complete three-day window",()=>{
+ const h=["2026-11-20","2026-11-21","2026-11-22"].map(date=>({date,status:"COMPLETE",weightedMatchRate:.92,completeSamples:10,requestedSamples:10})).concat([{date:"2026-11-23",status:"PARTIAL",weightedMatchRate:.91,completeSamples:9,requestedSamples:10}]);
+ const s=summarizeDailyHistory(h);
+ assert.equal(s.completeDays,3);
+ assert.equal(s.consecutiveCompleteDays,0);
+ assert.equal(s.threeDay.ready,false);
+ assert.deepEqual(s.threeDay.dates,[]);
+});
+
+test("a calendar gap breaks the latest complete-day streak",()=>{
+ const h=["2026-11-20","2026-11-22","2026-11-23"].map(date=>({date,status:"COMPLETE",weightedMatchRate:.92}));
+ const s=summarizeDailyHistory(h);
+ assert.equal(s.consecutiveCompleteDays,2);
+ assert.equal(s.threeDay.ready,false);
+ assert.deepEqual(s.threeDay.dates,["2026-11-22","2026-11-23"]);
 });
