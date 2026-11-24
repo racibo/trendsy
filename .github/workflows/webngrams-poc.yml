@@ -132,18 +132,6 @@ jobs:
         if: (github.event_name == 'schedule' || github.event_name == 'push') && success()
         run: npm run webngrams:archive
 
-      - name: Publish raw observations to Supabase (shadow mode)
-        if: (github.event_name == 'schedule' || github.event_name == 'push') && success()
-        run: |
-          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_SECRET_KEY" ]; then
-            echo "::notice::Supabase secrets are not configured; raw observation publishing was skipped."
-            exit 0
-          fi
-          npm run market:shadow:push
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
-
       - name: Commit daily history
         if: (github.event_name == 'schedule' || github.event_name == 'push') && success()
         run: |
@@ -167,4 +155,20 @@ jobs:
               sleep 2
             done
           fi
+
+      - name: Publish raw observations to Supabase (shadow mode)
+        if: (github.event_name == 'schedule' || github.event_name == 'push') && success()
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_SECRET_KEY" ]; then
+            echo "::notice::Supabase secrets are not configured; raw observation publishing was skipped."
+            exit 0
+          fi
+          if npm run market:shadow:push; then
+            echo "Supabase shadow publication completed."
+          else
+            echo "::warning::Supabase shadow publication failed. The daily GitHub archive was already committed; inspect the logs and SUPABASE_URL/DNS configuration."
+          fi
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
 

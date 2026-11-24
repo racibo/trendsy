@@ -37,7 +37,10 @@ export function summarizeMultiSample(samples) {
     requestedSamples: samples.length,
     completeSamples: available.length,
     missingGkgSamples: samples.filter(sample => sample.status === "GKG_MISSING").length,
-    samplesWithoutNgrams: samples.filter(sample => sample.status === "NGRAMS_MISSING").length,
+    samplesWithoutNgrams: samples.filter(sample => sample.status !== "GKG_MISSING" && Number(sample.availableNgramsFileCount ?? 0) === 0).length,
+    confirmedNgramsMissingSamples: samples.filter(sample => sample.status === "NGRAMS_MISSING").length,
+    errorSamples: samples.filter(sample => sample.status === "ERROR").length,
+    errorSamplesWithoutNgrams: samples.filter(sample => sample.status === "ERROR" && Number(sample.availableNgramsFileCount ?? 0) === 0).length,
     meanMatchRate: Number(mean.toFixed(4)),
     medianMatchRate: Number(median.toFixed(4)),
     minMatchRate: rates.length ? rates[0] : 0,
@@ -79,20 +82,27 @@ export function summarizeDailyHistory(history) {
   }
   const entries = [...byDate.values()].sort((a,b)=>a.date.localeCompare(b.date));
   const complete = entries.filter(x=>x.status==="COMPLETE");
+  // The streak must end on the newest recorded UTC date. A newer PARTIAL day
+  // or a calendar gap invalidates the streak instead of being silently skipped.
   const consecutive=[];
-  for(let i=complete.length-1;i>=0;i--){
-    if(consecutive.length && (Date.parse(consecutive.at(-1).date+"T00:00:00Z")-Date.parse(complete[i].date+"T00:00:00Z"))/86400000!==1) break;
-    consecutive.push(complete[i]);
+  if (entries.length) {
+    let expectedDate = entries.at(-1).date;
+    for (let i=entries.length-1;i>=0;i--) {
+      const entry=entries[i];
+      if (entry.date!==expectedDate || entry.status!=="COMPLETE") break;
+      consecutive.push(entry);
+      expectedDate = new Date(Date.parse(entry.date+"T00:00:00Z")-86400000).toISOString().slice(0,10);
+    }
   }
   consecutive.reverse();
   const window3=consecutive.slice(-3), window7=consecutive.slice(-7);
   const avg=rows=>rows.length?Number((rows.reduce((n,x)=>n+x.weightedMatchRate,0)/rows.length).toFixed(4)):null;
-  const window=rows=>({ready:rows.length===(rows===window3?3:7),dates:rows.map(x=>x.date),meanWeightedMatchRate:avg(rows),minWeightedMatchRate:rows.length?Math.min(...rows.map(x=>x.weightedMatchRate)):null,maxWeightedMatchRate:rows.length?Math.max(...rows.map(x=>x.weightedMatchRate)):null});
-  return {retainedDays:entries.length,completeDays:complete.length,consecutiveCompleteDays:consecutive.length,threeDay:window(window3),sevenDay:window(window7),entries};
+  const window=(rows,required)=>({ready:rows.length===required,dates:rows.map(x=>x.date),meanWeightedMatchRate:avg(rows),minWeightedMatchRate:rows.length?Math.min(...rows.map(x=>x.weightedMatchRate)):null,maxWeightedMatchRate:rows.length?Math.max(...rows.map(x=>x.weightedMatchRate)):null});
+  return {retainedDays:entries.length,completeDays:complete.length,consecutiveCompleteDays:consecutive.length,threeDay:window(window3,3),sevenDay:window(window7,7),entries};
 }
 
 export function renderDailyHistoryMarkdown(report) {
  const s=report.summary;
  const line=(name,w,required)=>w.ready?`- ${name}: gotowe (${w.dates.join(", ")}); średnia ${(w.meanWeightedMatchRate*100).toFixed(2)}%, zakres ${(w.minWeightedMatchRate*100).toFixed(2)}–${(w.maxWeightedMatchRate*100).toFixed(2)}%.`:`- ${name}: oczekiwanie na ${required} pełnych kolejnych dni; obecnie ${w.dates.length}.`;
- return ["# GKG daily history: multi-day coverage comparison","",`- Wygenerowano: ${report.generatedAt}`,`- Pełne dni: ${s.completeDays}; kolejne pełne dni: ${s.consecutiveCompleteDays}`,line("3 dni",s.threeDay,3),line("7 dni",s.sevenDay,7),"","| Dzień UTC | Status | Próbki | Ważony URL join | Średni URL join | GKG URL |","|---|---|---:|---:|---:|---:|",...s.entries.map(x=>`| ${x.date} | ${x.status} | ${x.completeSamples}/${x.requestedSamples} | ${(x.weightedMatchRate*100).toFixed(2)}% | ${(x.meanMatchRate*100).toFixed(2)}% | ${x.totalGkgUniqueUrls} |`),"","## Interpretacja","- To techniczne pokrycie URL między GKG i Web NGrams, nie ranking popularności tematów.","- Każdy dzienny pomiar obejmuje 10 partii GKG z około 22,5 godziny.","- Okna wymagają kolejnych pełnych dni UTC; niepełne dni nie są wliczane.","- Historia przechowuje maksymalnie 30 dni.","- Wyniki nie zmieniają automatycznie kandydatów, ligi ani cen.",""].join("\n");
+ return ["# GKG daily history: multi-day coverage comparison","",`- Wygenerowano: ${report.generatedAt}`,`- Pełne dni: ${s.completeDays}; kolejne pełne dni: ${s.consecutiveCompleteDays}`,line("3 dni",s.threeDay,3),line("7 dni",s.sevenDay,7),"","| Dzień UTC | Status | Próbki | Ważony URL join | Średni URL join | GKG URL |","|---|---|---:|---:|---:|---:|",...s.entries.map(x=>`| ${x.date} | ${x.status} | ${x.completeSamples}/${x.requestedSamples} | ${(x.weightedMatchRate*100).toFixed(2)}% | ${(x.meanMatchRate*100).toFixed(2)}% | ${x.totalGkgUniqueUrls} |`),"","## Interpretacja","- To techniczne pokrycie URL między GKG i Web NGrams, nie ranking popularności tematów.","- Każdy dzienny pomiar obejmuje 10 partii GKG z około 22,5 godziny.","- Okna wymagają pełnych dni UTC bezpośrednio do najnowszego zapisanego dnia; PARTIAL lub luka przerywa serię.","- Historia przechowuje maksymalnie 30 dni.","- Wyniki nie zmieniają automatycznie kandydatów, ligi ani cen.",""].join("\n");
 }
