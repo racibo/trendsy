@@ -28,7 +28,10 @@ test("summarizes per-sample join stability and weighted coverage", () => {
   assert.equal(summary.requestedSamples, 5);
   assert.equal(summary.completeSamples, 2);
   assert.equal(summary.missingGkgSamples, 1);
-  assert.equal(summary.samplesWithoutNgrams, 2);\n  assert.equal(summary.confirmedNgramsMissingSamples, 1);\n  assert.equal(summary.errorSamples, 1);\n  assert.equal(summary.errorSamplesWithoutNgrams, 1);
+  assert.equal(summary.samplesWithoutNgrams, 2);
+  assert.equal(summary.confirmedNgramsMissingSamples, 1);
+  assert.equal(summary.errorSamples, 1);
+  assert.equal(summary.errorSamplesWithoutNgrams, 1);
   assert.equal(summary.meanMatchRate, 0.7);
   assert.equal(summary.medianMatchRate, 0.7);
   assert.equal(summary.weightedMatchRate, 0.6667);
