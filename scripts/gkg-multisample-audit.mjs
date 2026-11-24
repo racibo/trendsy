@@ -38,7 +38,7 @@ async function requestWithRetry(url, options = {}) {
       lastError = error;
     }
     if (response) {
-      if (response.ok || response.status === 404) return response;
+      if (response.ok || response.status === 404 || (options.method === "HEAD" && [403, 405, 501].includes(response.status))) return response;
       if (![429, 500, 502, 503, 504].includes(response.status)) {
         throw new Error(`HTTP ${response.status} for ${url}`);
       }
