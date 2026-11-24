@@ -19,11 +19,44 @@ const AFTER_MINUTES = 5;
 const CONCURRENCY = 4;
 
 async function request(url, options = {}) {
+  const { timeout = 300_000, ...fetchOptions } = options;
   return fetch(url, {
-    ...options,
-    headers: { "User-Agent": USER_AGENT, ...(options.headers ?? {}) },
-    signal: AbortSignal.timeout(options.timeout ?? 300_000)
+    ...fetchOptions,
+    headers: { "User-Agent": USER_AGENT, ...(fetchOptions.headers ?? {}) },
+    signal: AbortSignal.timeout(timeout)
   });
+}
+
+async function requestWithRetry(url, options = {}) {
+  const maxAttempts = 3;
+  let lastError;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    let response;
+    try {
+      response = await request(url, options);
+    } catch (error) {
+      lastError = error;
+    }
+    if (response) {
+      if (response.ok || response.status === 404) return response;
+      if (![429, 500, 502, 503, 504].includes(response.status)) {
+        throw new Error(`HTTP ${response.status} for ${url}`);
+      }
+      lastError = new Error(`HTTP ${response.status} for ${url}`);
+      const retryAfter = response.headers.get("retry-after");
+      try { await response.body?.cancel(); } catch {}
+      if (attempt < maxAttempts) {
+        const retrySeconds = retryAfter && /^\\d+(?:\\.\\d+)?$/.test(retryAfter) ? Number(retryAfter) : 0;
+        const delay = Math.min(15_000, Math.max(1_000 * 2 ** (attempt - 1), retrySeconds * 1_000));
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+      continue;
+    }
+    if (attempt < maxAttempts) {
+      await new Promise(resolve => setTimeout(resolve, Math.min(8_000, 1_000 * 2 ** (attempt - 1))));
+    }
+  }
+  throw new Error(`Request failed after ${maxAttempts} attempts for ${url}: ${String(lastError)}`);
 }
 
 async function readGkg(zipPath) {
@@ -59,7 +92,7 @@ async function readGkg(zipPath) {
 }
 
 async function readNgrams(url) {
-  const response = await request(url);
+  const response = await requestWithRetry(url);
   if (response.status === 404) return { status: "missing", records: 0, urls: new Set(), languages: {} };
   if (!response.ok) throw new Error(`HTTP ${response.status} for ${url}`);
   const lines = createInterface({ input: Readable.fromWeb(response.body).pipe(createGunzip()), crlfDelay: Infinity });
@@ -81,7 +114,7 @@ async function readNgrams(url) {
 
 async function probeFile(file) {
   const url = `${NGRAM_BASE}/${file.filename}`;
-  const head = await request(url, { method: "HEAD", timeout: 45_000 });
+  const head = await requestWithRetry(url, { method: "HEAD", timeout: 45_000 });
   if (head.status === 404) return { ...file, status: "missing" };
   if (!head.ok && ![403, 405, 501].includes(head.status)) {
     throw new Error(`HEAD HTTP ${head.status} for ${url}`);
@@ -129,7 +162,7 @@ async function main() {
   const startedAt = new Date().toISOString();
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "trendsy-gkg-multi-"));
   try {
-    const lastUpdateResponse = await request(LAST_UPDATE_URL);
+    const lastUpdateResponse = await requestWithRetry(LAST_UPDATE_URL);
     if (!lastUpdateResponse.ok) throw new Error(`lastupdate HTTP ${lastUpdateResponse.status}`);
     const lastUpdate = await lastUpdateResponse.text();
     const line = lastUpdate.split(/\r?\n/).find(value => value.includes(".gkg.csv.zip"));
@@ -149,7 +182,7 @@ async function main() {
         availableFileOffsets: []
       };
       try {
-        const response = await request(gkgUrl);
+        const response = await requestWithRetry(gkgUrl);
         if (response.status === 404) {
           samples.push(item);
           continue;
