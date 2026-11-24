@@ -115,6 +115,23 @@ jobs:
           }
           NODE
 
+      - name: Prepare Web NGrams evidence review worksheet
+        if: success()
+        run: npm run webngrams:review-audit
+
+      - name: Upload Web NGrams evidence review worksheet
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: webngrams-evidence-review
+          path: output/webngrams-review-audit.*
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Create compact daily history record
+        if: (github.event_name == 'schedule' || github.event_name == 'push') && success()
+        run: npm run webngrams:archive
+
       - name: Commit daily history
         if: (github.event_name == 'schedule' || github.event_name == 'push') && success()
         run: |
@@ -154,21 +171,4 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
-
-      - name: Prepare Web NGrams evidence review worksheet
-        if: success()
-        run: npm run webngrams:review-audit
-
-      - name: Upload Web NGrams evidence review worksheet
-        if: success()
-        uses: actions/upload-artifact@v4
-        with:
-          name: webngrams-evidence-review
-          path: output/webngrams-review-audit.*
-          if-no-files-found: error
-          retention-days: 30
-
-      - name: Create compact daily history record
-        if: (github.event_name == 'schedule' || github.event_name == 'push') && success()
-        run: npm run webngrams:archive
 
