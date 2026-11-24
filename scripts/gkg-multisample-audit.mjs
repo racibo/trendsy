@@ -46,7 +46,7 @@ async function requestWithRetry(url, options = {}) {
       const retryAfter = response.headers.get("retry-after");
       try { await response.body?.cancel(); } catch {}
       if (attempt < maxAttempts) {
-        const retrySeconds = retryAfter && /^\\d+(?:\\.\\d+)?$/.test(retryAfter) ? Number(retryAfter) : 0;
+        const retrySeconds = retryAfter && /^\d+(?:\.\d+)?$/.test(retryAfter) ? Number(retryAfter) : 0;
         const delay = Math.min(15_000, Math.max(1_000 * 2 ** (attempt - 1), retrySeconds * 1_000));
         await new Promise(resolve => setTimeout(resolve, delay));
       }
