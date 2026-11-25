@@ -166,5 +166,17 @@
     "meanMatchRate": 0.9122,
     "totalGkgUniqueUrls": 9536,
     "totalMatchedUrls": 8731
+  },
+  {
+    "date": "2026-11-25",
+    "startedAt": "2026-11-25T13:21:04.605Z",
+    "completedAt": "2026-11-25T13:22:24.204Z",
+    "status": "PARTIAL",
+    "requestedSamples": 10,
+    "completeSamples": 9,
+    "weightedMatchRate": 0.9243,
+    "meanMatchRate": 0.9232,
+    "totalGkgUniqueUrls": 10640,
+    "totalMatchedUrls": 9835
   }
 ]
